@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!--  Start  Do not remove-->
+	<string name="workManagerAuthority">bg.government.virusafe.debug.workmanager-init</string>
+	<!--End of do not remove-->
+	<string name="app_name">Dev-ViruSafe</string>
+</resources>

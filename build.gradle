@@ -1,0 +1,150 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext {
+        compileSdkVersion = 29
+        minSdkVersion = 21
+        targetSdkVersion = 29
+
+        versionCode = System.getenv("BUILD_NUMBER") as Integer ?: 1
+        versionName = "1.0.0"
+
+        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+
+        gradlePluginVersion = '3.5.3'
+
+        dependencyVersions = [
+                kotlinVersion      : '1.3.61',
+
+                lifecycle          : '2.2.0',
+                design             : '1.2.0-alpha05',
+
+                dagger2Version     : '2.16',
+
+                coroutines         : '1.3.2',
+
+                junitVersion       : '4.12',
+                testRunnerVersion  : '1.1.0-alpha4',
+                espressoCoreVersion: '3.1.0-alpha4',
+                workManagerVersion : '2.3.4'
+        ]
+
+        dependencies = [
+                kotlinReflect         : "org.jetbrains.kotlin:kotlin-reflect:${dependencyVersions.kotlinVersion}",
+                kotlinStdlib          : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${dependencyVersions.kotlinVersion}",
+
+                design                : "com.google.android.material:material:${dependencyVersions.design}",
+
+                dagger2               : "com.google.dagger:dagger:${dependencyVersions.dagger2Version}",
+                dagger2Android        : "com.google.dagger:dagger-android:${dependencyVersions.dagger2Version}",
+                dagger2AndroidSupport : "com.google.dagger:dagger-android-support:${dependencyVersions.dagger2Version}",
+                dagger2Compiler       : "com.google.dagger:dagger-compiler:${dependencyVersions.dagger2Version}",
+                dagger2AndroidCompiler: "com.google.dagger:dagger-android-processor:${dependencyVersions.dagger2Version}",
+
+                coroutinesCore        : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${dependencyVersions.coroutines}",
+                coroutinesAndroid     : "org.jetbrains.kotlinx:kotlinx-coroutines-android:${dependencyVersions.coroutines}",
+
+                junit                 : "junit:junit:${dependencyVersions.junitVersion}",
+                testRunner            : "androidx.test:runner:${dependencyVersions.testRunnerVersion}",
+                espresso              : "androidx.test.espresso:espresso-core:${dependencyVersions.espressoCoreVersion}"
+        ]
+    }
+
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:${rootProject.ext.gradlePluginVersion}"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${rootProject.ext.dependencyVersions.kotlinVersion}"
+
+        //check style plugin
+        classpath 'de.undercouch:gradle-download-task:3.4.3'
+
+        //jfrog plugin
+        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.11.0'
+
+        //google services
+        classpath 'com.google.gms:google-services:4.3.3'
+
+        //crashlytics
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.0.0-beta03'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+plugins {
+    //download plugin
+    id "de.undercouch.download" version "3.4.3"
+    //kotlin checkstyle plugin
+    id "io.gitlab.arturbosch.detekt" version "1.0.1"
+}
+import de.undercouch.gradle.tasks.download.Download
+
+ext {
+    DownloadType = Download
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+        maven {
+            url 'https://jitpack.io'
+        }
+        flatDir {
+            dirs "${project.rootDir}/libs"
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xmaxerrs" << "500"
+    }
+}
+
+//kotlin checkstyle plugin
+apply plugin: 'io.gitlab.arturbosch.detekt'
+
+detekt {
+    input = files("$projectDir")
+    config = files("$projectDir/detekt-ruleset.yml")
+}
+
+tasks.withType(io.gitlab.arturbosch.detekt.Detekt) {
+    exclude('**/gen/**',
+            '**/external/**',
+            '**/test/**',
+            '**/androidTest/**',
+            '**/resources/**',
+            '**/tmp/**')
+}
+//end of kotlin checkstyle plugin
+
+//check style plugin
+apply plugin: 'checkstyle'
+
+checkstyle() {
+    toolVersion = '7.4'
+}
+
+task checkstyle(type: Checkstyle) {
+    configFile file("$projectDir/checkstyle-android.xml")
+    include '**/*.java'
+    exclude '**/gen/**'
+    exclude '**/external/**'
+    exclude '**/build/**'
+    exclude '**/test/**'
+    exclude '**/androidTest/**'
+    source "$projectDir"
+    classpath = files()
+}
+//end of check style plugin

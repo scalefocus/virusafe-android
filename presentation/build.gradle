@@ -1,0 +1,123 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId "bg.government.virusafe"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+        testInstrumentationRunner rootProject.ext.testInstrumentationRunner
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    buildTypes {
+        debug {
+            versionNameSuffix "-debug"
+            applicationIdSuffix ".debug"
+
+            debuggable true
+            minifyEnabled false
+            manifestPlaceholders = [crashlyticsCollectionEnabled: "false"]
+        }
+        mk {
+            versionNameSuffix "-mk"
+            applicationIdSuffix ".mk"
+
+            debuggable false
+            minifyEnabled false
+            manifestPlaceholders = [crashlyticsCollectionEnabled: "false"]
+            signingConfig signingConfigs.debug
+        }
+        release {
+            debuggable false
+            minifyEnabled true
+            manifestPlaceholders = [crashlyticsCollectionEnabled: "true"]
+
+            //default android proguard rules
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
+            //application proguard rules
+            proguardFiles 'proguard-rules.pro'
+            //3rd libraries proguard rules
+            proguardFiles fileTree('proguard').asList().toArray()
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    //Kotlin
+    api rootProject.ext.dependencies.kotlinStdlib
+    api rootProject.ext.dependencies.kotlinReflect
+
+    //Dagger 2
+    kapt rootProject.ext.dependencies.dagger2Compiler
+    kapt rootProject.ext.dependencies.dagger2AndroidCompiler
+
+    //Coroutines
+    implementation rootProject.ext.dependencies.coroutinesCore
+    implementation rootProject.ext.dependencies.coroutinesAndroid
+
+    //Lifecycle extensions
+    implementation "androidx.lifecycle:lifecycle-extensions:${dependencyVersions.lifecycle}"
+    implementation "androidx.lifecycle:lifecycle-common-java8:${dependencyVersions.lifecycle}"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${dependencyVersions.lifecycle}"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${dependencyVersions.lifecycle}"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:${dependencyVersions.lifecycle}"
+
+    //EventBus
+    api 'org.greenrobot:eventbus:3.1.1'
+
+    //Design libs
+    implementation rootProject.ext.dependencies.design
+
+    //UI
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.github.cdflynn:checkview:v1.1'
+
+    //GMS
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.android.gms:play-services-auth-api-phone:17.4.0'
+
+    //Crashlytics
+    implementation 'com.google.firebase:firebase-analytics:17.2.3'
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta02'
+
+    //Permissions
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
+    //Test tools
+    testImplementation rootProject.ext.dependencies.junit
+    androidTestImplementation rootProject.ext.dependencies.testRunner
+    androidTestImplementation rootProject.ext.dependencies.espresso
+
+    //Base presentation module
+    implementation 'com.upnetix.android-arch:base-presentation:1.0.6@aar'
+
+    //Firebase
+    implementation 'com.google.firebase:firebase-config:19.1.3'
+    implementation 'com.google.firebase:firebase-messaging:20.1.3'
+
+    //DateTime
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
+
+    //Service module
+    implementation project(path: ':service')
+}

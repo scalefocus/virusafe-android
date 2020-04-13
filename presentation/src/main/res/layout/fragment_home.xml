@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+
+		<import type="android.view.View" />
+
+		<import type="bg.government.virusafe.app.utils.StringsKt" />
+
+		<variable
+			name="homeVM"
+			type="bg.government.virusafe.app.home.HomeViewModel" />
+	</data>
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:fillViewport="true">
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/fragment_home_container"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<View
+				android:id="@+id/fragment_home_view"
+				android:layout_width="0dp"
+				android:layout_height="0dp"
+				android:background="@drawable/background_linear"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintHeight_percent="0.40"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent" />
+
+			<TextView
+				android:id="@+id/fragment_home_title"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/home_title_margin_bottom"
+				android:gravity="center"
+				android:text="@{homeVM.liveLocale().getString(StringsKt.MY_CONTRIBUTION_TITLE)}"
+				android:textAlignment="center"
+				android:textAllCaps="true"
+				android:textColor="@color/color_dark_blue"
+				android:textSize="@dimen/fragment_home_title_size"
+				app:layout_constraintBottom_toTopOf="@+id/fragment_home_description"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent" />
+
+			<TextView
+				android:id="@+id/fragment_home_description"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingStart="@dimen/home_top_btn_start_end"
+				android:paddingEnd="@dimen/home_top_btn_start_end"
+				android:text="@{homeVM.liveLocale().getString(StringsKt.MY_CONTRIBUTION_DESC)}"
+				android:textAlignment="center"
+				android:textColor="@color/color_black"
+				android:textSize="@dimen/fragment_home_title_size"
+				app:layout_constraintBottom_toBottomOf="@+id/fragment_home_view"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="@+id/fragment_home_view" />
+
+			<Button
+				android:id="@+id/fragment_home_btn_self_check"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="@dimen/home_top_btn_start_end"
+				android:layout_marginEnd="@dimen/home_top_btn_start_end"
+				android:background="@drawable/background_btn"
+				android:text="@{homeVM.liveLocale().getString(StringsKt.HOW_DO_YOU_FEEL)}"
+				android:textColor="@color/color_white"
+				app:layout_constraintBottom_toBottomOf="@+id/fragment_home_view"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/fragment_home_view" />
+
+			<Button
+				android:id="@+id/fragment_home_btn_statistics"
+				style="@style/Button"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="@dimen/home_learn_more_btn_margin_start_end"
+				android:layout_marginTop="@dimen/fragment_home_button_margins"
+				android:layout_marginEnd="@dimen/home_learn_more_btn_margin_start_end"
+				android:text="@{homeVM.liveLocale().getString(StringsKt.STATISTICS)}"
+				android:visibility="@{homeVM.isStatisticsBtnVisible ? View.VISIBLE : View.GONE}"
+				app:layout_constraintBottom_toTopOf="@id/fragment_home_personal_info"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/fragment_home_btn_self_check"
+				app:layout_constraintVertical_chainStyle="spread" />
+
+			<Button
+				android:id="@+id/fragment_home_personal_info"
+				style="@style/Button"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="@dimen/home_learn_more_btn_margin_start_end"
+				android:layout_marginTop="@dimen/fragment_home_button_margins"
+				android:layout_marginEnd="@dimen/home_learn_more_btn_margin_start_end"
+				android:drawableEnd="@drawable/ic_personal_data"
+				android:gravity="center"
+				android:paddingStart="@dimen/personal_info_btn_padding_start"
+				android:paddingEnd="@dimen/personal_info_btn_padding_end"
+				android:text="@{homeVM.liveLocale().getString(StringsKt.MY_PERSONAL_DATA)}"
+				android:textAlignment="gravity"
+				app:layout_constraintBottom_toTopOf="@id/home_screen_learn_more_btn"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/fragment_home_btn_statistics" />
+
+			<Button
+				android:id="@+id/home_screen_learn_more_btn"
+				style="@style/Button"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="@dimen/home_learn_more_btn_margin_start_end"
+				android:layout_marginTop="@dimen/fragment_home_button_margins"
+				android:layout_marginEnd="@dimen/home_learn_more_btn_margin_start_end"
+				android:text="@{homeVM.liveLocale().getString(StringsKt.LEARN_MORE)}"
+				android:textColor="@color/colorPrimary"
+				android:textSize="@dimen/text_size_normal"
+				app:layout_constraintBottom_toTopOf="@+id/fragment_home_btn_app_info"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/fragment_home_personal_info"
+				app:layout_constraintVertical_bias="0" />
+
+			<Button
+				android:id="@+id/fragment_home_btn_app_info"
+				style="@style/Button"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="@dimen/home_learn_more_btn_margin_start_end"
+				android:layout_marginTop="@dimen/fragment_home_button_margins"
+				android:layout_marginEnd="@dimen/home_learn_more_btn_margin_start_end"
+				android:text="@{homeVM.liveLocale().getString(StringsKt.HOW_IT_WORKS)}"
+				app:layout_constraintBottom_toTopOf="@+id/home_screen_terms_btn"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/home_screen_learn_more_btn"
+				app:layout_constraintVertical_chainStyle="spread" />
+
+			<TextView
+				android:id="@+id/home_screen_terms_btn"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/home_screen_terms_margin_top"
+				android:layout_marginBottom="@dimen/home_screen_terms_margin_bottom"
+				android:background="?attr/selectableItemBackground"
+				android:clickable="true"
+				android:focusable="true"
+				android:padding="@dimen/text_btn_padding"
+				android:text="@{homeVM.liveLocale().getString(StringsKt.TERMS_N_CONDITIONS_LBL)}"
+				android:textColor="@color/color_black"
+				android:textSize="@dimen/text_size_normal"
+				app:layout_constraintBottom_toTopOf="@+id/home_screen_logo_iv"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/fragment_home_btn_app_info" />
+
+			<LinearLayout
+				android:id="@+id/language_container"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="@dimen/fragment_home_company_logo_margin"
+				android:layout_marginBottom="@dimen/fragment_home_company_logo_margin"
+				android:background="?attr/selectableItemBackground"
+				android:clickable="true"
+				android:focusable="true"
+				android:gravity="center"
+				android:orientation="horizontal"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintStart_toStartOf="parent">
+
+				<ImageView
+					android:layout_width="@dimen/language_img_dimen"
+					android:layout_height="@dimen/language_img_dimen"
+					android:layout_marginEnd="5dp"
+					android:src="@drawable/ic_globe"
+					android:tint="@color/colorPrimary"
+					tools:ignore="ContentDescription" />
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@{homeVM.liveLocale().getString(StringsKt.LANGUAGE)}"
+					android:textColor="@color/colorPrimary"
+					android:textSize="@dimen/text_size_normal" />
+			</LinearLayout>
+
+			<ImageView
+				android:id="@+id/home_screen_logo_iv"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginEnd="@dimen/fragment_home_company_logo_margin"
+				android:layout_marginBottom="@dimen/fragment_home_company_logo_margin"
+				android:src="@drawable/ic_sf_logo"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintEnd_toEndOf="parent"
+				tools:ignore="ContentDescription" />
+		</androidx.constraintlayout.widget.ConstraintLayout>
+	</ScrollView>
+</layout>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+
+		<import type="bg.government.virusafe.app.utils.StringsKt" />
+
+		<variable
+			name="selfCheckViewModel"
+			type="bg.government.virusafe.app.selfcheck.SelfCheckViewModel" />
+	</data>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:clipToPadding="false"
+		android:paddingStart="@dimen/self_check_padding_start_end"
+		android:paddingEnd="@dimen/self_check_padding_start_end">
+
+		<TextView
+			android:id="@+id/self_check_title"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/self_check_title_margin_top"
+			android:text="@{selfCheckViewModel.liveLocale().getString(StringsKt.SELF_CHECK_TITLE)}"
+			android:textAlignment="viewStart"
+			android:textColor="@color/color_black"
+			android:textSize="@dimen/self_check_title_size"
+			android:textStyle="bold"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="10dp"
+			android:text="@{selfCheckViewModel.liveLocale().getString(StringsKt.NO_SYMPTOMS)}"
+			android:textColor="@color/color_dark_grey"
+			android:textSize="@dimen/text_size_normal"
+			app:layout_constraintBottom_toBottomOf="@+id/self_check_no_symptoms_checkbox"
+			app:layout_constraintEnd_toStartOf="@+id/self_check_no_symptoms_checkbox"
+			app:layout_constraintTop_toTopOf="@+id/self_check_no_symptoms_checkbox" />
+
+		<CheckBox
+			android:id="@+id/self_check_no_symptoms_checkbox"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/self_check_checkbox_margin_top"
+			android:checked="@={selfCheckViewModel.isNoSymptomsChecked}"
+			android:onClick="@{() -> selfCheckViewModel.onNoSymptomsClick()}"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/self_check_title" />
+
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/self_check_recycler"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:layout_marginTop="@dimen/self_check_recycler_margin_top"
+			android:layout_marginBottom="@dimen/self_check_btn_margin"
+			android:orientation="vertical"
+			android:overScrollMode="never"
+			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+			app:layout_constraintBottom_toTopOf="@+id/self_check_save_btn"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/self_check_no_symptoms_checkbox"
+			tools:listitem="@layout/row_question_self_check" />
+
+		<Button
+			android:id="@+id/self_check_save_btn"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/self_check_btn_margin"
+			android:background="@drawable/background_btn"
+			android:paddingTop="@dimen/btn_padding_top_bottom"
+			android:paddingBottom="@dimen/btn_padding_top_bottom"
+			android:text="@{selfCheckViewModel.liveLocale().getString(StringsKt.SAVE_CHANGES_LABEL)}"
+			android:textColor="@color/color_white"
+			android:textSize="@dimen/text_size_normal"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent" />
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

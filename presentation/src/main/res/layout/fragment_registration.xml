@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+
+		<import type="bg.government.virusafe.app.utils.StringsKt" />
+
+		<variable
+			name="registrationViewModel"
+			type="bg.government.virusafe.app.registration.RegistrationViewModel" />
+	</data>
+
+	<ScrollView
+		android:id="@+id/registration_scroll"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:scrollbars="none">
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/registration_container"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:clipToPadding="false"
+			android:focusable="true"
+			android:focusableInTouchMode="true"
+			android:paddingStart="@dimen/registration_padding_start_end"
+			android:paddingEnd="@dimen/registration_padding_start_end"
+			android:paddingBottom="@dimen/registration_padding_bottom">
+
+			<ImageView
+				android:id="@+id/registration_user_img"
+				android:layout_width="@dimen/registration_user_img_width"
+				android:layout_height="@dimen/registration_user_img_height"
+				android:layout_marginTop="@dimen/registration_user_img_margin_top"
+				android:src="@drawable/ic_user"
+				android:tint="@color/colorPrimary"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent"
+				tools:ignore="ContentDescription" />
+
+			<TextView
+				android:id="@+id/registration_title"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/registration_title_margin_top"
+				android:text="@{registrationViewModel.liveLocale().getString(StringsKt.REGISTRATION_TITLE)}"
+				android:textAlignment="center"
+				android:textColor="@color/color_black"
+				android:textSize="@dimen/title_text_size"
+				android:textStyle="bold"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/registration_user_img" />
+
+			<com.google.android.material.textfield.TextInputLayout
+				android:id="@+id/registration_phone_number_layout"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/registration_phone_number_layout_margin_top"
+				android:hint="@{registrationViewModel.liveLocale().getString(StringsKt.MOBILE_HINT)}"
+				app:errorEnabled="true"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/registration_title"
+				app:passwordToggleDrawable="@null">
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/registration_phone_number_et"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:inputType="phone"
+					android:maxLength="15"
+					android:textColor="@color/color_black"
+					android:textSize="@dimen/text_size_normal" />
+			</com.google.android.material.textfield.TextInputLayout>
+
+			<CheckBox
+				android:id="@+id/terms_and_conditions_check_box"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				android:layout_marginEnd="@dimen/registration_term_and_conditions_padding"
+				android:buttonTint="@color/colorPrimary"
+				app:constraintSet="@dimen/text_btn_padding"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/registration_phone_number_layout" />
+
+			<TextView
+				android:id="@+id/registration_i_agree_txt"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@{registrationViewModel.liveLocale().getString(StringsKt.I_AGREE_WITH_LBL)}"
+				android:textColor="@color/colorPrimary"
+				android:textSize="@dimen/text_size_normal"
+				app:layout_constraintBottom_toBottomOf="@+id/terms_and_conditions_check_box"
+				app:layout_constraintStart_toEndOf="@+id/terms_and_conditions_check_box"
+				app:layout_constraintTop_toTopOf="@+id/terms_and_conditions_check_box" />
+
+			<TextView
+				android:id="@+id/registration_terms_and_conditions_btn"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="4dp"
+				android:background="?attr/selectableItemBackground"
+				android:clickable="true"
+				android:focusable="true"
+				android:text="@{registrationViewModel.liveLocale().getString(StringsKt.TERMS_N_CONDITIONS_SMALL_LBL)}"
+				android:textColor="@color/colorPrimary"
+				android:textSize="@dimen/text_size_normal"
+				app:layout_constraintBottom_toBottomOf="@+id/registration_i_agree_txt"
+				app:layout_constraintStart_toEndOf="@+id/registration_i_agree_txt"
+				app:layout_constraintTop_toTopOf="@+id/registration_i_agree_txt" />
+
+			<Button
+				android:id="@+id/registration_btn"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/registration_btn_margin_top"
+				android:background="@drawable/background_btn"
+				android:paddingTop="@dimen/btn_padding_top_bottom"
+				android:paddingBottom="@dimen/btn_padding_top_bottom"
+				android:text="@{registrationViewModel.liveLocale().getString(StringsKt.CONFIRM_LABEL)}"
+				android:textColor="@color/color_white"
+				android:textSize="@dimen/text_size_normal"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/terms_and_conditions_check_box" />
+		</androidx.constraintlayout.widget.ConstraintLayout>
+	</ScrollView>
+</layout>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+
+		<import type="bg.government.virusafe.app.utils.StringsKt" />
+
+		<variable
+			name="codeVerificationViewModel"
+			type="bg.government.virusafe.app.registration.CodeVerificationViewModel" />
+	</data>
+
+	<ScrollView
+		android:id="@+id/code_verification_scroll"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:scrollbars="none">
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/code_verification_container"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:clipToPadding="false"
+			android:paddingStart="@dimen/registration_padding_start_end"
+			android:paddingEnd="@dimen/registration_padding_start_end"
+			android:paddingBottom="@dimen/registration_padding_bottom">
+
+			<ImageView
+				android:id="@+id/code_verification_user_img"
+				android:layout_width="@dimen/code_verification_user_img_width"
+				android:layout_height="@dimen/code_verification_user_img_height"
+				android:layout_marginTop="@dimen/code_verification_user_img_margin_top"
+				android:src="@drawable/ic_user_shield"
+				android:tint="@color/colorPrimary"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent"
+				tools:ignore="ContentDescription" />
+
+			<TextView
+				android:id="@+id/code_verification_title"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/code_verification_title_margin_top"
+				android:text="@{codeVerificationViewModel.liveLocale().getString(StringsKt.VERIFICATION_CODE_TITLE)}"
+				android:textAlignment="center"
+				android:textSize="@dimen/title_text_size"
+				android:textColor="@color/color_black"
+				android:textStyle="bold"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/code_verification_user_img" />
+
+			<TextView
+				android:id="@+id/code_verification_info_tv"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/code_verification_info_margin_top"
+				android:text="@{String.format(codeVerificationViewModel.liveLocale().getString(StringsKt.VERIFICATION_INFO_TEXT), codeVerificationViewModel.phoneNumber)}"
+				android:textAlignment="center"
+				android:textColor="@color/color_dark_grey"
+				android:textSize="@dimen/text_size_medium"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/code_verification_title" />
+
+			<com.google.android.material.textfield.TextInputLayout
+				android:id="@+id/code_verification_code_layout"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/code_verification_code_layout_margin_top"
+				app:errorEnabled="true"
+				android:hint="@{codeVerificationViewModel.liveLocale().getString(StringsKt.VERIFICATION_CODE_HINT)}"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/code_verification_info_tv">
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/code_verification_code_et"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:inputType="number"
+					android:maxLength="6"
+					android:textColor="@color/color_black"
+					android:textSize="@dimen/text_size_normal" />
+			</com.google.android.material.textfield.TextInputLayout>
+
+			<Button
+				android:id="@+id/code_verification_btn"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/code_verification_btn_margin_top"
+				android:background="@drawable/background_btn"
+				android:paddingTop="@dimen/btn_padding_top_bottom"
+				android:paddingBottom="@dimen/btn_padding_top_bottom"
+				android:text="@{codeVerificationViewModel.liveLocale().getString(StringsKt.CONFIRM_LABEL)}"
+				android:textColor="@color/color_white"
+				android:textSize="@dimen/text_size_normal"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/code_verification_code_layout" />
+
+			<TextView
+				android:id="@+id/code_verification_missing_btn"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/code_verification_missing_btn_margin_top"
+				android:background="?attr/selectableItemBackground"
+				android:clickable="true"
+				android:focusable="true"
+				android:text="@{codeVerificationViewModel.liveLocale().getString(StringsKt.MISSING_VERIFICATION_CODE)}"
+				android:textAlignment="center"
+				android:textColor="@color/colorPrimary"
+				android:textSize="@dimen/text_size_normal"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/code_verification_btn" />
+		</androidx.constraintlayout.widget.ConstraintLayout>
+	</ScrollView>
+</layout>

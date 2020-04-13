@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:scrollbars="none">
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/personal_data_container"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:clipToPadding="false"
+			android:paddingBottom="@dimen/registration_padding_bottom"
+			android:paddingEnd="@dimen/registration_padding_start_end"
+			android:paddingStart="@dimen/registration_padding_start_end">
+
+			<Button
+				android:id="@+id/personal_data_btn"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/personal_data_margin_top"
+				android:background="@drawable/background_btn"
+				android:paddingBottom="@dimen/btn_padding_top_bottom"
+				android:paddingTop="@dimen/btn_padding_top_bottom"
+				android:text="@{personalDataViewModel.liveLocale().getString(StringsKt.CONFIRM_LABEL)}"
+				android:textColor="@color/color_white"
+				android:textSize="@dimen/text_size_normal"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/personal_health_status_layout" />
+
+			<RadioGroup
+				android:id="@+id/personal_gender_container"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/personal_gender_margin_top"
+				android:clickable="@{personalDataViewModel.componentsEditable}"
+				android:focusable="@{personalDataViewModel.componentsEditable}"
+				android:orientation="horizontal"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/personal_gender_title">
+
+				<RadioButton
+					android:id="@+id/personal_gender_male"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginEnd="@dimen/personal_gender_btn_margin_start_end"
+					android:layout_weight="1"
+					android:background="@drawable/background_radio_btn"
+					android:button="@android:color/transparent"
+					android:clickable="@{personalDataViewModel.componentsEditable}"
+					android:focusable="@{personalDataViewModel.componentsEditable}"
+					android:onClick="@{() -> personalDataViewModel.setGender(Gender.VALUE_MALE)}"
+					android:paddingBottom="@dimen/radio_btn_padding_top_bottom"
+					android:paddingTop="@dimen/radio_btn_padding_top_bottom"
+					android:text="@{personalDataViewModel.liveLocale().getString(StringsKt.GENDER_MALE)}"
+					android:textAlignment="center"
+					android:textColor="@drawable/radio_text_color" />
+
+				<RadioButton
+					android:id="@+id/personal_gender_female"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="@dimen/personal_gender_btn_margin_start_end"
+					android:layout_weight="1"
+					android:background="@drawable/background_radio_btn"
+					android:button="@android:color/transparent"
+					android:clickable="@{personalDataViewModel.componentsEditable}"
+					android:focusable="@{personalDataViewModel.componentsEditable}"
+					android:onClick="@{() -> personalDataViewModel.setGender(Gender.VALUE_FEMALE)}"
+					android:paddingBottom="@dimen/radio_btn_padding_top_bottom"
+					android:paddingTop="@dimen/radio_btn_padding_top_bottom"
+					android:text="@{personalDataViewModel.liveLocale().getString(StringsKt.GENDER_FEMALE)}"
+					android:textAlignment="center"
+					android:textColor="@drawable/radio_text_color" />
+			</RadioGroup>
+
+			<RadioGroup
+				android:id="@+id/fragment_personal_data_legitimation_types"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/personal_data_margin_top"
+				android:orientation="horizontal"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/personal_data_title">
+
+				<RadioButton
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:background="@drawable/egn_selector"
+					android:button="@android:color/transparent"
+					android:checked="@{personalDataViewModel.legitimationTypeSelected == LegitimationType.PERSONAL_NUMBER}"
+					android:clickable="true"
+					android:focusable="true"
+					android:onClick="@{() -> personalDataViewModel.onLegitimationChange(LegitimationType.PERSONAL_NUMBER)}"
+					android:paddingBottom="@dimen/radio_btn_padding_top_bottom"
+					android:paddingTop="@dimen/radio_btn_padding_top_bottom"
+					android:text="@{personalDataViewModel.liveLocale().getString(StringsKt.ID_NUMBER_HINT)}"
+					android:textAlignment="center"
+					android:textColor="@drawable/radio_text_color" />
+
+				<RadioButton
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:background="@drawable/lnch_selector"
+					android:button="@android:color/transparent"
+					android:checked="@{personalDataViewModel.legitimationTypeSelected == LegitimationType.FOREIGNER_NUMBER}"
+					android:clickable="true"
+					android:focusable="true"
+					android:onClick="@{() -> personalDataViewModel.onLegitimationChange(LegitimationType.FOREIGNER_NUMBER)}"
+					android:paddingBottom="@dimen/radio_btn_padding_top_bottom"
+					android:paddingTop="@dimen/radio_btn_padding_top_bottom"
+					android:text="@{personalDataViewModel.liveLocale().getString(StringsKt.FOREIGNER_NUMBER)}"
+					android:textAlignment="center"
+					android:textColor="@drawable/radio_text_color"
+					app:buildTypeVisibility="@{BuildConfig.BUILD_TYPE}" />
+
+				<RadioButton
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:background="@drawable/passport_selector"
+					android:button="@android:color/transparent"
+					android:checked="@{personalDataViewModel.legitimationTypeSelected == LegitimationType.PASSPORT}"
+					android:clickable="true"
+					android:focusable="true"
+					android:onClick="@{() -> personalDataViewModel.onLegitimationChange(LegitimationType.PASSPORT)}"
+					android:paddingBottom="@dimen/radio_btn_padding_top_bottom"
+					android:paddingTop="@dimen/radio_btn_padding_top_bottom"
+					android:text="@{personalDataViewModel.liveLocale().getString(StringsKt.PASSPORT_HINT)}"
+					android:textAlignment="center"
+					android:textColor="@drawable/radio_text_color" />
+			</RadioGroup>
+
+			<TextView
+				android:id="@+id/personal_data_title"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/personal_data_title_margin_top"
+				android:text="@{personalDataViewModel.liveLocale().getString(StringsKt.PERSONAL_DATA_TITLE)}"
+				android:textAlignment="viewStart"
+				android:textColor="@color/color_black"
+				android:textSize="@dimen/text_size_large"
+				android:textStyle="bold"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent" />
+
+			<TextView
+				android:id="@+id/personal_gender_title"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/personal_data_margin_top"
+				android:text="@{personalDataViewModel.liveLocale().getString(StringsKt.GENDER_HINT)}"
+				android:textAlignment="viewStart"
+				android:textColor="@color/color_black"
+				android:textSize="@dimen/text_size_big"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/personal_age_layout" />
+
+			<com.google.android.material.textfield.TextInputLayout
+				android:id="@+id/personal_age_layout"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/personal_data_margin_top"
+				android:clickable="@{personalDataViewModel.componentsEditable}"
+				android:focusable="@{personalDataViewModel.componentsEditable}"
+				android:hint="@{personalDataViewModel.liveLocale().getString(StringsKt.AGE_HINT)}"
+				app:errorEnabled="true"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/personal_number_layout">
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/personal_age_et"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:clickable="@{personalDataViewModel.componentsEditable}"
+					android:focusable="@{personalDataViewModel.componentsEditable}"
+					android:inputType="@{personalDataViewModel.componentsEditable }"
+					android:longClickable="false"
+					android:text="@={personalDataViewModel.age}"
+					android:textColor="@color/color_black"
+					android:textIsSelectable="@{personalDataViewModel.componentsEditable}"
+					android:textSize="@dimen/text_size_normal" />
+			</com.google.android.material.textfield.TextInputLayout>
+
+			<com.google.android.material.textfield.TextInputLayout
+				android:id="@+id/personal_health_status_layout"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/personal_data_margin_top"
+				android:hint="@{personalDataViewModel.liveLocale().getString(StringsKt.CHRONICAL_CONDITIONS_HINT)}"
+				app:errorEnabled="true"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/personal_gender_container">
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/personal_health_status_et"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:inputType="textMultiLine"
+					android:longClickable="false"
+					android:maxLines="3"
+					android:scrollHorizontally="false"
+					android:scrollbars="vertical"
+					android:text="@={personalDataViewModel.healthStatus}"
+					android:textColor="@color/color_black"
+					android:textIsSelectable="false"
+					android:textSize="@dimen/text_size_normal" />
+			</com.google.android.material.textfield.TextInputLayout>
+
+			<com.google.android.material.textfield.TextInputLayout
+				android:id="@+id/personal_number_layout"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/personal_data_margin_top"
+				android:hint="@{personalDataViewModel.liveLocale().getString(personalDataViewModel.selectedLegitimationHint)}"
+				app:errorEnabled="true"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/fragment_personal_data_legitimation_types">
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/personal_number_et"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:inputType="number"
+					android:longClickable="false"
+					android:maxLength="10"
+					android:text="@={personalDataViewModel.personalNumber}"
+					android:textColor="@color/color_black"
+					android:textIsSelectable="false"
+					android:textSize="@dimen/text_size_normal"
+					app:inputTypeAndFilter="@{personalDataViewModel.legitimationTypeSelected}" />
+			</com.google.android.material.textfield.TextInputLayout>
+		</androidx.constraintlayout.widget.ConstraintLayout>
+	</ScrollView>
+
+	<data>
+
+		<import type="com.upnetix.applicationservice.registration.model.Gender" />
+
+		<import type="bg.government.virusafe.app.utils.StringsKt" />
+
+		<import type="bg.government.virusafe.BuildConfig" />
+
+		<import type="bg.government.virusafe.app.personaldata.LegitimationType" />
+
+		<variable
+			name="personalDataViewModel"
+			type="bg.government.virusafe.app.personaldata.PersonalDataViewModel" />
+	</data>
+</layout>

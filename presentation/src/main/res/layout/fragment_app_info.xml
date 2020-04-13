@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<WebView
+			android:id="@+id/app_info_webview"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:layout_marginBottom="@dimen/self_check_btn_margin"
+			android:visibility="invisible"
+			app:layout_constraintBottom_toTopOf="@+id/continue_btn"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<Button
+			android:id="@+id/continue_btn"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="@dimen/terms_and_conditions_margin_start_end"
+			android:layout_marginEnd="@dimen/terms_and_conditions_margin_start_end"
+			android:layout_marginBottom="@dimen/self_check_btn_margin"
+			android:background="@drawable/background_btn"
+			android:paddingTop="@dimen/btn_padding_top_bottom"
+			android:paddingBottom="@dimen/btn_padding_top_bottom"
+			android:textColor="@color/color_white"
+			android:textSize="@dimen/text_size_normal"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent" />
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

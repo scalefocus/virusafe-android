@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+
+		<import type="bg.government.virusafe.app.utils.StringsKt" />
+
+		<variable
+			name="localizationVM"
+			type="bg.government.virusafe.app.localization.LocalizationViewModel" />
+	</data>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:clipToPadding="false"
+		android:paddingStart="@dimen/row_padding_start_end"
+		android:paddingTop="@dimen/localization_title_padding_top_bottom"
+		android:paddingEnd="@dimen/row_padding_start_end"
+		android:paddingBottom="@dimen/localization_title_padding_top_bottom">
+
+		<TextView
+			android:id="@+id/localization_title"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="@{localizationVM.liveLocale().getString(StringsKt.SELECT_LANGUAGE)}"
+			android:textAlignment="viewStart"
+			android:textColor="@color/color_black"
+			android:textSize="@dimen/text_size_large"
+			android:textStyle="bold"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/localization_recycler"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:layout_marginTop="@dimen/localization_recycler_margin_top_bottom"
+			android:layout_marginBottom="@dimen/localization_recycler_margin_top_bottom"
+			android:overScrollMode="never"
+			app:layout_constraintBottom_toTopOf="@+id/localization_btn"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			tools:listitem="@layout/row_app_locale"
+			app:layout_constraintTop_toBottomOf="@+id/localization_title" />
+
+		<Button
+			android:id="@+id/localization_btn"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:background="@drawable/background_btn"
+			android:paddingTop="@dimen/btn_padding_top_bottom"
+			android:paddingBottom="@dimen/btn_padding_top_bottom"
+			android:text="@{localizationVM.liveLocale().getString(StringsKt.CONFIRM_LABEL)}"
+			android:textColor="@color/color_white"
+			android:textSize="@dimen/text_size_normal"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent" />
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

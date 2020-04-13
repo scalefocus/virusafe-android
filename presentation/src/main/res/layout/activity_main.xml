@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<FrameLayout
+			android:id="@+id/main_container"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<ProgressBar
+			android:id="@+id/main_progress"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:background="@color/semitransparent_white"
+			android:indeterminate="true"
+			android:indeterminateTint="@color/colorPrimary"
+			android:indeterminateTintMode="src_atop"
+			android:clickable="true"
+			android:focusable="true"
+			android:padding="160dp"
+			android:visibility="gone"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

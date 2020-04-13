@@ -1,0 +1,72 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply from: 'translations.gradle'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+        testInstrumentationRunner rootProject.ext.testInstrumentationRunner
+
+        buildConfigField "String", "DEFAULT_LANGUAGE", "\"bg\""
+        buildConfigField 'boolean', 'ENABLE_HTTP_LOGGING', 'false'
+        buildConfigField "String", "CLIENT_ID", "\"${client_id}\""
+        buildConfigField "String", "DEFAULT_ENDPOINT", "\"${default_endpoint}\""
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField 'boolean', 'ENABLE_HTTP_LOGGING', 'true'
+        }
+        mk {
+            buildConfigField "String", "DEFAULT_LANGUAGE", "\"mk\""
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    //Kotlin
+    implementation rootProject.ext.dependencies.kotlinStdlib
+    implementation rootProject.ext.dependencies.coroutinesCore
+    api 'androidx.core:core-ktx:1.1.0'
+
+    //Test tools
+    testImplementation rootProject.ext.dependencies.junit
+    androidTestImplementation rootProject.ext.dependencies.testRunner
+    androidTestImplementation rootProject.ext.dependencies.espresso
+
+    //Base service module
+    api 'com.upnetix.android-arch:base-service:1.0.7@aar'
+
+    //Retrofit
+    api "com.squareup.retrofit2:retrofit:2.6.2"
+    api 'com.squareup.okhttp3:okhttp:3.12.1'
+    api 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+    implementation "com.squareup.retrofit2:converter-gson:2.6.2"
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.12.1'
+
+    //Dagger 2
+    api rootProject.ext.dependencies.dagger2
+    api rootProject.ext.dependencies.dagger2Android
+    api rootProject.ext.dependencies.dagger2AndroidSupport
+    kapt rootProject.ext.dependencies.dagger2Compiler
+    kapt rootProject.ext.dependencies.dagger2AndroidCompiler
+
+    //Flex
+    api 'com.imperiamobile.localizationmodule:localization:2.1.2@aar'
+
+    //Work manager
+    api "androidx.work:work-runtime-ktx:${dependencyVersions.workManagerVersion}"
+}

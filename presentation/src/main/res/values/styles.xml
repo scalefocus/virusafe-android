@@ -1,0 +1,26 @@
+<resources>
+
+	<!-- Base application theme. -->
+	<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+		<item name="colorPrimary">@color/colorPrimary</item>
+		<item name="colorAccent">@color/colorPrimary</item>
+		<item name="android:statusBarColor">@color/colorPrimary</item>
+		<item name="android:windowBackground">@color/color_white</item>
+		<item name="android:splitMotionEvents">false</item>
+	</style>
+
+	<style name="SplashTheme" parent="AppTheme">
+		<item name="android:windowBackground">@drawable/background_splash</item>
+	</style>
+
+	<style name="DialogAnimation">
+		<item name="android:windowEnterAnimation">@anim/enter_from_bottom</item>
+		<item name="android:windowExitAnimation">@anim/exit_to_bottom</item>
+	</style>
+
+	<style name="Button" parent="TextAppearance.AppCompat.Button">
+		<item name="android:textColor">@color/colorPrimary</item>
+		<item name="android:textSize">@dimen/text_size_normal</item>
+		<item name="android:background">@drawable/button_border</item>
+	</style>
+</resources>

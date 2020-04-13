@@ -1,0 +1,42 @@
+android {
+
+    defaultConfig {
+        buildConfigField "String", "FLEX_BASE_URL", "\"${base_locale_url_debug}\""
+        buildConfigField "String[]", "FLEX_DOMAINS", createBuildConfigDomainsArray()
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "String", "FLEX_SECRET", "\"${secret_debug}\""
+        }
+        mk {
+            buildConfigField "String", "FLEX_SECRET", "\"${secret_mk}\""
+        }
+        release {
+            buildConfigField "String", "FLEX_BASE_URL", "\"${base_locale_url}\""
+            buildConfigField "String", "FLEX_SECRET", "\"${secret}\""
+        }
+    }
+
+    sourceSets {
+        main.assets.srcDirs += "${rootDir}${locale_dest}"
+    }
+}
+
+// use to iterate through all domain ids
+void forEachDomain(action) {
+    domains.split(",").each {
+        def domainId = it.trim()
+        if (!domainId.isEmpty()) {
+            action(domainId)
+        }
+    }
+}
+
+String createBuildConfigDomainsArray() {
+    def result = "{"
+    forEachDomain {
+        result += "\"$it\", "
+    }
+    result += "}"
+}

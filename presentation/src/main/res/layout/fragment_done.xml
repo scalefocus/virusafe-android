@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+
+		<import type="bg.government.virusafe.app.utils.StringsKt" />
+
+		<variable
+			name="doneVM"
+			type="bg.government.virusafe.mvvm.viewmodel.EmptyViewModel" />
+	</data>
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:fillViewport="true">
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingStart="28dp"
+			android:paddingEnd="28dp">
+
+			<cdflynn.android.library.checkview.CheckView
+				android:id="@+id/done_img"
+				android:layout_width="@dimen/done_img_dimen"
+				android:layout_height="@dimen/done_img_dimen"
+				android:layout_marginTop="156dp"
+				app:checkView_strokeColor="@color/colorPrimary"
+				app:checkView_strokeWidth="6dp"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent" />
+
+			<TextView
+				android:id="@+id/done_title"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:text="@{doneVM.liveLocale().getString(StringsKt.DONE_TITLE)}"
+				android:textAlignment="center"
+				android:textColor="@color/color_black"
+				android:textSize="@dimen/title_text_size"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/done_img" />
+
+			<TextView
+				android:id="@+id/contribution_text"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/contribution_text_margin_top"
+				android:text="@string/share_your_contribution_colon"
+				android:textAlignment="center"
+				android:textColor="@color/color_black"
+				android:textSize="@dimen/text_size_big"
+				android:textStyle="bold"
+				android:visibility="gone"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/done_title" />
+
+			<LinearLayout
+				android:id="@+id/share_buttons_container"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:visibility="gone"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/contribution_text">
+
+				<ImageView
+					android:id="@+id/facebook_share_btn"
+					android:layout_width="@dimen/share_btn_width_height"
+					android:layout_height="@dimen/share_btn_width_height"
+					android:layout_margin="@dimen/share_btn_margin"
+					android:background="?attr/selectableItemBackground"
+					android:src="@drawable/ic_facebook_icon"
+					android:tint="@color/colorPrimary"
+					tools:ignore="ContentDescription" />
+
+				<ImageView
+					android:id="@+id/instagram_share_btn"
+					android:layout_width="@dimen/share_btn_width_height"
+					android:layout_height="@dimen/share_btn_width_height"
+					android:layout_margin="@dimen/share_btn_margin"
+					android:background="?attr/selectableItemBackground"
+					android:src="@drawable/ic_instagram_icon"
+					android:tint="@color/colorPrimary"
+					tools:ignore="ContentDescription" />
+
+				<ImageView
+					android:id="@+id/twiter_share_btn"
+					android:layout_width="@dimen/share_btn_width_height"
+					android:layout_height="@dimen/share_btn_width_height"
+					android:layout_margin="@dimen/share_btn_margin"
+					android:background="?attr/selectableItemBackground"
+					android:src="@drawable/ic_twitter_icon"
+					android:tint="@color/colorPrimary"
+					tools:ignore="ContentDescription" />
+
+				<ImageView
+					android:id="@+id/linkedin_share_btn"
+					android:layout_width="@dimen/share_btn_width_height"
+					android:layout_height="@dimen/share_btn_width_height"
+					android:layout_margin="@dimen/share_btn_margin"
+					android:background="?attr/selectableItemBackground"
+					android:src="@drawable/ic_linkedin_icon"
+					android:tint="@color/colorPrimary"
+					tools:ignore="ContentDescription" />
+			</LinearLayout>
+
+			<TextView
+				android:id="@+id/success_text"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/thank_you_text_margin_top"
+				android:text="@{doneVM.liveLocale().getString(StringsKt.DONE_MSG)}"
+				android:textAlignment="center"
+				android:textColor="@color/color_dark_grey"
+				android:textSize="@dimen/text_size_big"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/share_buttons_container" />
+
+			<TextView
+				android:id="@+id/done_back_to_home_btn"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/thank_you_text_margin_top"
+				android:background="?attr/selectableItemBackground"
+				android:clickable="true"
+				android:focusable="true"
+				android:padding="@dimen/text_btn_padding"
+				android:text="@{doneVM.liveLocale().getString(StringsKt.TO_THE_HOME_LABEL)}"
+				android:textColor="@color/colorPrimary"
+				android:textSize="@dimen/text_size_normal"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent" />
+		</androidx.constraintlayout.widget.ConstraintLayout>
+	</ScrollView>
+</layout>

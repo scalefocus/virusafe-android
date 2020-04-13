@@ -1,0 +1,10 @@
+<resources>
+	<!--  Start  Do not remove-->
+	<string name="workManagerAuthority">bg.government.virusafe.workmanager-init</string>
+	<!--End of do not remove-->
+
+	<string name="app_name">ViruSafe</string>
+	<string name="share_app_text">Аз помагам в борбата срещу пандемията. Помогни и ти:</string>
+	<string name="share_your_contribution_colon">Споделете своя принос:</string>
+	<string name="application_is_not_installed">Приложението не е инсталирано</string>
+</resources>

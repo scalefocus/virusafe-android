@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+
+		<import type="android.view.View" />
+
+		<variable
+			name="modelAppLocale"
+			type="bg.government.virusafe.app.localization.LocalizationViewModel.AppLocale" />
+	</data>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id="@+id/locale_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:clickable="true"
+		android:focusable="true"
+		android:paddingTop="@dimen/row_padding_top_bottom"
+		android:paddingBottom="@dimen/row_padding_top_bottom">
+
+		<TextView
+			android:id="@+id/locale_text"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_marginEnd="8dp"
+			android:text="@{modelAppLocale.localeStr}"
+			android:textColor="@color/color_black"
+			android:textSize="@dimen/text_size_big"
+			app:layout_constraintEnd_toStartOf="@+id/locale_check"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<ImageView
+			android:id="@+id/locale_check"
+			android:layout_width="@dimen/img_check_width"
+			android:layout_height="@dimen/img_check_height"
+			android:layout_gravity="end"
+			android:src="@drawable/ic_check"
+			android:tint="@color/colorPrimary"
+			android:visibility="@{modelAppLocale.isSelected ? View.VISIBLE : View.INVISIBLE}"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			tools:ignore="ContentDescription" />
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

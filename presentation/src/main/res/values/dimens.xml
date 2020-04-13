@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="text_size_normal">14sp</dimen>
+	<dimen name="text_size_medium">15sp</dimen>
+	<dimen name="text_size_big">16sp</dimen>
+	<dimen name="text_size_large">22sp</dimen>
+	<dimen name="title_text_size">30sp</dimen>
+	<dimen name="app_name_text_size">38sp</dimen>
+	<dimen name="btn_padding_top_bottom">16dp</dimen>
+	<dimen name="text_btn_padding">4dp</dimen>
+
+	<!--Localization-->
+	<dimen name="row_padding_start_end">34dp</dimen>
+	<dimen name="row_padding_top_bottom">16dp</dimen>
+	<dimen name="img_check_width">21dp</dimen>
+	<dimen name="img_check_height">24dp</dimen>
+	<dimen name="localization_title_padding_top_bottom">30dp</dimen>
+	<dimen name="localization_recycler_margin_top_bottom">20dp</dimen>
+
+	<!--Registration-->
+	<dimen name="registration_user_img_width">44dp</dimen>
+	<dimen name="registration_user_img_height">50dp</dimen>
+	<dimen name="registration_user_img_margin_top">132dp</dimen>
+	<dimen name="registration_title_margin_top">22dp</dimen>
+	<dimen name="registration_phone_number_layout_margin_top">40dp</dimen>
+	<dimen name="registration_padding_start_end">34dp</dimen>
+	<dimen name="registration_padding_bottom">20dp</dimen>
+	<dimen name="registration_btn_margin_top">40dp</dimen>
+	<dimen name="registration_term_and_conditions_padding">5dp</dimen>
+
+	<!--Code verification-->
+	<dimen name="code_verification_user_img_width">63dp</dimen>
+	<dimen name="code_verification_user_img_height">50dp</dimen>
+	<dimen name="code_verification_user_img_margin_top">60dp</dimen>
+	<dimen name="code_verification_title_margin_top">22dp</dimen>
+	<dimen name="code_verification_info_margin_top">22dp</dimen>
+	<dimen name="code_verification_code_layout_margin_top">40dp</dimen>
+	<dimen name="code_verification_btn_margin_top">40dp</dimen>
+	<dimen name="code_verification_missing_btn_margin_top">23dp</dimen>
+
+	<!--Personal data-->
+	<dimen name="personal_data_margin_top">36dp</dimen>
+	<dimen name="personal_gender_margin_top">8dp</dimen>
+	<dimen name="personal_gender_btn_margin_start_end">5dp</dimen>
+	<dimen name="personal_data_title_margin_top">25dp</dimen>
+	<dimen name="personal_data_id_radius">25dp</dimen>
+	<dimen name="personal_data_line_width">1dp</dimen>
+
+	<!--Home-->
+	<dimen name="home_title_margin_bottom">10dp</dimen>
+	<dimen name="home_status_btn_margin_top">40dp</dimen>
+	<dimen name="home_learn_more_btn_margin_bottom">24dp</dimen>
+	<dimen name="home_top_btn_start_end">20dp</dimen>
+	<dimen name="home_learn_more_btn_margin_start_end">40dp</dimen>
+	<dimen name="home_terms_margin_bottom">32dp</dimen>
+	<dimen name="home_status_btn_dimen">320dp</dimen>
+	<dimen name="home_status_btn_text_size">25sp</dimen>
+	<dimen name="home_title_padding_start_end">20dp</dimen>
+	<dimen name="fragment_home_company_logo_margin">12dp</dimen>
+	<dimen name="home_screen_terms_margin_top">29dp</dimen>
+	<dimen name="home_screen_terms_margin_bottom">32dp</dimen>
+	<dimen name="fragment_home_button_margins">24dp</dimen>
+	<dimen name="fragment_home_app_info_margin_top">37dp</dimen>
+	<dimen name="fragment_home_title_bottom_margin">21dp</dimen>
+	<dimen name="fragment_home_title_size">18sp</dimen>
+	<dimen name="fragment_home_app_logo_margin_bottom">21dp</dimen>
+	<dimen name="fragment_home_app_logo_width">104dp</dimen>
+	<dimen name="fragment_home_app_logo_height">101dp</dimen>
+	<dimen name="language_img_dimen">20dp</dimen>
+	<dimen name="personal_info_btn_padding_end">5dp</dimen>
+	<dimen name="personal_info_btn_padding_start">35dp</dimen>
+
+	<!--SelfCheck-->
+	<dimen name="self_check_title_margin_top">24dp</dimen>
+	<dimen name="self_check_padding_start_end">36dp</dimen>
+	<dimen name="self_check_title_size">22sp</dimen>
+	<dimen name="self_check_checkbox_margin_top">24dp</dimen>
+	<dimen name="self_check_recycler_margin_top">12dp</dimen>
+	<dimen name="self_check_btn_margin">24dp</dimen>
+	<dimen name="radio_btn_padding_top_bottom">6dp</dimen>
+	<dimen name="done_img_dimen">80dp</dimen>
+
+	<!--TermsAndConditions-->
+	<dimen name="terms_and_conditions_margin_start_end">37dp</dimen>
+	<dimen name="terms_and_conditions_text_margin_top_bottom">22dp</dimen>
+	<dimen name="terms_and_conditions_title_size">22sp</dimen>
+
+	<!--Done-->
+	<dimen name="share_btn_width_height">40dp</dimen>
+	<dimen name="contribution_text_margin_top">40dp</dimen>
+	<dimen name="share_btn_margin">10dp</dimen>
+	<dimen name="thank_you_text_margin_top">40dp</dimen>
+</resources>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@drawable/background_splash"
+		app:buildType="@{BuildConfig.BUILD_TYPE}"
+		app:currentLocale="@{splashViewModel.currentLocale}"
+		app:firstLogo="@{firstLogo}"
+		app:secondLogo="@{secondLogo}">
+
+		<ImageView
+			android:id="@+id/first_logo"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="60dp"
+			android:src="@drawable/ic_min_zdrave"
+			app:layout_constraintEnd_toStartOf="@+id/second_logo"
+			app:layout_constraintHorizontal_chainStyle="spread"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			tools:ignore="ContentDescription" />
+
+		<ImageView
+			android:id="@+id/second_logo"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:src="@drawable/ic_oper_shtab"
+			app:layout_constraintBottom_toBottomOf="@+id/first_logo"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintHorizontal_chainStyle="spread"
+			app:layout_constraintStart_toEndOf="@+id/first_logo"
+			app:layout_constraintTop_toTopOf="@+id/first_logo"
+			tools:ignore="ContentDescription" />
+
+		<ImageView
+			android:id="@+id/logo_iv"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:src="@drawable/ic_app_logo"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			tools:ignore="ContentDescription" />
+
+		<ProgressBar
+			android:id="@+id/splash_progress"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:indeterminate="true"
+			android:indeterminateTint="@color/colorPrimary"
+			android:indeterminateTintMode="src_atop"
+			android:padding="160dp"
+			android:visibility="gone"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/splash_app_name" />
+
+		<TextView
+			android:id="@+id/splash_app_name"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="16dp"
+			android:text="@string/app_name"
+			android:textColor="@color/color_white"
+			android:textSize="@dimen/app_name_text_size"
+			android:textStyle="bold"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/logo_iv" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+	<data>
+
+		<import type="bg.government.virusafe.BuildConfig" />
+
+		<variable
+			name="splashViewModel"
+			type="bg.government.virusafe.mvvm.viewmodel.EmptyViewModel" />
+	</data>
+</layout>

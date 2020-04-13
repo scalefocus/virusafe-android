@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!--  Start  Do not remove-->
+	<string name="workManagerAuthority">bg.government.virusafe.mk.workmanager-init</string>
+	<!--End of do not remove-->
+
+	<string name="app_name">SeZaCovid19</string>
+</resources>

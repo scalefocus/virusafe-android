@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<data>
+
+		<variable
+			name="modelQuestion"
+			type="com.upnetix.applicationservice.selfcheck.model.Question" />
+	</data>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="20dp">
+
+		<TextView
+			android:id="@+id/question_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@{modelQuestion.questionTitle}"
+			android:textColor="@color/color_black"
+			android:textSize="@dimen/text_size_big"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<LinearLayout
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="10dp"
+			android:orientation="horizontal"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/question_title">
+
+			<RadioButton
+				android:id="@+id/question_answer_yes_btn"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginEnd="10dp"
+				android:layout_weight="1"
+				android:background="@drawable/background_radio_btn"
+				android:button="@android:color/transparent"
+				android:checked="@{modelQuestion.answer != null &amp;&amp; modelQuestion.answer == true}"
+				android:paddingTop="@dimen/radio_btn_padding_top_bottom"
+				android:paddingBottom="@dimen/radio_btn_padding_top_bottom"
+				android:textAlignment="center"
+				android:textColor="@drawable/radio_text_color" />
+
+			<RadioButton
+				android:id="@+id/question_answer_no_btn"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:background="@drawable/background_radio_btn"
+				android:button="@android:color/transparent"
+				android:checked="@{modelQuestion.answer != null &amp;&amp; modelQuestion.answer == false}"
+				android:paddingTop="@dimen/radio_btn_padding_top_bottom"
+				android:paddingBottom="@dimen/radio_btn_padding_top_bottom"
+				android:textAlignment="center"
+				android:textColor="@drawable/radio_text_color" />
+		</LinearLayout>
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

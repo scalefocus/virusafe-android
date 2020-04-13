@@ -1,0 +1,27 @@
+# Project-wide Gradle settings.
+
+org.gradle.jvmargs=-Xmx1536m
+org.gradle.daemon=false
+
+kotlin.code.style=official
+android.databinding.incremental=true
+kapt.incremental.apt=true
+
+android.useAndroidX=true
+android.enableJetifier=true
+
+#locales
+base_locale_url=https://www.example.com/locales/
+base_locale_url_debug=https://dev.example.com/locales/
+locale_dest=/locale
+locale_zip_dest=/locale/zip
+app_id=ViruSafe-BG
+app_id_mk=ViruSafe-MK
+secret=1234-abcd
+secret_debug=1234-abcd-debug
+secret_mk=1234-abcd-mk
+domains=Common
+
+#Example endpoint and client id
+default_endpoint=https://virtserver.swaggerhub.com/ViruSafe/viru-safe_backend_rest_api/1.0.0/
+client_id=3b3d3b02-e052-4289-827b-6c2f2e2a0430

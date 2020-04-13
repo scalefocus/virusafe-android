@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1",
+    "firebase_url": "https://dummy-example-project.firebaseio.com",
+    "project_id": "dummy-example-project",
+    "storage_bucket": "dummy-example-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1:android:1",
+        "android_client_info": {
+          "package_name": "bg.government.virusafe.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1234-exampleid.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "ExampleApiKey"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
