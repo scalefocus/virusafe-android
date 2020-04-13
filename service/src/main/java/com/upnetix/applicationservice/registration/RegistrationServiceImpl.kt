@@ -32,7 +32,7 @@ class RegistrationServiceImpl @Inject constructor(
 
 		if (responseWrapper is ResponseWrapper.Success) {
 			sharedPrefs.writeStringToSharedPrefs(HAS_REGISTRATION_KEY, TRUE_VALUE)
-			sharedPrefs.writeStringToSharedPrefs(TOKEN_KEY, responseWrapper.response.accessToken)
+			sharedPrefs.writeStringToSharedPrefs(NEW_TOKEN_KEY, responseWrapper.response.accessToken)
 		}
 		return responseWrapper
 	}
@@ -45,7 +45,8 @@ class RegistrationServiceImpl @Inject constructor(
 
 	companion object {
 		const val HAS_REGISTRATION_KEY = "com.upnetix.applicationservice.key1"
-		const val TOKEN_KEY = "com.upnetix.applicationservice.key2"
+		const val OLD_TOKEN_KEY = "com.upnetix.applicationservice.key2"
+		const val NEW_TOKEN_KEY = "com.upnetix.applicationservice.key2.1"
 		const val FINISHED_REGISTRATION_KEY = "com.upnetix.applicationservice.key3"
 
 		private const val TRUE_VALUE = "true"

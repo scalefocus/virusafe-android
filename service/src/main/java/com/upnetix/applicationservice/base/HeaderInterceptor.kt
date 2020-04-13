@@ -2,14 +2,17 @@ package com.upnetix.applicationservice.base
 
 import com.imperiamobile.localizationmodule.LocaleHelper
 import com.upnetix.applicationservice.BuildConfig
-import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.TOKEN_KEY
+import com.upnetix.applicationservice.encryption.IEncryptionService
+import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.NEW_TOKEN_KEY
+import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.OLD_TOKEN_KEY
 import com.upnetix.service.sharedprefs.ISharedPrefsService
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
 class HeaderInterceptor @Inject constructor(
-	val sharedPrefs: ISharedPrefsService
+	val sharedPrefs: ISharedPrefsService,
+	val encryptionService: IEncryptionService
 ) : Interceptor {
 
 	override fun intercept(chain: Interceptor.Chain): Response = chain.run {
@@ -26,9 +29,19 @@ class HeaderInterceptor @Inject constructor(
 			requestBuilder.addHeader(LANGUAGE_KEY, it.language)
 		}
 
-		val token = sharedPrefs.readStringFromSharedPrefs(TOKEN_KEY)
-		if (token.isNotBlank()) {
-			requestBuilder.addHeader(AUTHORIZATION_KEY, "$BEARER_KEY $token")
+		var token: String? = sharedPrefs.readStringFromSharedPrefs(NEW_TOKEN_KEY)
+		if (token.isNullOrBlank()) {
+			val encryptedValue = sharedPrefs.readStringFromSharedPrefs(OLD_TOKEN_KEY)
+			if (encryptedValue.isNotBlank()) {
+				token = encryptionService.decryptValue(encryptedValue)
+				sharedPrefs.clearValue(OLD_TOKEN_KEY)
+			}
+		}
+		token?.let {
+			if (it.isBlank().not()) {
+				sharedPrefs.writeStringToSharedPrefs(NEW_TOKEN_KEY, it)
+				requestBuilder.addHeader(AUTHORIZATION_KEY, "$BEARER_KEY $it")
+			}
 		}
 
 		proceed(requestBuilder.build())
