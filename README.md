@@ -92,7 +92,7 @@ If you happen to find a security vulnerability, we would appreciate you letting 
 
 ## License
 
-Copyright 2020 Scalefocus AD
+Copyright 2020 SCALE FOCUS AD
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
