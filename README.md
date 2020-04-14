@@ -28,27 +28,16 @@ Overview:
 ## Build Instructions
 
 1. Make sure you've installed [Android Studio](https://developer.android.com/studio/index.html).
-2. Clone this repo and go in the root directory of the project.
-3. Execute the following commands in order:
-   
-    `cp gradle.properties-example gradle.properties` - to setup the simple app credentials file.
-    
-    `cp google-services.json-example presentation/google-services.json` - to setup the sample google services credentials file.
-    
-    `mkdir "locale" && cp -a locale-example/. locale/` - to setup the locale files.
-    
-    `cd service` - to move in to the service folder.
-    
-    `cp translations.gradle-example translations.gradle` - to setup the translations build step.
-4. In Android Studio, open the project from the local repository.
-5. Go to the [Use a Mock API](Using-Mock-API.md) and create your own Mock API, after that put the newly created endpoint in the `gradle.properties` file in the `default_endpoint` property.
-6. Connect a device or emulator and run the project.
+2. Setup your dev environment by running `sh setup-dev.sh` from the root directory of the project.
+3. In Android Studio, open the project from the local repository.
+4. Go to the [Use a Mock API](Using-Mock-API.md) and create your own Mock API, after that put the newly created endpoint in the `gradle.properties` file in the `default_endpoint` property.
+5. Connect a device or emulator and run the project.
 
 > **Note:** The project depends on different build variants, which are configured in the `build.gradle` files of the project. There are 3 build types:
-> 	1. Debug - The preffered build variant for development.
+> 	1. Debug - The preferred build variant for development.
 > 	2. Release - This one is for building the release apks for the store.
 > 	3. Mk - This one is for switching to other locales/regions apart from the BG version.
-> It is preffered to use the **Debug** type for making any new changes, but make sure when you introduce them that all of the other build variants are still working.
+> It is preferred to use the **Debug** type for making any new changes, but make sure when you introduce them that all of the other build variants are still working.
 
 ## Code Styleguide
 
@@ -70,8 +59,8 @@ To run both of the plugins use the following commands:
 
 ```$ ./gradlew detekt```
 
-> **Note:** Currently we have some issues in the project which are comming from both of these static analysis tools. 
-We are aware of that and we are tring to fix them, but due to the short timeframe that we had for the project we weren't abe to fix all of them. 
+> **Note:** Currently we have some issues in the project which are coming from both of these static analysis tools. 
+We are aware of that and we are working on fixing them - [virusafe-android#3](https://github.com/scalefocus/virusafe-android/issues/3#issue-598955030).
 If you want to help us resolve them you are more then welcome.
 
 ## Gitflow guide
