@@ -22,6 +22,8 @@ Overview:
     - [Using a Mock API](#using-a-mock-api)
   - [Contributing](#contributing)
   - [Security](#security)
+  - [Contacts](#contacts)
+  - [License](#license)
 
 ## Build Instructions
 
@@ -89,6 +91,10 @@ Read our [Contributing Guide](CONTRIBUTING.md) to learn about reporting issues, 
 ## Security
 
 If you happen to find a security vulnerability, we would appreciate you letting us know by contacting us on - virusafe.support (at) scalefocus.com and allowing us to respond before disclosing the issue publicly.
+
+## Contacts
+
+Feel free to checkout our [Slack Team](https://join.slack.com/t/virusafe/shared_invite/zt-dthph60w-KGyk_s6rjoGa6WjR7~tCAg) and join the discussion there ✌️
 
 ## License
 
