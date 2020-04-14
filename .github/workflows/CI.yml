@@ -18,6 +18,10 @@ jobs:
         ./gradlew checkstyle
         ./gradlew detekt
 
-    - name: Static code analysis
+    - name: Build
+      run: 
+        echo "TODO"
+        
+    - name: Test
       run: 
         echo "TODO"
