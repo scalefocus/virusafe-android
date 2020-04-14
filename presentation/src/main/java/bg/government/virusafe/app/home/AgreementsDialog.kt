@@ -7,24 +7,27 @@ import android.text.method.LinkMovementMethod
 import android.view.View
 import bg.government.virusafe.R
 import bg.government.virusafe.app.utils.I_AGREE_LABEL
-import bg.government.virusafe.app.utils.TNC_PART_ONE
-import bg.government.virusafe.app.utils.TNC_PART_TWO
-import bg.government.virusafe.app.utils.TNC_TITLE
-import bg.government.virusafe.databinding.FragmentTermsAndConditionsBinding
+import bg.government.virusafe.databinding.FragmentAgreementsBinding
 import bg.government.virusafe.mvvm.dialog.AbstractDialogFragment
 import bg.government.virusafe.mvvm.viewmodel.EmptyViewModel
 import com.upnetix.presentation.view.DEFAULT_VIEW_MODEL_ID
 
-class TermsAndConditionsDialog :
-	AbstractDialogFragment<FragmentTermsAndConditionsBinding, EmptyViewModel>() {
+class AgreementsDialog :
+	AbstractDialogFragment<FragmentAgreementsBinding, EmptyViewModel>() {
 
 	private var agreeButtonListener: OnDialogButtonListener? = null
 
 	companion object {
+		private const val TITLE = "title"
+		private const val DESCRIPTION = "description"
+		private const val TERMS_AND_CONDITIONS = "terms_and_conditions"
 		private const val SHOW_AGREE_BTN = "show_agree_btn"
-		internal fun newInstance(showAgreeBtn: Boolean) = TermsAndConditionsDialog()
-			.apply {
+		internal fun newInstance(title: String, description: String, tnc: Boolean, showAgreeBtn: Boolean) =
+			AgreementsDialog().apply {
 				arguments = Bundle().apply {
+					putString(TITLE, title)
+					putString(DESCRIPTION, description)
+					putBoolean(TERMS_AND_CONDITIONS, tnc)
 					putBoolean(SHOW_AGREE_BTN, showAgreeBtn)
 				}
 			}
@@ -42,16 +45,15 @@ class TermsAndConditionsDialog :
 
 	override fun onPrepareLayout(layoutView: View) {
 		super.onPrepareLayout(layoutView)
-		val title = viewModel.localizeString(TNC_TITLE)
-		val description =
-			viewModel.localizeString(TNC_PART_ONE) + viewModel.localizeString(TNC_PART_TWO)
-		binding.termsAndConditionsTitle.text = title
-		binding.termsAndConditionsTxt.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+		val title = arguments?.getString(TITLE)
+		val description = arguments?.getString(DESCRIPTION)
+		binding.agreementsTitle.text = title
+		binding.agreementsTxt.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 			Html.fromHtml(description, Html.FROM_HTML_MODE_LEGACY)
 		} else {
 			Html.fromHtml(description)
 		}
-		binding.termsAndConditionsTxt.movementMethod = LinkMovementMethod.getInstance();
+		binding.agreementsTxt.movementMethod = LinkMovementMethod.getInstance();
 
 		val showAgreeBtn = arguments?.getBoolean(SHOW_AGREE_BTN) ?: false
 		if (showAgreeBtn) {
@@ -60,7 +62,9 @@ class TermsAndConditionsDialog :
 			binding.agreeBtn.setOnClickListener {
 				setAnimation(R.anim.exit_to_bottom)
 				dismiss()
-				agreeButtonListener?.onAgreeBtnClicked()
+				agreeButtonListener?.onAgreeBtnClicked(
+					arguments?.getBoolean(TERMS_AND_CONDITIONS) ?: false
+				)
 			}
 		}
 	}
@@ -69,7 +73,7 @@ class TermsAndConditionsDialog :
 		agreeButtonListener = listener
 	}
 
-	override fun getLayoutResId() = R.layout.fragment_terms_and_conditions
+	override fun getLayoutResId() = R.layout.fragment_agreements
 
 	override fun getViewModelClass() = EmptyViewModel::class.java
 
@@ -77,5 +81,5 @@ class TermsAndConditionsDialog :
 }
 
 interface OnDialogButtonListener {
-	fun onAgreeBtnClicked()
+	fun onAgreeBtnClicked(termsAndConditions: Boolean)
 }
