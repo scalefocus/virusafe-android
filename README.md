@@ -94,7 +94,7 @@ If you happen to find a security vulnerability, we would appreciate you letting 
 
 ## Contacts
 
-Feel free to join our [Slack team](https://join.slack.com/t/virusafe/shared_invite/zt-dthph60w-KGyk_s6rjoGa6WjR7~tCAg) and join in the discussion there.
+Feel free to checkout our [Slack Team](https://join.slack.com/t/virusafe/shared_invite/zt-dthph60w-KGyk_s6rjoGa6WjR7~tCAg) and join the discussion there ✌️
 
 ## License
 
