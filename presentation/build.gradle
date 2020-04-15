@@ -118,6 +118,15 @@ dependencies {
     //DateTime
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
 
+    // Timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    //ble
+    implementation 'com.polidea.rxandroidble2:rxandroidble:1.11.0'
+
+    implementation "androidx.preference:preference:1.1.0"
+    implementation 'com.google.code.gson:gson:2.8.5'
+
     //Service module
     implementation project(path: ':service')
 }

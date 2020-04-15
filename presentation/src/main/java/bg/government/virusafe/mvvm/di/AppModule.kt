@@ -3,6 +3,7 @@ package bg.government.virusafe.mvvm.di
 import bg.government.virusafe.app.MainActivity
 import bg.government.virusafe.app.WebViewFragment
 import bg.government.virusafe.app.appinfo.AppInfoFragment
+import bg.government.virusafe.app.home.BackgroundScansFragment
 import bg.government.virusafe.app.home.HomeFragment
 import bg.government.virusafe.app.home.TermsAndConditionsDialog
 import bg.government.virusafe.app.localization.LocalizationFragment
@@ -59,4 +60,7 @@ abstract class AppModule : BaseAppModule() {
 
 	@ContributesAndroidInjector
 	abstract fun localizationFragment(): LocalizationFragment
+
+	@ContributesAndroidInjector
+	abstract fun backgroundScansFragment(): BackgroundScansFragment
 }

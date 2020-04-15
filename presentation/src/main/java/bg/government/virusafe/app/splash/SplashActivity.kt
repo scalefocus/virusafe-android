@@ -29,7 +29,7 @@ import com.upnetix.presentation.navigation.ACTIVITY_BUNDLE_EXTRA_KEY
 import com.upnetix.service.sharedprefs.ISharedPrefsService
 import javax.inject.Inject
 
-class SplashActivity : AbstractActivity<ActivitySplashBinding, EmptyViewModel>() {
+class 	SplashActivity : AbstractActivity<ActivitySplashBinding, EmptyViewModel>() {
 	private val mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
 	private lateinit var firebaseDefaultMap: HashMap<String, Any>
 	private var isForceUpdateDialogShown = false
@@ -73,6 +73,11 @@ class SplashActivity : AbstractActivity<ActivitySplashBinding, EmptyViewModel>()
 				)
 				sharedPrefsService.writeStringToSharedPrefs(
 					IS_STATISTICS_BTN_VISIBLE_KEY, mFirebaseRemoteConfig.getString(IS_STATISTICS_BTN_VISIBLE_KEY)
+				)
+				sharedPrefsService.writeStringToSharedPrefs(
+					KEY_BLUETOOTH_BEACONS_SEND_PERIOD, mFirebaseRemoteConfig.getString(
+						KEY_BLUETOOTH_BEACONS_SEND_PERIOD
+					)
 				)
 				//calling function to check if new version is available or not
 				checkForUpdate()
@@ -172,6 +177,7 @@ class SplashActivity : AbstractActivity<ActivitySplashBinding, EmptyViewModel>()
 	companion object {
 		const val STATISTICS_URL_KEY = "statistics_url"
 		const val IS_STATISTICS_BTN_VISIBLE_KEY = "is_statistics_btn_visible"
+		const val KEY_BLUETOOTH_BEACONS_SEND_PERIOD = "bluetooth_beacons_send_period"
 		private const val DEFAULT_APP_GOOGLE_PLAY_STORE_URL =
 			"https://play.google.com/store/apps/details?id=bg.government.virusafe"
 		private const val DELAY = 1000L

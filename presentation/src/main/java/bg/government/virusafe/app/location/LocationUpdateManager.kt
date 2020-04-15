@@ -12,6 +12,7 @@ import bg.government.virusafe.app.utils.hasPermission
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
@@ -46,12 +47,18 @@ class LocationUpdateManager private constructor(private val context: Context) {
 	}
 
 	fun getLastKnownLocation(
-		owner: LifecycleOwner,
+		owner: LifecycleOwner? = null,
 		listener: suspend (location: Location?) -> Unit
 	) {
 		fusedLocationClient.lastLocation.addOnCompleteListener {
-			owner.lifecycleScope.launch {
-				listener(if (it.isSuccessful) it.result else null)
+			if(owner != null) {
+				owner.lifecycleScope?.launch {
+					listener(if (it.isSuccessful) it.result else null)
+				}
+			} else {
+				GlobalScope.launch {
+					listener(if (it.isSuccessful) it.result else null)
+				}
 			}
 		}
 	}

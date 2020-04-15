@@ -31,7 +31,7 @@ class LocationUpdateBroadcastReceiver : BroadcastReceiver() {
 	}
 
 	private fun enqueueWork(context: Context, locationEntity: LocationEntity) {
-		val inputData = GeoLocationWorker.createData(locationEntity)
+		val inputData = GeoLocationWorker.createLocationData(locationEntity)
 
 		val constraints = Constraints.Builder()
 			.setRequiredNetworkType(NetworkType.CONNECTED)

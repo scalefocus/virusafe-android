@@ -47,6 +47,7 @@ class RegistrationServiceImpl @Inject constructor(
 		const val HAS_REGISTRATION_KEY = "com.upnetix.applicationservice.key1"
 		const val TOKEN_KEY = "com.upnetix.applicationservice.key2"
 		const val FINISHED_REGISTRATION_KEY = "com.upnetix.applicationservice.key3"
+		const val BLUETOOTH_KEY = "com.upnetix.applicationservice.key4"
 
 		private const val TRUE_VALUE = "true"
 	}

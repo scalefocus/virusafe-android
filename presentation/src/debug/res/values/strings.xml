@@ -4,4 +4,6 @@
 	<string name="workManagerAuthority">bg.government.virusafe.debug.workmanager-init</string>
 	<!--End of do not remove-->
 	<string name="app_name">Dev-ViruSafe</string>
+
+	<string name="scan_for_beacons">Scan for near devices</string>
 </resources>

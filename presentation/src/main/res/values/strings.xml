@@ -7,4 +7,6 @@
 	<string name="share_app_text">Аз помагам в борбата срещу пандемията. Помогни и ти:</string>
 	<string name="share_your_contribution_colon">Споделете своя принос:</string>
 	<string name="application_is_not_installed">Приложението не е инсталирано</string>
+
+	<string name="scan_for_beacons">Сканира за близки устроиства</string>
 </resources>
