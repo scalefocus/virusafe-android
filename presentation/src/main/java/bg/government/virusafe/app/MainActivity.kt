@@ -2,7 +2,10 @@ package bg.government.virusafe.app
 
 import android.Manifest
 import android.app.Activity
+import android.app.ActivityManager
 import android.app.AlertDialog
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -13,17 +16,27 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Patterns
 import android.widget.ProgressBar
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager.getInstance
 import bg.government.virusafe.R
+import bg.government.virusafe.app.bluetooth.BluetoothProximityService
+import bg.government.virusafe.app.bluetooth.proximity.ProximityData
+import bg.government.virusafe.app.bluetooth.proximity.ProximityWorker
 import bg.government.virusafe.app.fcm.FirebaseCloudMessagingService.Companion.URL
 import bg.government.virusafe.app.home.HomeFragment
+import bg.government.virusafe.app.home.HomeFragment.Companion.CHECK_BLUETOOTH
 import bg.government.virusafe.app.localization.LocalizationFragment
 import bg.government.virusafe.app.location.LocationUpdateManager
+import bg.government.virusafe.app.personaldata.PersonalDataFragment
 import bg.government.virusafe.app.registration.CodeVerificationFragment
 import bg.government.virusafe.app.registration.CodeVerificationFragment.Companion.SMS_RETRIEVE_STATUS_CODE
-import bg.government.virusafe.app.personaldata.PersonalDataFragment
 import bg.government.virusafe.app.registration.RegistrationFragment
 import bg.government.virusafe.app.registration.SmsBroadcastReceiver
 import bg.government.virusafe.app.selfcheck.DoneFragment
+import bg.government.virusafe.app.splash.SplashActivity.Companion.KEY_BLUETOOTH_BEACONS_SEND_PERIOD
 import bg.government.virusafe.app.utils.LOCATION_PERMISSION_MSG
 import bg.government.virusafe.app.utils.NO_LABEL
 import bg.government.virusafe.app.utils.OK_LABEL
@@ -31,6 +44,7 @@ import bg.government.virusafe.app.utils.WARNING_LABEL
 import bg.government.virusafe.app.utils.YES_LABEL
 import bg.government.virusafe.databinding.ActivityMainBinding
 import bg.government.virusafe.mvvm.activity.AbstractActivity
+import bg.government.virusafe.mvvm.application.HealthcareApp
 import bg.government.virusafe.mvvm.viewmodel.EmptyViewModel
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.common.api.ApiException
@@ -38,13 +52,14 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.LocationSettingsStatusCodes
-import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.HAS_REGISTRATION_KEY
 import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.FINISHED_REGISTRATION_KEY
+import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.HAS_REGISTRATION_KEY
 import com.upnetix.presentation.view.DEFAULT_VIEW_MODEL_ID
 import com.upnetix.presentation.view.IView
 import com.upnetix.service.sharedprefs.ISharedPrefsService
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class MainActivity : AbstractActivity<ActivityMainBinding, EmptyViewModel>(),
@@ -77,6 +92,10 @@ class MainActivity : AbstractActivity<ActivityMainBinding, EmptyViewModel>(),
 		super.onCreate(savedInstanceState)
 		decideNavigation()
 		checkForNotificationData()
+		if (!isMyServiceRunning(BluetoothProximityService::class.java)) {
+			(this.applicationContext as HealthcareApp).startBluetoothLeExchange()
+		}
+		enqueueSendProximityRequest()
 	}
 
 	private fun decideNavigation() {
@@ -114,6 +133,35 @@ class MainActivity : AbstractActivity<ActivityMainBinding, EmptyViewModel>(),
 				stopSmsRetrieve()
 			}
 		}
+	}
+
+	private fun enqueueSendProximityRequest() {
+		val constraints = Constraints.Builder()
+			.setRequiredNetworkType(NetworkType.CONNECTED)
+			.build()
+
+		val work = PeriodicWorkRequest.Builder(
+			ProximityWorker::class.java,
+			sendProximityRequestPeriodInMins(),
+			TimeUnit.MINUTES
+		).setConstraints(constraints).build()
+
+		getInstance(this).enqueueUniquePeriodicWork(SEND_PROXIMITIES, ExistingPeriodicWorkPolicy.KEEP, work)
+	}
+
+	private fun sendProximityRequestPeriodInMins(): Long {
+		val sendPeriodStr =
+			sharedPreferences.readStringFromSharedPrefs(KEY_BLUETOOTH_BEACONS_SEND_PERIOD)
+		var sendPeriod = 15L
+		if (sendPeriodStr.isNotBlank()) {
+			try {
+				sendPeriod = sendPeriodStr.toLong()
+			} catch (e: NumberFormatException) {
+				e.printStackTrace()
+			}
+		}
+
+		return sendPeriod
 	}
 
 	override fun onResume() {
@@ -159,6 +207,11 @@ class MainActivity : AbstractActivity<ActivityMainBinding, EmptyViewModel>(),
 			when (requestCode) {
 				LOCATION_PERMISSIONS_REQUEST_CODE -> {
 					startLocationTracking()
+					(this.applicationContext as HealthcareApp).startBluetoothLeExchange()
+				}
+
+				REQUEST_ENABLE_BT -> {
+					requestLocationTracking {}
 				}
 			}
 		} else {
@@ -168,6 +221,7 @@ class MainActivity : AbstractActivity<ActivityMainBinding, EmptyViewModel>(),
 		if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
 			if (hasLocationPermissions()) {
 				startLocationTracking()
+				(this.applicationContext as HealthcareApp).startBluetoothLeExchange()
 			} else {
 				locationPermissionListener?.invoke()
 			}
@@ -200,6 +254,20 @@ class MainActivity : AbstractActivity<ActivityMainBinding, EmptyViewModel>(),
 		}
 	}
 
+	fun verifyBluetooth() {
+		try {
+			if (!(getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter.isEnabled) {
+				val intentBtEnabled = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+				startActivityForResult(intentBtEnabled, REQUEST_ENABLE_BT)
+			} else {
+				requestLocationTracking {}
+			}
+		} catch (e: RuntimeException) {
+			// Device does not support Bluetooth LE
+			e.printStackTrace()
+		}
+	}
+
 	private fun showPermissionDescDialog() {
 		AlertDialog.Builder(this).setTitle(viewModel.localizeString(WARNING_LABEL))
 			.setMessage(viewModel.localizeString(LOCATION_PERMISSION_MSG))
@@ -225,6 +293,7 @@ class MainActivity : AbstractActivity<ActivityMainBinding, EmptyViewModel>(),
 			return
 		}
 
+		(this.applicationContext as HealthcareApp).startBluetoothLeExchange()
 		startLocationTracking()
 	}
 
@@ -249,6 +318,7 @@ class MainActivity : AbstractActivity<ActivityMainBinding, EmptyViewModel>(),
 				val settingsResponse = it.getResult(ApiException::class.java)
 				if (settingsResponse != null) {
 					startLocationTracking()
+					(this.applicationContext as HealthcareApp).startBluetoothLeExchange()
 				}
 			} catch (ex: ApiException) {
 				when (ex.statusCode) {
@@ -387,8 +457,29 @@ class MainActivity : AbstractActivity<ActivityMainBinding, EmptyViewModel>(),
 		}
 	}
 
+	@Suppress("DEPRECATION")
+	private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
+		val manager: ActivityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+		for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+			if (serviceClass.name == service.service.className) {
+				return true
+			}
+		}
+		return false
+	}
+
+	override fun onDestroy() {
+		ProximityData.saveProximities(this, mutableListOf())
+		sharedPreferences.clearValue(CHECK_BLUETOOTH)
+		sharedPreferences.clearValue("beacons")
+
+		super.onDestroy()
+	}
+
 	companion object {
 		private const val LOCATION_PERMISSIONS_REQUEST_CODE = 999
+		private const val REQUEST_ENABLE_BT: Int = 1
+		private const val SEND_PROXIMITIES = "send_proximities"
 		private const val KEY_SHOW = "key_show"
 		private const val VALUE_SHOW = "value_show"
 	}

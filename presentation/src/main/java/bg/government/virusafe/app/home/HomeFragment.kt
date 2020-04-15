@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import bg.government.virusafe.BR
 import bg.government.virusafe.R
+import bg.government.virusafe.app.MainActivity
 import bg.government.virusafe.app.WebViewFragment
 import bg.government.virusafe.app.appinfo.AppInfoFragment
 import bg.government.virusafe.app.fcm.FirebaseCloudMessagingService.Companion.URL
@@ -80,6 +81,16 @@ class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
 			if (canClick().not()) return@setOnClickListener
 			navigateToView(LocalizationFragment::class)
 		}
+
+		binding.backgroundScansBtn.setOnClickListener {
+			navigateToView(BackgroundScansFragment::class)
+		}
+
+		if(sharedPrefsService.readStringFromSharedPrefs(CHECK_BLUETOOTH).isBlank()) {
+			val mainActivity = activity as? MainActivity
+			mainActivity?.verifyBluetooth()
+			sharedPrefsService.writeStringToSharedPrefs(CHECK_BLUETOOTH, "false")
+		}
 	}
 
 	override fun addViewModelObservers(viewLifecycleOwner: LifecycleOwner) {
@@ -109,5 +120,9 @@ class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 			window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 		window?.statusBarColor = ContextCompat.getColor(activity!!, R.color.color_light_blue)
+	}
+
+	companion object {
+		const val CHECK_BLUETOOTH = "check_bluetooth"
 	}
 }

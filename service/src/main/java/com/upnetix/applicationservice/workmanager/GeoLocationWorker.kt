@@ -4,11 +4,15 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.upnetix.applicationservice.ServiceModule
 import com.upnetix.applicationservice.geolocation.IGeoLocationApi
 import com.upnetix.applicationservice.geolocation.Location
 import com.upnetix.applicationservice.geolocation.LocationEntity
 import com.upnetix.applicationservice.geolocation.LocationRequest
+import com.upnetix.applicationservice.geolocation.Proximity
+import com.upnetix.applicationservice.geolocation.ProximityRequest
 import com.upnetix.service.retrofit.RetrofitModule
 import com.upnetix.service.retrofit.SSLData
 import com.upnetix.service.sharedprefs.ISharedPrefsService
@@ -18,6 +22,7 @@ import okhttp3.Interceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.HttpException
+import java.util.*
 
 class GeoLocationWorker(
 	context: Context,
@@ -34,6 +39,8 @@ class GeoLocationWorker(
 		private const val LONGITUDE = "val1"
 		private const val LATITUDE = "val2"
 		private const val DATE = "val3"
+		private const val PROXIMITIES = "val4"
+		private const val IS_PROXIMITY = "val5"
 		private const val DELIMITER = "-"
 		private const val VALUE_KEY = "value_key"
 
@@ -41,24 +48,45 @@ class GeoLocationWorker(
 		 * Transmit the arguments for this work
 		 * @param entity [LocationEntity] received location
 		 */
-		fun createData(entity: LocationEntity) =
+		fun createLocationData(entity: LocationEntity) =
 			Data.Builder()
 				.putDouble(LONGITUDE, entity.lng)
 				.putDouble(LATITUDE, entity.lat)
 				.putLong(DATE, entity.timestamp)
+				.putBoolean(IS_PROXIMITY, false)
+				.build()
+
+		/**
+		 * Transmit the arguments for this work
+		 * @param entity [Proximity] received iBeacon
+		 */
+		fun createProximityData(proximitiesList: MutableList<Proximity>, location: Location): Data =
+			Data.Builder()
+				.putString(PROXIMITIES, Gson().toJson(proximitiesList))
+				.putDouble(LONGITUDE, location.lng)
+				.putDouble(LATITUDE, location.lat)
+				.putBoolean(IS_PROXIMITY, true)
 				.build()
 	}
 
 	override suspend fun doWork(): Result = coroutineScope {
+		val isProximityRequest = inputData.getBoolean(IS_PROXIMITY, false)
 		val longitude = inputData.getDouble(LONGITUDE, 0.0)
 		val latitude = inputData.getDouble(LATITUDE, 0.0)
-		val date = inputData.getLong(DATE, 0)
-		val coordinatesMatch = coordinatesMatch(latitude, longitude)
-		if (coordinatesMatch) {
-			return@coroutineScope Result.success()
+		val date = if (isProximityRequest) {
+			Calendar.getInstance().timeInMillis
+		} else {
+			inputData.getLong(DATE, 0)
 		}
+
+		if (isProximityRequest.not()) {
+			val coordinatesMatch = coordinatesMatch(latitude, longitude)
+			if (coordinatesMatch) {
+				return@coroutineScope Result.success()
+			}
+		}
+
 		val deferredJob = async {
-			val request = LocationRequest(Location(latitude, longitude), date)
 			try {
 				val retrofit =
 					RetrofitModule.provideRetrofit(
@@ -69,7 +97,22 @@ class GeoLocationWorker(
 						logLevel
 					)
 				val api = retrofit.create(IGeoLocationApi::class.java)
-				api.sendLocation(request)
+
+				if (isProximityRequest) {
+					val proximityEntities: MutableList<Proximity> = Gson().fromJson(
+						inputData.getString(PROXIMITIES),
+						object : TypeToken<MutableList<Proximity?>?>() {}.type
+					)
+					api.sendProximity(
+						ProximityRequest(
+							Location(latitude, longitude),
+							proximityEntities,
+							date
+						)
+					)
+				} else {
+					api.sendLocation(LocationRequest(Location(latitude, longitude), date))
+				}
 			} catch (ex: HttpException) {
 				//do nothing
 			}
