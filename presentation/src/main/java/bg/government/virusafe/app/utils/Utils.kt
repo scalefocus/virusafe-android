@@ -74,30 +74,20 @@ fun <T> SparseArray<T>.values(): List<T> {
 
 fun TextView.setClickablePhrase(
 	fullText: String?,
-	varArg1: String? = null,
-	varArg2: String? = null,
 	clickablePhrase: String?,
 	shouldBoldPhrase: Boolean?,
 	shouldUnderlinePhrase: Boolean = true,
 	@ColorInt phraseColor: Int? = null,
-	clickCallback: View.OnClickListener?
+	onClick: (() -> Unit)? = null
 ) {
 	if (fullText == null) {
 		return
 	}
-	if (clickablePhrase == null || shouldBoldPhrase == null || clickCallback == null) {
+	if (clickablePhrase == null || shouldBoldPhrase == null || onClick == null) {
 		return
 	}
 
-	val formattedFullText =
-		if (varArg1 == null && varArg2 == null) {
-			String.format(fullText, clickablePhrase)
-		} else if (varArg1 != null && varArg2 == null) {
-			String.format(fullText, varArg1, clickablePhrase)
-		} else {
-			String.format(fullText, varArg1, varArg2, clickablePhrase)
-		}
-
+	val formattedFullText = String.format(fullText, clickablePhrase)
 	val spannableString = SpannableString(formattedFullText)
 	val phraseIndex = formattedFullText.indexOf(clickablePhrase, 0)
 	if (phraseIndex != -1) {
@@ -115,7 +105,7 @@ fun TextView.setClickablePhrase(
 		movementMethod = LinkMovementMethod.getInstance()
 		val clickableSpan = object : ClickableSpan() {
 			override fun onClick(widget: View) {
-				clickCallback.onClick(widget)
+				onClick.invoke()
 			}
 
 			override fun updateDrawState(drawState: TextPaint) {

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import bg.government.virusafe.BR
 import bg.government.virusafe.R
@@ -72,32 +71,20 @@ class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
 
 		binding.homeScreenTermsBtn.setOnClickListener {
 			if (canClick()) {
-				val fm: FragmentManager =
-					activity?.supportFragmentManager ?: return@setOnClickListener
-				AgreementsDialog.newInstance(
+				showAgreementsDialog(
 					viewModel.localizeString(TNC_TITLE),
 					viewModel.localizeString(TNC_PART_ONE) + viewModel.localizeString(TNC_PART_TWO),
-					tnc = true,
-					showAgreeBtn = false
-				).show(
-					fm,
-					AgreementsDialog::class.java.canonicalName
+					Agreement.TermsAndConditions
 				)
 			}
 		}
 
 		binding.homeScreenDataProtectionBtn.setOnClickListener {
 			if (canClick()) {
-				val fm: FragmentManager =
-					activity?.supportFragmentManager ?: return@setOnClickListener
-				AgreementsDialog.newInstance(
+				showAgreementsDialog(
 					viewModel.localizeString(DPN_TITLE),
 					viewModel.localizeString(DPN_DESCRIPTION),
-					tnc = false,
-					showAgreeBtn = false
-				).show(
-					fm,
-					AgreementsDialog::class.java.canonicalName
+					Agreement.DataProtectionNotice
 				)
 			}
 		}

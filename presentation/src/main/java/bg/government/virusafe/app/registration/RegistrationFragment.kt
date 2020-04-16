@@ -3,16 +3,14 @@ package bg.government.virusafe.app.registration
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import bg.government.virusafe.BR
 import bg.government.virusafe.R
-import bg.government.virusafe.app.home.AgreementsDialog
+import bg.government.virusafe.app.home.Agreement
 import bg.government.virusafe.app.home.OnDialogButtonListener
 import bg.government.virusafe.app.utils.DATA_PROTECTION_NOTICE_SMALL_LBL
 import bg.government.virusafe.app.utils.DPN_DESCRIPTION
@@ -73,27 +71,23 @@ class RegistrationFragment :
 		}
 
 		binding.registrationTermsAndConditionsTxt.setClickablePhrase(
-			fullText = TextUtils.concat(
-				viewModel.localizeString(I_AGREE_WITH_LBL), " ",
-				viewModel.localizeString(TERMS_N_CONDITIONS_SMALL_LBL)
-			).toString(),
+			fullText = "${viewModel.localizeString(I_AGREE_WITH_LBL)} " +
+					viewModel.localizeString(TERMS_N_CONDITIONS_SMALL_LBL),
 			clickablePhrase = viewModel.localizeString(TERMS_N_CONDITIONS_SMALL_LBL),
 			shouldBoldPhrase = false,
-			shouldUnderlinePhrase = true,
-			clickCallback = View.OnClickListener {
-				if (!canClick()) {
-					return@OnClickListener
-				}
-				val dialog =
-					AgreementsDialog.newInstance(
-						viewModel.localizeString(TNC_TITLE),
-						viewModel.localizeString(TNC_PART_ONE) + viewModel.localizeString(TNC_PART_TWO),
-						tnc = true,
-						showAgreeBtn = !binding.termsAndConditionsCheckBox.isChecked)
-				val fm: FragmentManager = activity?.supportFragmentManager ?: return@OnClickListener
-				dialog.setClickListener(this)
-				dialog.show(fm, AgreementsDialog::class.java.canonicalName)
-			})
+			shouldUnderlinePhrase = true
+		) {
+			if (!canClick()) {
+				return@setClickablePhrase
+			}
+			showAgreementsDialog(
+				viewModel.localizeString(TNC_TITLE),
+				viewModel.localizeString(TNC_PART_ONE) + viewModel.localizeString(TNC_PART_TWO),
+				Agreement.TermsAndConditions,
+				!binding.termsAndConditionsCheckBox.isChecked,
+				this
+			)
+		}
 
 		binding.dataProtectionNoticeCheckBox.setOnCheckedChangeListener { _, isChecked ->
 			if (isChecked) {
@@ -102,27 +96,23 @@ class RegistrationFragment :
 		}
 
 		binding.registrationDataProtectionNoticeTxt.setClickablePhrase(
-			     fullText = TextUtils.concat(
-					 viewModel.localizeString(I_CONSENT_TO_LBL), " ",
-					 viewModel.localizeString(DATA_PROTECTION_NOTICE_SMALL_LBL)
-				 ).toString(),
-			     clickablePhrase = viewModel.localizeString(DATA_PROTECTION_NOTICE_SMALL_LBL),
-			     shouldBoldPhrase = false,
-			     shouldUnderlinePhrase = true,
-			     clickCallback = View.OnClickListener {
-					 if (!canClick()) {
-						 return@OnClickListener
-					 }
-					 val dialog =
-						 AgreementsDialog.newInstance(
-							 viewModel.localizeString(DPN_TITLE),
-							 viewModel.localizeString(DPN_DESCRIPTION),
-							 tnc = false,
-							 showAgreeBtn = !binding.dataProtectionNoticeCheckBox.isChecked)
-					 val fm: FragmentManager = activity?.supportFragmentManager ?: return@OnClickListener
-					 dialog.setClickListener(this)
-					 dialog.show(fm, AgreementsDialog::class.java.canonicalName)
-		     })
+			fullText = "${viewModel.localizeString(I_CONSENT_TO_LBL)} " +
+					viewModel.localizeString(DATA_PROTECTION_NOTICE_SMALL_LBL),
+			clickablePhrase = viewModel.localizeString(DATA_PROTECTION_NOTICE_SMALL_LBL),
+			shouldBoldPhrase = false,
+			shouldUnderlinePhrase = true
+		) {
+			if (!canClick()) {
+				return@setClickablePhrase
+			}
+			showAgreementsDialog(
+				viewModel.localizeString(DPN_TITLE),
+				viewModel.localizeString(DPN_DESCRIPTION),
+				Agreement.DataProtectionNotice,
+				!binding.dataProtectionNoticeCheckBox.isChecked,
+				this
+			)
+		}
 	}
 
 	override fun addViewModelObservers(viewLifecycleOwner: LifecycleOwner) {
@@ -206,11 +196,11 @@ class RegistrationFragment :
 		)
 	}
 
-	override fun onAgreeBtnClicked(termsAndConditions: Boolean) {
-		if(termsAndConditions)
-			binding.termsAndConditionsCheckBox.isChecked = true
-		else
-			binding.dataProtectionNoticeCheckBox.isChecked = true
+	override fun onAgreeBtnClicked(agreement: Agreement) {
+		when (agreement) {
+			Agreement.TermsAndConditions -> binding.termsAndConditionsCheckBox.isChecked = true
+			Agreement.DataProtectionNotice -> binding.dataProtectionNoticeCheckBox.isChecked = true
+		}
 	}
 
 	override fun getLayoutResId() = R.layout.fragment_registration

@@ -11,6 +11,7 @@ import bg.government.virusafe.databinding.FragmentAgreementsBinding
 import bg.government.virusafe.mvvm.dialog.AbstractDialogFragment
 import bg.government.virusafe.mvvm.viewmodel.EmptyViewModel
 import com.upnetix.presentation.view.DEFAULT_VIEW_MODEL_ID
+import java.io.Serializable
 
 class AgreementsDialog :
 	AbstractDialogFragment<FragmentAgreementsBinding, EmptyViewModel>() {
@@ -20,14 +21,14 @@ class AgreementsDialog :
 	companion object {
 		private const val TITLE = "title"
 		private const val DESCRIPTION = "description"
-		private const val TERMS_AND_CONDITIONS = "terms_and_conditions"
+		private const val AGREEMENT = "agreement"
 		private const val SHOW_AGREE_BTN = "show_agree_btn"
-		internal fun newInstance(title: String, description: String, tnc: Boolean, showAgreeBtn: Boolean) =
+		internal fun newInstance(title: String, description: String, agreement: Agreement, showAgreeBtn: Boolean) =
 			AgreementsDialog().apply {
 				arguments = Bundle().apply {
 					putString(TITLE, title)
 					putString(DESCRIPTION, description)
-					putBoolean(TERMS_AND_CONDITIONS, tnc)
+					putSerializable(AGREEMENT, agreement)
 					putBoolean(SHOW_AGREE_BTN, showAgreeBtn)
 				}
 			}
@@ -62,9 +63,7 @@ class AgreementsDialog :
 			binding.agreeBtn.setOnClickListener {
 				setAnimation(R.anim.exit_to_bottom)
 				dismiss()
-				agreeButtonListener?.onAgreeBtnClicked(
-					arguments?.getBoolean(TERMS_AND_CONDITIONS) ?: false
-				)
+				agreeButtonListener?.onAgreeBtnClicked(arguments?.getSerializable(AGREEMENT) as Agreement)
 			}
 		}
 	}
@@ -80,6 +79,11 @@ class AgreementsDialog :
 	override fun getViewModelResId() = DEFAULT_VIEW_MODEL_ID
 }
 
+sealed class Agreement : Serializable {
+	object TermsAndConditions : Agreement()
+	object DataProtectionNotice : Agreement()
+}
+
 interface OnDialogButtonListener {
-	fun onAgreeBtnClicked(termsAndConditions: Boolean)
+	fun onAgreeBtnClicked(agreement: Agreement)
 }
