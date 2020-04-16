@@ -118,6 +118,8 @@ dependencies {
     //DateTime
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
 
+    implementation 'com.github.hierynomus:license-gradle-plugin:0.15.0'
+
     //Service module
     implementation project(path: ':service')
 }
