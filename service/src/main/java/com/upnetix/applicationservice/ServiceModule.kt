@@ -3,7 +3,10 @@ package com.upnetix.applicationservice
 import android.app.Application
 import android.content.Context
 import androidx.work.WorkerFactory
+import com.upnetix.applicationservice.base.BaseService.Companion.KEY_VALUE
 import com.upnetix.applicationservice.base.HeaderInterceptor
+import com.upnetix.applicationservice.encryption.EncryptionService
+import com.upnetix.applicationservice.encryption.IEncryptionService
 import com.upnetix.applicationservice.geolocation.WorkManagerInitializer
 import com.upnetix.applicationservice.localization.ILocalizationService
 import com.upnetix.applicationservice.localization.LocalizationServiceImpl
@@ -28,6 +31,7 @@ import okhttp3.Interceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 import javax.inject.Singleton
 
 /**
@@ -65,8 +69,9 @@ class ServiceModule(application: Application) : BaseServiceModule(application) {
 		@Provides
 		@JvmStatic
 		fun headerInterceptor(
-			sharedPrefs: ISharedPrefsService
-		): Interceptor = HeaderInterceptor(sharedPrefs)
+			sharedPrefs: ISharedPrefsService,
+			encryptionService: IEncryptionService
+		): Interceptor = HeaderInterceptor(sharedPrefs, encryptionService)
 
 		@Singleton
 		@Provides
@@ -135,6 +140,15 @@ class ServiceModule(application: Application) : BaseServiceModule(application) {
 		@JvmStatic
 		fun pushTokenService(pushTokenServiceImpl: PushTokenServiceImpl): IPushTokenService =
 			pushTokenServiceImpl
+
+		@Provides
+		@Singleton
+		@JvmStatic
+		fun encryptionService(
+			ctx: Context,
+			sharedPrefs: ISharedPrefsService,
+			module: ServiceModule
+		): IEncryptionService = EncryptionService(ctx, module.getKeyValue(sharedPrefs))
 	}
 
 	/**
@@ -153,5 +167,14 @@ class ServiceModule(application: Application) : BaseServiceModule(application) {
 
 	fun setEndpoint(endPoint: String) {
 		this.endPoint = endPoint
+	}
+
+	private fun getKeyValue(sharedPrefs: ISharedPrefsService): String {
+		var value = sharedPrefs.readDecodedStringFromSharedPrefs(KEY_VALUE)
+		if (value.isEmpty()) {
+			value = UUID.randomUUID().toString()
+			sharedPrefs.writeEncodedStringToSharedPrefs(KEY_VALUE, value)
+		}
+		return value
 	}
 }
