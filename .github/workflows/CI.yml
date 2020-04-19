@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    types: [assigned, opened, synchronize, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Prepare Project
+      run: |
+        cp gradle.properties-example gradle.properties
+        cp google-services.json-example presentation/google-services.json
+        mkdir "locale" && cp -a locale-example/. locale/
+        cp service/translations.gradle-example service/translations.gradle
+
+    - name: Static code analysis
+      run: |
+        ./gradlew checkstyle
+        ./gradlew detekt
+
+    - name: Build
+      run: 
+        echo "TODO"
+        
+    - name: Test
+      run: 
+        echo "TODO"
