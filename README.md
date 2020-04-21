@@ -74,6 +74,21 @@ To run both of the plugins use the following commands:
 We are aware of that and we are tring to fix them, but due to the short timeframe that we had for the project we weren't abe to fix all of them. 
 If you want to help us resolve them you are more then welcome.
 
+## Gitflow guide
+
+The main branches that we have are master and develop. Master branch is used when we create a release version with feature - we create a PR from the develop branch to it with updated versionName or when we have to make a hotfix - we create the branch from master and when we are done we create a pr to both the master and the develop branch and push a tag with the version name that we are going to release. When we create a feature normally the feature branch is from develop which also happens to be the destination branch.  The bugfix is done from source develop to destination develop.
+
+The branches naming is as follows:
+- feature/{name}
+- hotfix/{v1.2.8}
+- bugfix/{name}
+- master
+- develop
+
+> **Note:** If we are working on GitHub issue we use it as {name} of the branch otherwise we choose appropriate name which describes the task we want to develop.
+
+#### When you leave TODO in the code it should always have the issue connected to as a comment.
+
 ## Using the REST API
 
 Swagger Documentation for the ViruSafe REST API is available at the [ViruSafe SwaggerHub](https://app.swaggerhub.com/apis-docs/ViruSafe/viru-safe_backend_rest_api/1.0.0).
