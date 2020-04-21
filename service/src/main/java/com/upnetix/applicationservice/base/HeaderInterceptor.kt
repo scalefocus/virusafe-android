@@ -1,7 +1,9 @@
 package com.upnetix.applicationservice.base
 
+import android.content.Context
 import com.imperiamobile.localizationmodule.LocaleHelper
 import com.upnetix.applicationservice.BuildConfig
+import com.upnetix.applicationservice.R
 import com.upnetix.applicationservice.encryption.IEncryptionService
 import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.NEW_ACCESS_TOKEN_KEY
 import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.OLD_TOKEN_KEY
@@ -11,6 +13,7 @@ import okhttp3.Response
 import javax.inject.Inject
 
 class HeaderInterceptor @Inject constructor(
+	val context: Context,
 	val sharedPrefs: ISharedPrefsService,
 	val encryptionService: IEncryptionService
 ) : Interceptor {
@@ -20,6 +23,7 @@ class HeaderInterceptor @Inject constructor(
 		val requestBuilder = request()
 			.newBuilder()
 			.addHeader(CLIENT_ID_KEY, BuildConfig.CLIENT_ID)
+			.addHeader(USER_AGENT_KEY, createUserAgent())
 
 		var languageValue = sharedPrefs.readStringFromSharedPrefs(LANGUAGE_KEY)
 		if (languageValue.isBlank()) {
@@ -48,9 +52,21 @@ class HeaderInterceptor @Inject constructor(
 		proceed(requestBuilder.build())
 	}
 
+	private fun createUserAgent(): String {
+		var userAgent = "${context.getString(R.string.app_name)}/${BuildConfig.VERSION_CODE}"
+		val baseUserAgent = System.getProperty(USER_AGENT_SYSTEM_PROPERTY)
+		baseUserAgent?.let {
+			userAgent = "$userAgent $baseUserAgent"
+		}
+
+		return userAgent
+	}
+
 	companion object {
 		private const val CLIENT_ID_KEY = "clientId"
 		private const val LANGUAGE_KEY = "language"
+		private const val USER_AGENT_KEY = "User-Agent"
+		private const val USER_AGENT_SYSTEM_PROPERTY = "http.agent"
 
 		const val AUTHORIZATION_KEY = "Authorization"
 		const val BEARER_KEY = "Bearer"
