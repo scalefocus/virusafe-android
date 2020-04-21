@@ -68,7 +68,7 @@ class AgreementsDialog :
 		}
 	}
 
-	fun setClickListener(listener: OnDialogButtonListener) {
+	fun setClickListener(listener: OnDialogButtonListener?) {
 		agreeButtonListener = listener
 	}
 

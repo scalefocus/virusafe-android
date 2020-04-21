@@ -274,19 +274,16 @@ abstract class AbstractFragment<B : ViewDataBinding, VM : AbstractViewModel> :
 		}
 	}
 
-	fun showAgreementsDialog(
+	protected fun showAgreementsDialog(
 		title: String,
 		description: String,
 		agreement: Agreement,
 		showAgreeBtn: Boolean = false,
 		onClick: OnDialogButtonListener? = null
 	) {
-		val dialog = AgreementsDialog.newInstance(title, description, agreement, showAgreeBtn)
-		val fm: FragmentManager? = activity?.supportFragmentManager
-		onClick?.let {
-			dialog.setClickListener(it)
-		}
-		fm?.let {
+		activity?.supportFragmentManager?.let {
+			val dialog = AgreementsDialog.newInstance(title, description, agreement, showAgreeBtn)
+			dialog.setClickListener(onClick)
 			dialog.show(it, AgreementsDialog::class.java.canonicalName)
 		}
 	}

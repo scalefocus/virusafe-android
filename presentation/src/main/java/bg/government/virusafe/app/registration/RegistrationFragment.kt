@@ -71,8 +71,11 @@ class RegistrationFragment :
 		}
 
 		binding.registrationTermsAndConditionsTxt.setClickablePhrase(
-			fullText = "${viewModel.localizeString(I_AGREE_WITH_LBL)} " +
-					viewModel.localizeString(TERMS_N_CONDITIONS_SMALL_LBL),
+			fullText = buildString {
+				append(viewModel.localizeString(I_AGREE_WITH_LBL))
+				append(" ")
+				append(viewModel.localizeString(TERMS_N_CONDITIONS_SMALL_LBL))
+			},
 			clickablePhrase = viewModel.localizeString(TERMS_N_CONDITIONS_SMALL_LBL),
 			shouldBoldPhrase = false,
 			shouldUnderlinePhrase = true
@@ -96,8 +99,11 @@ class RegistrationFragment :
 		}
 
 		binding.registrationDataProtectionNoticeTxt.setClickablePhrase(
-			fullText = "${viewModel.localizeString(I_CONSENT_TO_LBL)} " +
-					viewModel.localizeString(DATA_PROTECTION_NOTICE_SMALL_LBL),
+			fullText = buildString {
+				append(viewModel.localizeString(I_CONSENT_TO_LBL))
+				append(" ")
+				append(viewModel.localizeString(DATA_PROTECTION_NOTICE_SMALL_LBL))
+			},
 			clickablePhrase = viewModel.localizeString(DATA_PROTECTION_NOTICE_SMALL_LBL),
 			shouldBoldPhrase = false,
 			shouldUnderlinePhrase = true
