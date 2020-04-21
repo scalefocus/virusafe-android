@@ -40,8 +40,9 @@ import com.upnetix.applicationservice.base.BaseService.Companion.SERVER_ERROR
 import com.upnetix.applicationservice.base.BaseService.Companion.TOO_MANY_REQUESTS
 import com.upnetix.applicationservice.base.ResponseWrapper
 import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.HAS_REGISTRATION_KEY
-import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.NEW_TOKEN_KEY
+import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.NEW_ACCESS_TOKEN_KEY
 import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.OLD_TOKEN_KEY
+import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.REFRESH_TOKEN_KEY
 import com.upnetix.presentation.view.BaseFragment
 import com.upnetix.presentation.view.IView
 import com.upnetix.service.sharedprefs.ISharedPrefsService
@@ -169,7 +170,8 @@ abstract class AbstractFragment<B : ViewDataBinding, VM : AbstractViewModel> :
 	private fun startRegistration() {
 		sharedPrefsService.clearValue(HAS_REGISTRATION_KEY)
 		sharedPrefsService.clearValue(OLD_TOKEN_KEY)
-		sharedPrefsService.clearValue(NEW_TOKEN_KEY)
+		sharedPrefsService.clearValue(NEW_ACCESS_TOKEN_KEY)
+		sharedPrefsService.clearValue(REFRESH_TOKEN_KEY)
 
 		val intent = Intent(activity, MainActivity::class.java)
 		intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP

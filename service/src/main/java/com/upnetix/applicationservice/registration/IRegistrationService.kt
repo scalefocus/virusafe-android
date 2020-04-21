@@ -13,4 +13,6 @@ interface IRegistrationService {
 	suspend fun getPersonalData(): ResponseWrapper<PersonalData>
 
 	suspend fun sendPersonalData(personalData: PersonalData): ResponseWrapper<Unit>
+
+	suspend fun refreshToken(): ResponseWrapper<TokenResponse>
 }

@@ -2,6 +2,7 @@ package com.upnetix.applicationservice.registration
 
 import com.upnetix.applicationservice.registration.model.PersonalData
 import com.upnetix.applicationservice.registration.model.PinRequest
+import com.upnetix.applicationservice.registration.model.TokenRefreshRequest
 import com.upnetix.applicationservice.registration.model.TokenRequest
 import com.upnetix.applicationservice.registration.model.TokenResponse
 import retrofit2.http.Body
@@ -21,4 +22,7 @@ interface IRegistrationApi {
 
 	@POST("personalinfo")
 	suspend fun postPersonalData(@Body request: PersonalData)
+
+	@POST("token/refresh")
+	suspend fun refreshToken(@Body request:TokenRefreshRequest): TokenResponse
 }

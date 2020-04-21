@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.work.WorkerFactory
 import com.upnetix.applicationservice.base.BaseService.Companion.KEY_VALUE
 import com.upnetix.applicationservice.base.HeaderInterceptor
+import com.upnetix.applicationservice.base.TokenAuthenticator
 import com.upnetix.applicationservice.encryption.EncryptionService
 import com.upnetix.applicationservice.encryption.IEncryptionService
 import com.upnetix.applicationservice.geolocation.WorkManagerInitializer
@@ -18,6 +19,7 @@ import com.upnetix.applicationservice.selfcheck.ISelfCheckService
 import com.upnetix.applicationservice.selfcheck.SelfCheckServiceImpl
 import com.upnetix.applicationservice.workmanager.WorkersFactory
 import com.upnetix.service.BaseServiceModule
+import com.upnetix.service.retrofit.ApiAuthenticator
 import com.upnetix.service.retrofit.ApiConverterFactory
 import com.upnetix.service.retrofit.ApiEndpoint
 import com.upnetix.service.retrofit.ApiInterceptors
@@ -25,8 +27,10 @@ import com.upnetix.service.retrofit.ApiLogging
 import com.upnetix.service.retrofit.ApiSSLData
 import com.upnetix.service.retrofit.SSLData
 import com.upnetix.service.sharedprefs.ISharedPrefsService
+import dagger.Lazy
 import dagger.Module
 import dagger.Provides
+import okhttp3.Authenticator
 import okhttp3.Interceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
@@ -78,6 +82,13 @@ class ServiceModule(application: Application) : BaseServiceModule(application) {
 		@ApiSSLData
 		@JvmStatic
 		fun provideSSLData(): SSLData? = null
+
+		@Singleton
+		@Provides
+		@ApiAuthenticator
+		@JvmStatic
+		fun provideAuthenticator(serviceWrapper: Lazy<IRegistrationService>): Authenticator? =
+			TokenAuthenticator(serviceWrapper)
 
 		@Singleton
 		@Provides
