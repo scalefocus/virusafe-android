@@ -53,10 +53,10 @@ class HeaderInterceptor @Inject constructor(
 	}
 
 	private fun createUserAgent(): String {
-		var userAgent = "${context.getString(R.string.app_name)}/${BuildConfig.VERSION_CODE}"
+		val userAgent = "${context.getString(R.string.app_name)}/${BuildConfig.VERSION_CODE}"
 		val baseUserAgent = System.getProperty(USER_AGENT_SYSTEM_PROPERTY)
 		baseUserAgent?.let {
-			userAgent = "$userAgent $baseUserAgent"
+			return "$userAgent $it"
 		}
 
 		return userAgent
