@@ -8,7 +8,7 @@
 		android:background="@color/color_white">
 
 		<TextView
-			android:id="@+id/terms_and_conditions_title"
+			android:id="@+id/agreements_title"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="@dimen/terms_and_conditions_margin_start_end"
@@ -30,10 +30,10 @@
 			app:layout_constraintBottom_toTopOf="@+id/agree_btn"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@+id/terms_and_conditions_title">
+			app:layout_constraintTop_toBottomOf="@+id/agreements_title">
 
 			<TextView
-				android:id="@+id/terms_and_conditions_txt"
+				android:id="@+id/agreements_txt"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:paddingStart="@dimen/terms_and_conditions_margin_start_end"

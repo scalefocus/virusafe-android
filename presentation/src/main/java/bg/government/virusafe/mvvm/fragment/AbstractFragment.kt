@@ -8,8 +8,12 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import bg.government.virusafe.app.MainActivity
+import bg.government.virusafe.app.home.Agreement
+import bg.government.virusafe.app.home.AgreementsDialog
+import bg.government.virusafe.app.home.OnDialogButtonListener
 import bg.government.virusafe.app.personaldata.PersonalDataFragment
 import bg.government.virusafe.app.registration.RegistrationFragment
 import bg.government.virusafe.app.selfcheck.SelfCheckFragment
@@ -271,6 +275,20 @@ abstract class AbstractFragment<B : ViewDataBinding, VM : AbstractViewModel> :
 			"$hours $hourStr $minutesFormat"
 		} else {
 			"$minutes $minuteLabel"
+		}
+	}
+
+	protected fun showAgreementsDialog(
+		title: String,
+		description: String,
+		agreement: Agreement,
+		showAgreeBtn: Boolean = false,
+		onClick: OnDialogButtonListener? = null
+	) {
+		activity?.supportFragmentManager?.let {
+			val dialog = AgreementsDialog.newInstance(title, description, agreement, showAgreeBtn)
+			dialog.setClickListener(onClick)
+			dialog.show(it, AgreementsDialog::class.java.canonicalName)
 		}
 	}
 
