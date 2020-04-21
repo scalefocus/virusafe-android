@@ -73,9 +73,10 @@ class ServiceModule(application: Application) : BaseServiceModule(application) {
 		@Provides
 		@JvmStatic
 		fun headerInterceptor(
+			context: Context,
 			sharedPrefs: ISharedPrefsService,
 			encryptionService: IEncryptionService
-		): Interceptor = HeaderInterceptor(sharedPrefs, encryptionService)
+		): Interceptor = HeaderInterceptor(context, sharedPrefs, encryptionService)
 
 		@Singleton
 		@Provides
