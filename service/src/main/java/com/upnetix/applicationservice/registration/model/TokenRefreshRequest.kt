@@ -2,9 +2,7 @@ package com.upnetix.applicationservice.registration.model
 
 import com.google.gson.annotations.SerializedName
 
-data class TokenResponse(
-	@SerializedName("accessToken")
-	val accessToken: String,
+data class TokenRefreshRequest(
 	@SerializedName("refreshToken")
 	val refreshToken: String
 ) {

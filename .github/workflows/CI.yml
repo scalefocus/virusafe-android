@@ -13,11 +13,7 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: Prepare Project
-      run: |
-        cp gradle.properties-example gradle.properties
-        cp google-services.json-example presentation/google-services.json
-        cp -a locale-example locale
-        cp service/translations.gradle-example service/translations.gradle
+      run: bash setup-dev.sh
 
     - name: Static code analysis
       run: |
