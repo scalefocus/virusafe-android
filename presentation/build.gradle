@@ -98,7 +98,7 @@ dependencies {
 
     //Crashlytics
     implementation 'com.google.firebase:firebase-analytics:17.3.0'
-    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta02'
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
 
     //Permissions
     implementation 'pub.devrel:easypermissions:3.0.0'
