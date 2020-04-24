@@ -1,0 +1,42 @@
+name: Upload apk to the App Center
+
+on:
+  push:
+    branches: [ app-center ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Prepare Project
+      run: |
+        echo '${{ secrets.GOOGLE_SERVICES_JSON_DEBUG }}' > presentation/src/debug/google-services.json
+        echo '${{ secrets.GOOGLE_SERVICES_JSON_MK }}' > presentation/src/mk/google-services.json
+        mkdir -p presentation/src/release
+        echo '${{ secrets.GOOGLE_SERVICES_JSON_RELEASE }}' > presentation/src/release/google-services.json
+        echo '${{ secrets.GRADLE_PROPERTIES }}' > gradle.properties
+        echo '${{ secrets.TRANSLATIONS_GRADLE }}' > service/translations.gradle
+
+    - name: Static code analysis
+      run: |
+        ./gradlew checkstyle
+        ./gradlew detekt
+
+    - name: Build
+      run: 
+        ./gradlew assembleDebug
+
+    - name: upload artefact to App Center
+        uses: wzieba/App-Center-action@v1.0.0
+        with:
+          appName: wzieba/${{ secrets.APP_NAME_DEV }}
+          token: ${{ secrets.APP_CENTER_TOKEN }}
+          group: [${{ secrets.APP_CENTER_GROUPS }}]
+          file: presentation/build/outputs/apk/debug/presentation-debug.apk
+        
+    - name: Test
+      run: 
+        echo "TODO"
