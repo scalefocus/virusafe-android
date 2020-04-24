@@ -13,7 +13,13 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: Prepare Project
-      run: bash setup-dev.sh
+      run: |
+        echo "${{ secrets.GOOGLE_SERVICES_JSON_DEBUG }}" > presentation/src/debug/google-services.json
+        echo "${{ secrets.GOOGLE_SERVICES_JSON_MK }}" > presentation/src/mk/google-services.json
+        mkdir -p presentation/src/release
+        echo "${{ secrets.GOOGLE_SERVICES_JSON_RELEASE }}" > presentation/src/release/google-services.json
+        echo "${{ secrets.GRADLE_PROPERTIES }}" > gradle.properties
+        echo "${{ secrets.TRANSLATIONS_GRADLE }}" > service/translations.gradle
 
     - name: Static code analysis
       run: |
@@ -22,7 +28,7 @@ jobs:
 
     - name: Build
       run: 
-        ./gradlew assembleDebug
+        ./gradlew assembleRelease
         
     - name: Test
       run: 
