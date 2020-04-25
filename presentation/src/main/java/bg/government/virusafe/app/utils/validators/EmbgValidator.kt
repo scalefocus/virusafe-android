@@ -1,21 +1,28 @@
 package bg.government.virusafe.app.utils.validators
 
+import bg.government.virusafe.app.utils.empty
 import com.upnetix.applicationservice.registration.model.Gender
 import org.threeten.bp.LocalDate
 import org.threeten.bp.temporal.ChronoUnit
 
+/**
+ * Validate EMBG.
+ */
 private const val EMBG_SKIP_FACTOR = 6
 private const val EMBG_MOD = 11
 private const val EMBG_BASE = 11
 private val EMBG_WEIGHTS = listOf(7, 6, 5, 4, 3, 2)
 
-class EmbgValidatorK : PersonalIdValidator {
+class EmbgValidator : PersonalIdValidator {
 
 	private var personalNumber: String? = null
 	private var isValid = false
 
 	override var years: Long? = null
+		private set
+
 	override var gender: String? = null
+		private set
 
 	override fun isValidPersonalId(): Boolean = isValid
 
@@ -36,20 +43,23 @@ class EmbgValidatorK : PersonalIdValidator {
 	}
 
 	private fun isValidPersonalNumber(): Boolean {
-		if (personalNumber == null || personalNumber == "") {
+		if (personalNumber == null || personalNumber == String.empty) {
 			return true
 		} else if (personalNumber!!.length != 13) {
 			return false
 		}
+
 		val charArr = personalNumber!!.toCharArray()
 		val personalNumberDigits: MutableList<Int> = ArrayList(charArr.size)
 
 		for (c in charArr) {
 			personalNumberDigits.add(c - '0')
 		}
+
 		updateGender(personalNumberDigits)
 		val isValidBirthday: Boolean = validateBirthday(personalNumberDigits)
 		val isValidEmbgChecksum: Boolean = validateChecksum(personalNumberDigits)
+
 		return isValidBirthday && isValidEmbgChecksum
 	}
 
@@ -72,6 +82,7 @@ class EmbgValidatorK : PersonalIdValidator {
 		if (year <= 1800) {
 			year += 1000
 		}
+
 		years = try {
 			val birthday = LocalDate.of(year, month, day)
 			val now = LocalDate.now()
@@ -79,6 +90,7 @@ class EmbgValidatorK : PersonalIdValidator {
 		} catch (e: Exception) {
 			return false
 		}
+
 		return true
 	}
 
@@ -88,8 +100,10 @@ class EmbgValidatorK : PersonalIdValidator {
 			checkSum += ((personalNumberDigits[i] + personalNumberDigits[i + EMBG_SKIP_FACTOR])
 					* EMBG_WEIGHTS[i])
 		}
+
 		checkSum %= EMBG_MOD
 		checkSum = EMBG_BASE - checkSum
+
 		if (checkSum > 9) {
 			checkSum = 0
 		}

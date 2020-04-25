@@ -43,7 +43,7 @@ private fun phoneFilter(): InputFilter =
 			val regionStart = matcher.regionStart()
 			val regionEnd = matcher.regionEnd()
 			if (regionStart == regionEnd)
-				EMPTY_STR
+				String.empty
 			else
 				source.substring(regionStart until regionEnd - 1)
 		} else
@@ -59,7 +59,7 @@ private fun ageFilter(): InputFilter =
 				if (ageStr.isBlank())
 					return@InputFilter null
 				if ((ageNumb in MIN_AGE..MAX_AGE).not()) {
-					return@InputFilter EMPTY_STR
+					return@InputFilter String.empty
 				}
 			}
 		}
@@ -69,7 +69,7 @@ private fun ageFilter(): InputFilter =
 private fun chronicConditionsFilter(): InputFilter =
 	InputFilter { source, _, _, _, _, _ ->
 		val sourceStr = source.toString()
-		if (sourceStr == EMPTY_STR) {
+		if (sourceStr == String.empty) {
 			return@InputFilter source
 		}
 
@@ -80,7 +80,7 @@ private fun chronicConditionsFilter(): InputFilter =
 		} else {
 			return@InputFilter sourceStr.replace(
 				"[^a-zA-Z0-9 ,.()а-яА-Я-]+".toRegex(),
-				EMPTY_STR
+				String.empty
 			)
 		}
 	}
@@ -88,14 +88,14 @@ private fun chronicConditionsFilter(): InputFilter =
 private fun passportFilter(): InputFilter =
 	InputFilter { source, _, _, _, _, _ ->
 		val sourceStr = source.toString()
-		if (sourceStr == EMPTY_STR) {
+		if (sourceStr == String.empty) {
 			return@InputFilter source
 		}
 
 		if (source.isNotEmpty() && sourceStr.matches("[a-zA-Z0-9]+".toRegex())) {
 			return@InputFilter source
 		} else {
-			return@InputFilter sourceStr.replace("[^a-zA-Z0-9]".toRegex(), EMPTY_STR)
+			return@InputFilter sourceStr.replace("[^a-zA-Z0-9]".toRegex(), String.empty)
 		}
 	}
 
@@ -124,7 +124,6 @@ private fun getPersonalIdLength() = when (BuildConfig.BUILD_TYPE) {
 }
 
 //base constants
-private const val EMPTY_STR = ""
 private const val MIN_AGE = 1
 private const val MAX_AGE = 150
 private const val MAX_AGE_LENGTH = 3
