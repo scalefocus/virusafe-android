@@ -32,7 +32,7 @@ jobs:
     - name: upload artefact to App Center
       uses: zackify/AppCenter-Github-Action@1.0.0
       with:
-        appName: ${{ secrets.APP_NAME_DEV }}
+        appName: ${{ secrets.APP_CENTER_OWNER }}/${{ secrets.APP_NAME_DEV }}
         token: ${{secrets.APP_CENTER_TOKEN}}
         group: ${{secrets.APP_CENTER_GROUPS}}
         file: presentation/build/outputs/apk/debug/presentation-debug.apk
