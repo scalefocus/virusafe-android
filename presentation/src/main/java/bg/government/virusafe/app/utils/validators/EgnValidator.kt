@@ -1,3 +1,4 @@
+@file:Suppress("MagicNumber")
 package bg.government.virusafe.app.utils.validators
 
 import bg.government.virusafe.app.utils.empty
@@ -13,7 +14,6 @@ private const val EGN_MOD = 11
 
 class EgnValidator : PersonalIdValidator {
 
-	@Suppress("MagicNumber")
 	private val egnWeights = listOf(2, 4, 8, 5, 10, 9, 7, 3, 6)
 	private var personalNumber: String? = null
 	private var isValid = false
@@ -42,7 +42,7 @@ class EgnValidator : PersonalIdValidator {
 		gender = null
 	}
 
-	@Suppress("MagicNumber")
+	@Suppress("ReturnCount")
 	private fun isValidPersonalNumber(): Boolean {
 		if (personalNumber == null || personalNumber == String.empty) {
 			return true
@@ -74,7 +74,7 @@ class EgnValidator : PersonalIdValidator {
 		}
 	}
 
-	@Suppress("MagicNumber, TooGenericExceptionCaught")
+	@Suppress("TooGenericExceptionCaught, LongMethod")
 	private fun validateBirthday(egnDigits: List<Int>): Boolean {
 		var year = egnDigits[0] * 10 + egnDigits[1]
 		var month = egnDigits[2] * 10 + egnDigits[3]
@@ -106,7 +106,6 @@ class EgnValidator : PersonalIdValidator {
 		return true
 	}
 
-	@Suppress("MagicNumber")
 	private fun validateEgnCheckSum(egnDigits: List<Int>): Boolean {
 		var checkSum = 0
 		for (i in 0 until egnDigits.size - 1) {

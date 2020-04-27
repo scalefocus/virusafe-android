@@ -1,3 +1,4 @@
+@file:Suppress("MagicNumber")
 package bg.government.virusafe.app.utils.validators
 
 import bg.government.virusafe.app.utils.empty
@@ -14,7 +15,6 @@ private const val EMBG_BASE = 11
 
 class EmbgValidator : PersonalIdValidator {
 
-	@Suppress("MagicNumber")
 	private val embgWeights = listOf(7, 6, 5, 4, 3, 2)
 	private var personalNumber: String? = null
 	private var isValid = false
@@ -43,7 +43,7 @@ class EmbgValidator : PersonalIdValidator {
 		gender = null
 	}
 
-	@Suppress("MagicNumber")
+	@Suppress("ReturnCount")
 	private fun isValidPersonalNumber(): Boolean {
 		if (personalNumber == null || personalNumber == String.empty) {
 			return true
@@ -65,7 +65,6 @@ class EmbgValidator : PersonalIdValidator {
 		return isValidBirthday && isValidEmbgChecksum
 	}
 
-	@Suppress("MagicNumber")
 	private fun updateGender(personalNumberDigits: List<Int>) {
 		val genderUniqueNumber =
 			personalNumberDigits[9] * 100 + personalNumberDigits[10] * 10 + personalNumberDigits[11]
@@ -76,7 +75,7 @@ class EmbgValidator : PersonalIdValidator {
 		}
 	}
 
-	@Suppress("MagicNumber, TooGenericExceptionCaught")
+	@Suppress("TooGenericExceptionCaught")
 	private fun validateBirthday(personalNumberDigits: List<Int>): Boolean {
 		var year = 1000 + personalNumberDigits[4] * 100 + personalNumberDigits[5] * 10 + personalNumberDigits[6]
 		val month = personalNumberDigits[2] * 10 + personalNumberDigits[3]
@@ -98,7 +97,6 @@ class EmbgValidator : PersonalIdValidator {
 		return true
 	}
 
-	@Suppress("MagicNumber")
 	private fun validateChecksum(personalNumberDigits: List<Int>): Boolean {
 		var checkSum = 0
 		for (i in embgWeights.indices) {
