@@ -38,5 +38,5 @@ jobs:
         file: presentation/build/outputs/apk/debug/presentation-debug.apk
         
     - name: Test
-      run: 
+      run:
         echo "TODO"
