@@ -14,6 +14,7 @@ import com.upnetix.service.retrofit.SSLData
 import com.upnetix.service.sharedprefs.ISharedPrefsService
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import okhttp3.Authenticator
 import okhttp3.Interceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
@@ -25,6 +26,7 @@ class GeoLocationWorker(
 	private val module: ServiceModule,
 	private val interceptors: Array<Interceptor>?,
 	private val sslData: SSLData?,
+	private val authenticator: Authenticator?,
 	private val logLevel: HttpLoggingInterceptor.Level,
 	private val converterFactory: Converter.Factory,
 	private val sharedPrefs: ISharedPrefsService
@@ -66,7 +68,8 @@ class GeoLocationWorker(
 						interceptors,
 						converterFactory,
 						sslData,
-						logLevel
+						logLevel,
+						authenticator
 					)
 				val api = retrofit.create(IGeoLocationApi::class.java)
 				api.sendLocation(request)

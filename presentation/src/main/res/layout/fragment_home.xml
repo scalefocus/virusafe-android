@@ -150,7 +150,6 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="@dimen/home_screen_terms_margin_top"
-				android:layout_marginBottom="@dimen/home_screen_terms_margin_bottom"
 				android:background="?attr/selectableItemBackground"
 				android:clickable="true"
 				android:focusable="true"
@@ -158,10 +157,28 @@
 				android:text="@{homeVM.liveLocale().getString(StringsKt.TERMS_N_CONDITIONS_LBL)}"
 				android:textColor="@color/color_black"
 				android:textSize="@dimen/text_size_normal"
-				app:layout_constraintBottom_toTopOf="@+id/home_screen_logo_iv"
+				app:layout_constraintBottom_toTopOf="@+id/home_screen_data_protection_btn"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintStart_toStartOf="parent"
 				app:layout_constraintTop_toBottomOf="@+id/fragment_home_btn_app_info" />
+
+			<TextView
+				android:id="@+id/home_screen_data_protection_btn"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/home_screen_data_protection_margin_top"
+				android:layout_marginBottom="@dimen/home_screen_data_protection_margin_bottom"
+				android:background="?attr/selectableItemBackground"
+				android:clickable="true"
+				android:focusable="true"
+				android:padding="@dimen/text_btn_padding"
+				android:text="@{homeVM.liveLocale().getString(StringsKt.DATA_PROTECTION_NOTICE_LBL)}"
+				android:textColor="@color/color_black"
+				android:textSize="@dimen/text_size_normal"
+				app:layout_constraintBottom_toTopOf="@+id/home_screen_logo_iv"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@+id/home_screen_terms_btn" />
 
 			<LinearLayout
 				android:id="@+id/language_container"

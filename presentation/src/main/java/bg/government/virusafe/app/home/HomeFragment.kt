@@ -6,7 +6,6 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import bg.government.virusafe.BR
 import bg.government.virusafe.R
@@ -17,6 +16,11 @@ import bg.government.virusafe.app.localization.LocalizationFragment
 import bg.government.virusafe.app.personaldata.PersonalDataFragment
 import bg.government.virusafe.app.selfcheck.SelfCheckFragment
 import bg.government.virusafe.app.splash.SplashActivity.Companion.STATISTICS_URL_KEY
+import bg.government.virusafe.app.utils.DPN_DESCRIPTION
+import bg.government.virusafe.app.utils.DPN_TITLE
+import bg.government.virusafe.app.utils.TNC_PART_ONE
+import bg.government.virusafe.app.utils.TNC_PART_TWO
+import bg.government.virusafe.app.utils.TNC_TITLE
 import bg.government.virusafe.app.utils.URL_ABOUT_COVID
 import bg.government.virusafe.app.utils.URL_VIRUSAFE_WHY
 import bg.government.virusafe.databinding.FragmentHomeBinding
@@ -67,11 +71,20 @@ class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
 
 		binding.homeScreenTermsBtn.setOnClickListener {
 			if (canClick()) {
-				val fm: FragmentManager =
-					activity?.supportFragmentManager ?: return@setOnClickListener
-				TermsAndConditionsDialog().show(
-					fm,
-					TermsAndConditionsDialog::class.java.canonicalName
+				showAgreementsDialog(
+					viewModel.localizeString(TNC_TITLE),
+					viewModel.localizeString(TNC_PART_ONE) + viewModel.localizeString(TNC_PART_TWO),
+					Agreement.TermsAndConditions
+				)
+			}
+		}
+
+		binding.homeScreenDataProtectionBtn.setOnClickListener {
+			if (canClick()) {
+				showAgreementsDialog(
+					viewModel.localizeString(DPN_TITLE),
+					viewModel.localizeString(DPN_DESCRIPTION),
+					Agreement.DataProtectionNotice
 				)
 			}
 		}

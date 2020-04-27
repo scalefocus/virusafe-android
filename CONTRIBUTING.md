@@ -53,6 +53,12 @@ Please follow the coding guidelines.
 
 PRs from all users (no matter internal or external to the company) would be checked with the same degree of diligence by the maintainers.
 
+## References
+
+In order to make this project open source, we followed the following great examples:
+- [Mozilla Firefox Mobile](https://github.com/mozilla-mobile)
+- [Wordpress Mobile](https://github.com/wordpress-mobile)
+
 # Thank You!
 
 Your contribution is detrimental in making ViruSafe accessible to everyone.
