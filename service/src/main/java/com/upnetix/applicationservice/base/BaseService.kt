@@ -7,6 +7,7 @@ import com.upnetix.service.util.NetworkConnectionUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import java.net.ProtocolException
 
 abstract class BaseService(private var ctx: Context) {
 
@@ -20,6 +21,8 @@ abstract class BaseService(private var ctx: Context) {
 				val response =
 					parseError(errorBodyStr, ErrorResponse::class.java)
 				ResponseWrapper.Error(response, e.code())
+			} catch (e: AuthProtocolException) {
+				ResponseWrapper.Error(code = e.code)
 			} catch (e: Exception) {
 				if (!NetworkConnectionUtil.hasNetworkConnection(ctx))
 					ResponseWrapper.NoInternetError
@@ -46,3 +49,5 @@ abstract class BaseService(private var ctx: Context) {
 		const val KEY_VALUE = "value"
 	}
 }
+
+class AuthProtocolException constructor(val code: Int) : ProtocolException()

@@ -5,12 +5,14 @@ import androidx.work.ListenableWorker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import com.upnetix.applicationservice.ServiceModule
+import com.upnetix.service.retrofit.ApiAuthenticator
 import com.upnetix.service.retrofit.ApiConverterFactory
 import com.upnetix.service.retrofit.ApiInterceptors
 import com.upnetix.service.retrofit.ApiLogging
 import com.upnetix.service.retrofit.ApiSSLData
 import com.upnetix.service.retrofit.SSLData
 import com.upnetix.service.sharedprefs.ISharedPrefsService
+import okhttp3.Authenticator
 import okhttp3.Interceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
@@ -26,6 +28,8 @@ class WorkersFactory @Inject constructor(
 	private val module: ServiceModule,
 	@ApiSSLData
 	private val sslData: SSLData?,
+	@ApiAuthenticator
+	private val authenticator: Authenticator?,
 	@ApiLogging
 	private val logLevel: HttpLoggingInterceptor.Level,
 	@ApiInterceptors
@@ -46,6 +50,7 @@ class WorkersFactory @Inject constructor(
 			module,
 			interceptors,
 			sslData,
+			authenticator,
 			logLevel,
 			converterFactory,
 			sharedPrefs

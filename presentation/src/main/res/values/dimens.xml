@@ -27,6 +27,7 @@
 	<dimen name="registration_padding_bottom">20dp</dimen>
 	<dimen name="registration_btn_margin_top">40dp</dimen>
 	<dimen name="registration_term_and_conditions_padding">5dp</dimen>
+	<dimen name="registration_data_protection_checkbox_margin_top">16dp</dimen>
 
 	<!--Code verification-->
 	<dimen name="code_verification_user_img_width">63dp</dimen>
@@ -58,7 +59,8 @@
 	<dimen name="home_title_padding_start_end">20dp</dimen>
 	<dimen name="fragment_home_company_logo_margin">12dp</dimen>
 	<dimen name="home_screen_terms_margin_top">29dp</dimen>
-	<dimen name="home_screen_terms_margin_bottom">32dp</dimen>
+	<dimen name="home_screen_data_protection_margin_top">5dp</dimen>
+	<dimen name="home_screen_data_protection_margin_bottom">32dp</dimen>
 	<dimen name="fragment_home_button_margins">24dp</dimen>
 	<dimen name="fragment_home_app_info_margin_top">37dp</dimen>
 	<dimen name="fragment_home_title_bottom_margin">21dp</dimen>

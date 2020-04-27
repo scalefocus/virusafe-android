@@ -5,6 +5,7 @@ import com.upnetix.applicationservice.base.BaseService
 import com.upnetix.applicationservice.base.ResponseWrapper
 import com.upnetix.applicationservice.registration.model.PersonalData
 import com.upnetix.applicationservice.registration.model.PinRequest
+import com.upnetix.applicationservice.registration.model.TokenRefreshRequest
 import com.upnetix.applicationservice.registration.model.TokenRequest
 import com.upnetix.applicationservice.registration.model.TokenResponse
 import com.upnetix.service.sharedprefs.ISharedPrefsService
@@ -31,8 +32,26 @@ class RegistrationServiceImpl @Inject constructor(
 		}
 
 		if (responseWrapper is ResponseWrapper.Success) {
+			val response = responseWrapper.response
 			sharedPrefs.writeStringToSharedPrefs(HAS_REGISTRATION_KEY, TRUE_VALUE)
-			sharedPrefs.writeStringToSharedPrefs(NEW_TOKEN_KEY, responseWrapper.response.accessToken)
+			saveTokens(response)
+		}
+		return responseWrapper
+	}
+
+	override suspend fun refreshToken(): ResponseWrapper<TokenResponse> {
+		val token = sharedPrefs.readStringFromSharedPrefs(REFRESH_TOKEN_KEY)
+		if (token.isBlank()) {
+			return ResponseWrapper.Error(code = INVALID_TOKEN)
+		}
+
+		sharedPrefs.clearValue(NEW_ACCESS_TOKEN_KEY)
+		val responseWrapper = executeRetrofitCall {
+			api.refreshToken(TokenRefreshRequest(token))
+		}
+
+		if (responseWrapper is ResponseWrapper.Success) {
+			saveTokens(responseWrapper.response)
 		}
 		return responseWrapper
 	}
@@ -43,10 +62,16 @@ class RegistrationServiceImpl @Inject constructor(
 	override suspend fun sendPersonalData(personalData: PersonalData): ResponseWrapper<Unit> =
 		executeRetrofitCall { api.postPersonalData(personalData) }
 
+	private fun saveTokens(response: TokenResponse) = with(sharedPrefs) {
+		writeStringToSharedPrefs(NEW_ACCESS_TOKEN_KEY, response.accessToken)
+		writeStringToSharedPrefs(REFRESH_TOKEN_KEY, response.refreshToken)
+	}
+
 	companion object {
 		const val HAS_REGISTRATION_KEY = "com.upnetix.applicationservice.key1"
 		const val OLD_TOKEN_KEY = "com.upnetix.applicationservice.key2"
-		const val NEW_TOKEN_KEY = "com.upnetix.applicationservice.key2.1"
+		const val NEW_ACCESS_TOKEN_KEY = "com.upnetix.applicationservice.key2.1"
+		const val REFRESH_TOKEN_KEY = "com.upnetix.applicationservice.key2.2"
 		const val FINISHED_REGISTRATION_KEY = "com.upnetix.applicationservice.key3"
 
 		private const val TRUE_VALUE = "true"
