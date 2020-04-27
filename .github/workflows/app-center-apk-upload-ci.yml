@@ -2,7 +2,7 @@ name: Upload apk to the App Center
 
 on:
   push:
-    branches: [ feature/automation-app-center-apk-upload ]
+    branches: [ app-center ]
 
 jobs:
   build:
