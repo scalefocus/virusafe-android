@@ -29,7 +29,3 @@ jobs:
     - name: Build
       run: 
         ./gradlew assembleRelease
-        
-    - name: Test
-      run: 
-        echo "TODO"
