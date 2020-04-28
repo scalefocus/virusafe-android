@@ -1,7 +1,7 @@
 @file:Suppress("MagicNumber")
+
 package bg.government.virusafe.app.utils.validators
 
-import bg.government.virusafe.app.utils.empty
 import com.upnetix.applicationservice.registration.model.Gender
 import org.threeten.bp.LocalDate
 import org.threeten.bp.temporal.ChronoUnit
@@ -44,9 +44,9 @@ class EgnValidator : PersonalIdValidator {
 
 	@Suppress("ReturnCount")
 	private fun isValidPersonalNumber(): Boolean {
-		if (personalNumber == null || personalNumber == String.empty) {
+		if (personalNumber.isNullOrEmpty()) {
 			return true
-		} else if (personalNumber!!.length != 10) {
+		} else if (personalNumber?.length != 10) {
 			return false
 		}
 
@@ -86,10 +86,12 @@ class EgnValidator : PersonalIdValidator {
 				month -= 40
 				year += 2000
 			}
+
 			month > 20 -> {
 				month -= 20
 				year += 1800
 			}
+
 			else -> {
 				year += 1900
 			}

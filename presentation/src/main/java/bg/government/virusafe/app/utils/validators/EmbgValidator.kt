@@ -1,7 +1,7 @@
 @file:Suppress("MagicNumber")
+
 package bg.government.virusafe.app.utils.validators
 
-import bg.government.virusafe.app.utils.empty
 import com.upnetix.applicationservice.registration.model.Gender
 import org.threeten.bp.LocalDate
 import org.threeten.bp.temporal.ChronoUnit
@@ -45,9 +45,9 @@ class EmbgValidator : PersonalIdValidator {
 
 	@Suppress("ReturnCount")
 	private fun isValidPersonalNumber(): Boolean {
-		if (personalNumber == null || personalNumber == String.empty) {
+		if (personalNumber.isNullOrEmpty()) {
 			return true
-		} else if (personalNumber!!.length != 13) {
+		} else if (personalNumber?.length != 13) {
 			return false
 		}
 
