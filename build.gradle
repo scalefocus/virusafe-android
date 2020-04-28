@@ -5,8 +5,8 @@ buildscript {
         minSdkVersion = 21
         targetSdkVersion = 29
 
-        versionCode = System.getenv("GITHUB_RUN_NUMBER") as Integer ?: 26
-        versionName = "1.0.23"
+        versionCode = System.getenv("GITHUB_RUN_NUMBER") as Integer ?: 1
+        versionName = "1.0.${System.getenv("GITHUB_RUN_NUMBER") ?: "0"}"
 
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
 

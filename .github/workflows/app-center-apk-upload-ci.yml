@@ -44,7 +44,3 @@ jobs:
         token: ${{ secrets.APP_CENTER_TOKEN }}
         group: ${{ secrets.APP_CENTER_GROUP_2 }}
         file: presentation/build/outputs/apk/debug/presentation-debug.apk
-        
-    - name: Test
-      run:
-        echo "TODO"
