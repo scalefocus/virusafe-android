@@ -30,3 +30,9 @@ jobs:
 
     - name: upload artefact to App Center
       run: ./gradlew appCenterAssembleAndUploadDebug
+      env:
+        APP_CENTER_TOKEN: ${{ secrets.APP_CENTER_TOKEN }}
+        APP_CENTER_OWNER: ${{ secrets.APP_CENTER_OWNER }}
+        APP_CENTER_GROUP_1: ${{ secrets.APP_CENTER_GROUP_1 }}
+        APP_CENTER_GROUP_2: ${{ secrets.APP_CENTER_GROUP_2 }}
+        APP_NAME_DEV: ${{ secrets.APP_NAME_DEV }}
