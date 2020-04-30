@@ -61,10 +61,13 @@ android {
 }
 
 appcenter {
+    apiToken = "${System.getenv("APPCENTER_API_TOKEN")}"
+    ownerName = "${System.getenv("APPCENTER_OWNER_NAME")}"
+    distributionGroups = ["${System.getenv("APP_CENTER_GROUP_1")}", "${System.getenv("APP_CENTER_GROUP_2")}"]
     notifyTesters = true
     apps {
         debug {
-            appName = System.getenv("APP_NAME_DEV") ?: ""
+            appName = "${System.getenv("APP_NAME_DEV")}"
         }
     }
 }
