@@ -4,6 +4,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'com.betomorrow.appcenter'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -56,6 +57,16 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+appcenter {
+    releaseNotes = file("../changelog.md")
+    notifyTesters = true
+    apps {
+        debug {
+            appName = System.getenv("APP_NAME_DEV") ?: ""
+        }
     }
 }
 
