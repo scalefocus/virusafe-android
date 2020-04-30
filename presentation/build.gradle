@@ -60,6 +60,7 @@ android {
     }
 }
 
+//apiToken, ownerName and distributionGroups are in app-center-apk-upload-ci.yml
 appcenter {
     notifyTesters = true
     apps {
