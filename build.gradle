@@ -83,7 +83,7 @@ buildscript {
 
 plugins {
     //download plugin
-    id "de.undercouch.download" version "3.4.3"
+    id "de.undercouch.download" version "4.0.4"
     //kotlin checkstyle plugin
     id "io.gitlab.arturbosch.detekt" version "1.0.1"
     // library licenses plugin
