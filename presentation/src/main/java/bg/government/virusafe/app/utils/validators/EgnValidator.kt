@@ -50,7 +50,8 @@ class EgnValidator : PersonalIdValidator {
 			return false
 		}
 
-		val charArr = personalNumber!!.toCharArray()
+		val charArr = personalNumber?.toCharArray() ?: return false
+
 		val personalNumberDigits: MutableList<Int> = ArrayList(charArr.size)
 
 		for (c in charArr) {
