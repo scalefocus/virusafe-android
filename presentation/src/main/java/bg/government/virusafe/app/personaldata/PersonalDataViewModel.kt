@@ -1,11 +1,14 @@
 package bg.government.virusafe.app.personaldata
 
+import android.os.Bundle
+import android.view.View
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
+import bg.government.virusafe.app.personaldata.PersonalDataFragment.Companion.CHECK_BOX_KEY
 import bg.government.virusafe.app.utils.ComparableLiveData
 import bg.government.virusafe.app.utils.FIELD_EMPTY_MSG
 import bg.government.virusafe.app.utils.FIELD_INVALID_FORMAT_MSG
@@ -15,6 +18,7 @@ import bg.government.virusafe.app.utils.ID_NUMBER_HINT
 import bg.government.virusafe.app.utils.INVALID_MIN_AGE_MSG
 import bg.government.virusafe.app.utils.PASSPORT_HINT
 import bg.government.virusafe.app.utils.SingleLiveEvent
+import bg.government.virusafe.app.utils.USE_PERSONAL_DATA_TEXT_DISABLED
 import bg.government.virusafe.app.utils.getPersonalIdValidator
 import bg.government.virusafe.app.utils.hasValidForeignerNumberLength
 import bg.government.virusafe.app.utils.hasValidPassportLength
@@ -88,6 +92,17 @@ class PersonalDataViewModel @Inject constructor(
 
 	val componentsEditable: LiveData<Boolean> = Transformations.map(_legitimationTypeSelected) {
 		it != LegitimationType.PERSONAL_NUMBER
+	}
+
+	var checkBoxVisibility: Int = View.INVISIBLE
+		private set
+
+	override fun receiveNavigationArgs(args: Bundle?) {
+		super.receiveNavigationArgs(args)
+
+		args ?: return
+
+		checkBoxVisibility = if (args.getBoolean(CHECK_BOX_KEY))  View.VISIBLE else View.INVISIBLE
 	}
 
 	fun onLegitimationChange(legitimationType: LegitimationType) {

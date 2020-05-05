@@ -14,6 +14,7 @@ import bg.government.virusafe.app.appinfo.AppInfoFragment
 import bg.government.virusafe.app.fcm.FirebaseCloudMessagingService.Companion.URL
 import bg.government.virusafe.app.localization.LocalizationFragment
 import bg.government.virusafe.app.personaldata.PersonalDataFragment
+import bg.government.virusafe.app.personaldata.PersonalDataFragment.Companion.CHECK_BOX_KEY
 import bg.government.virusafe.app.selfcheck.SelfCheckFragment
 import bg.government.virusafe.app.splash.SplashActivity.Companion.STATISTICS_URL_KEY
 import bg.government.virusafe.app.utils.DPN_DESCRIPTION
@@ -50,7 +51,9 @@ class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
 		binding.fragmentHomePersonalInfo.setOnClickListener {
 			if (canClick().not()) return@setOnClickListener
 
-			navigateToView(PersonalDataFragment::class)
+			navigateToView(PersonalDataFragment::class, Bundle().apply {
+				putBoolean(CHECK_BOX_KEY, true)
+			})
 		}
 
 		binding.fragmentHomeBtnAppInfo.setOnClickListener {

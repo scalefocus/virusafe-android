@@ -12,9 +12,9 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:clipToPadding="false"
-			android:paddingBottom="@dimen/registration_padding_bottom"
+			android:paddingStart="@dimen/registration_padding_start_end"
 			android:paddingEnd="@dimen/registration_padding_start_end"
-			android:paddingStart="@dimen/registration_padding_start_end">
+			android:paddingBottom="@dimen/registration_padding_bottom">
 
 			<Button
 				android:id="@+id/personal_data_btn"
@@ -22,14 +22,14 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="@dimen/personal_data_margin_top"
 				android:background="@drawable/background_btn"
-				android:paddingBottom="@dimen/btn_padding_top_bottom"
 				android:paddingTop="@dimen/btn_padding_top_bottom"
+				android:paddingBottom="@dimen/btn_padding_top_bottom"
 				android:text="@{personalDataViewModel.liveLocale().getString(StringsKt.CONFIRM_LABEL)}"
 				android:textColor="@color/color_white"
 				android:textSize="@dimen/text_size_normal"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@+id/personal_health_status_layout" />
+				app:layout_constraintTop_toBottomOf="@+id/data_protection_check_box" />
 
 			<RadioGroup
 				android:id="@+id/personal_gender_container"
@@ -54,8 +54,8 @@
 					android:clickable="@{personalDataViewModel.componentsEditable}"
 					android:focusable="@{personalDataViewModel.componentsEditable}"
 					android:onClick="@{() -> personalDataViewModel.setGender(Gender.VALUE_MALE)}"
-					android:paddingBottom="@dimen/radio_btn_padding_top_bottom"
 					android:paddingTop="@dimen/radio_btn_padding_top_bottom"
+					android:paddingBottom="@dimen/radio_btn_padding_top_bottom"
 					android:text="@{personalDataViewModel.liveLocale().getString(StringsKt.GENDER_MALE)}"
 					android:textAlignment="center"
 					android:textColor="@drawable/radio_text_color" />
@@ -71,8 +71,8 @@
 					android:clickable="@{personalDataViewModel.componentsEditable}"
 					android:focusable="@{personalDataViewModel.componentsEditable}"
 					android:onClick="@{() -> personalDataViewModel.setGender(Gender.VALUE_FEMALE)}"
-					android:paddingBottom="@dimen/radio_btn_padding_top_bottom"
 					android:paddingTop="@dimen/radio_btn_padding_top_bottom"
+					android:paddingBottom="@dimen/radio_btn_padding_top_bottom"
 					android:text="@{personalDataViewModel.liveLocale().getString(StringsKt.GENDER_FEMALE)}"
 					android:textAlignment="center"
 					android:textColor="@drawable/radio_text_color" />
@@ -98,8 +98,8 @@
 					android:clickable="true"
 					android:focusable="true"
 					android:onClick="@{() -> personalDataViewModel.onLegitimationChange(LegitimationType.PERSONAL_NUMBER)}"
-					android:paddingBottom="@dimen/radio_btn_padding_top_bottom"
 					android:paddingTop="@dimen/radio_btn_padding_top_bottom"
+					android:paddingBottom="@dimen/radio_btn_padding_top_bottom"
 					android:text="@{personalDataViewModel.liveLocale().getString(StringsKt.ID_NUMBER_HINT)}"
 					android:textAlignment="center"
 					android:textColor="@drawable/radio_text_color" />
@@ -114,8 +114,8 @@
 					android:clickable="true"
 					android:focusable="true"
 					android:onClick="@{() -> personalDataViewModel.onLegitimationChange(LegitimationType.FOREIGNER_NUMBER)}"
-					android:paddingBottom="@dimen/radio_btn_padding_top_bottom"
 					android:paddingTop="@dimen/radio_btn_padding_top_bottom"
+					android:paddingBottom="@dimen/radio_btn_padding_top_bottom"
 					android:text="@{personalDataViewModel.liveLocale().getString(StringsKt.FOREIGNER_NUMBER)}"
 					android:textAlignment="center"
 					android:textColor="@drawable/radio_text_color"
@@ -131,8 +131,8 @@
 					android:clickable="true"
 					android:focusable="true"
 					android:onClick="@{() -> personalDataViewModel.onLegitimationChange(LegitimationType.PASSPORT)}"
-					android:paddingBottom="@dimen/radio_btn_padding_top_bottom"
 					android:paddingTop="@dimen/radio_btn_padding_top_bottom"
+					android:paddingBottom="@dimen/radio_btn_padding_top_bottom"
 					android:text="@{personalDataViewModel.liveLocale().getString(StringsKt.PASSPORT_HINT)}"
 					android:textAlignment="center"
 					android:textColor="@drawable/radio_text_color" />
@@ -210,13 +210,34 @@
 					android:inputType="textMultiLine"
 					android:longClickable="false"
 					android:maxLines="3"
-					android:scrollHorizontally="false"
 					android:scrollbars="vertical"
+					android:scrollHorizontally="false"
 					android:text="@={personalDataViewModel.healthStatus}"
 					android:textColor="@color/color_black"
 					android:textIsSelectable="false"
 					android:textSize="@dimen/text_size_normal" />
 			</com.google.android.material.textfield.TextInputLayout>
+
+			<CheckBox
+				android:id="@+id/data_protection_check_box"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				android:layout_marginEnd="@dimen/registration_term_and_conditions_padding"
+				android:buttonTint="@color/colorPrimary"
+				android:visibility="@{personalDataViewModel.checkBoxVisibility}"
+				app:constraintSet="@dimen/text_btn_padding"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toBottomOf="@id/personal_health_status_layout" />
+
+			<TextView
+				android:id="@+id/data_protection_notice_txt"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textColor="@color/colorPrimary"
+				android:textSize="@dimen/text_size_normal"
+				app:layout_constraintStart_toEndOf="@+id/data_protection_check_box"
+				app:layout_constraintTop_toTopOf="@+id/data_protection_check_box" />
 
 			<com.google.android.material.textfield.TextInputLayout
 				android:id="@+id/personal_number_layout"

@@ -74,6 +74,8 @@ class RegistrationServiceImpl @Inject constructor(
 		const val REFRESH_TOKEN_KEY = "com.upnetix.applicationservice.key2.2"
 		const val FINISHED_REGISTRATION_KEY = "com.upnetix.applicationservice.key3"
 
-		private const val TRUE_VALUE = "true"
+		const val USE_PERSONAL_DATA_KEY = "use_personal_data_key"
+
+		const val TRUE_VALUE = "true"
 	}
 }

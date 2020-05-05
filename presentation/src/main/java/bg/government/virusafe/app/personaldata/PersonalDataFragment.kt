@@ -8,12 +8,21 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import bg.government.virusafe.BR
 import bg.government.virusafe.R
+import bg.government.virusafe.app.home.Agreement
 import bg.government.virusafe.app.home.HomeFragment
 import bg.government.virusafe.app.selfcheck.SelfCheckFragment
+import bg.government.virusafe.app.utils.DATA_PROTECTION_NOTICE_SMALL_LBL
+import bg.government.virusafe.app.utils.DPN_DESCRIPTION
+import bg.government.virusafe.app.utils.DPN_TITLE
+import bg.government.virusafe.app.utils.I_CONSENT_TO_LBL
+import bg.government.virusafe.app.utils.USE_PERSONAL_DATA_TEXT_DISABLED
 import bg.government.virusafe.app.utils.getAgeInputFilter
 import bg.government.virusafe.app.utils.getChronicConditionsInputFilter
+import bg.government.virusafe.app.utils.setClickablePhrase
 import bg.government.virusafe.databinding.FragmentPersonalDataBinding
 import bg.government.virusafe.mvvm.fragment.AbstractFragment
+import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.TRUE_VALUE
+import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.USE_PERSONAL_DATA_KEY
 import com.upnetix.applicationservice.registration.model.Gender
 
 class PersonalDataFragment :
@@ -32,6 +41,41 @@ class PersonalDataFragment :
 			sendData()
 		}
 		getData()
+
+		arguments?.let {
+			if (it.getBoolean(CHECK_BOX_KEY)) setTextNotice() else binding.dataProtectionNoticeTxt.visibility
+		}
+	}
+
+	private fun setTextNotice() {
+		if (sharedPrefsService.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY) == TRUE_VALUE) {
+			binding.dataProtectionNoticeTxt.setClickablePhrase(
+				fullText = buildString {
+					append(viewModel.localizeString(I_CONSENT_TO_LBL))
+					append(" ")
+					append(viewModel.localizeString(DATA_PROTECTION_NOTICE_SMALL_LBL))
+				},
+				clickablePhrase = viewModel.localizeString(DATA_PROTECTION_NOTICE_SMALL_LBL),
+				shouldBoldPhrase = false,
+				shouldUnderlinePhrase = true
+			) {
+
+				if (!canClick()) {
+					return@setClickablePhrase
+				}
+
+				showAgreementsDialog(
+					viewModel.localizeString(DPN_TITLE),
+					viewModel.localizeString(DPN_DESCRIPTION),
+					Agreement.DataProtectionNotice
+				)
+			}
+
+			binding.dataProtectionCheckBox.isChecked = true
+		} else {
+			binding.dataProtectionNoticeTxt.text = viewModel.localizeString(USE_PERSONAL_DATA_TEXT_DISABLED)
+			binding.dataProtectionCheckBox.isChecked = false
+		}
 	}
 
 	private fun setInputFilters() {
@@ -122,6 +166,8 @@ class PersonalDataFragment :
 	override fun getViewModelResId(): Int = BR.personalDataViewModel
 
 	companion object {
+		const val CHECK_BOX_KEY = "checkbox_visibility_key"
+
 		private const val SHAKE_DURATION = 500L
 		private const val SHAKE_CYCLES = 7F
 		private const val SHAKE_FROM_X = 0F
