@@ -20,8 +20,8 @@ import bg.government.virusafe.app.selfcheck.SelfCheckFragment
 import bg.government.virusafe.app.splash.SplashActivity.Companion.STATISTICS_URL_KEY
 import bg.government.virusafe.app.utils.DPN_DESCRIPTION
 import bg.government.virusafe.app.utils.DPN_TITLE
-import bg.government.virusafe.app.utils.NO_LABEL
 import bg.government.virusafe.app.utils.OK_LABEL
+import bg.government.virusafe.app.utils.REFUSAL_LABEL
 import bg.government.virusafe.app.utils.TNC_PART_ONE
 import bg.government.virusafe.app.utils.TNC_PART_TWO
 import bg.government.virusafe.app.utils.TNC_TITLE
@@ -147,7 +147,7 @@ class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
 			navigateToView(SelfCheckFragment::class)
 		}
 
-		setNegativeButton(viewModel.localizeString(NO_LABEL)) { _, _ ->
+		setNegativeButton(viewModel.localizeString(REFUSAL_LABEL)) { _, _ ->
 		}
 
 		show()

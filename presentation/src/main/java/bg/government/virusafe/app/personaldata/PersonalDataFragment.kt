@@ -19,8 +19,8 @@ import bg.government.virusafe.app.utils.DPN_DESCRIPTION
 import bg.government.virusafe.app.utils.DPN_TITLE
 import bg.government.virusafe.app.utils.I_CONSENT_TO_LBL
 import bg.government.virusafe.app.utils.NO_LABEL
-import bg.government.virusafe.app.utils.OK_LABEL
 import bg.government.virusafe.app.utils.USE_PERSONAL_DATA_TEXT_DISABLED
+import bg.government.virusafe.app.utils.YES_LABEL
 import bg.government.virusafe.app.utils.getAgeInputFilter
 import bg.government.virusafe.app.utils.getChronicConditionsInputFilter
 import bg.government.virusafe.app.utils.setClickablePhrase
@@ -106,7 +106,7 @@ class PersonalDataFragment :
 		setMessage("Data alert msg")
 		setCancelable(false)
 
-		setPositiveButton(viewModel.localizeString(OK_LABEL)) { _, _ ->
+		setPositiveButton(viewModel.localizeString(YES_LABEL)) { _, _ ->
 			binding.dataProtectionCheckBox.isChecked = true
 		}
 
