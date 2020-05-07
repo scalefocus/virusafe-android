@@ -102,7 +102,7 @@ class PersonalDataViewModel @Inject constructor(
 
 		args ?: return
 
-		checkBoxVisibility = if (args.getBoolean(CHECK_BOX_KEY))  View.VISIBLE else View.INVISIBLE
+		checkBoxVisibility = if (args.getBoolean(CHECK_BOX_KEY)) View.VISIBLE else View.INVISIBLE
 	}
 
 	fun onLegitimationChange(legitimationType: LegitimationType) {

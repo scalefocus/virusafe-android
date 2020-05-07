@@ -1,9 +1,12 @@
 package bg.government.virusafe.app.personaldata
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.CycleInterpolator
 import android.view.animation.TranslateAnimation
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import bg.government.virusafe.BR
@@ -15,12 +18,15 @@ import bg.government.virusafe.app.utils.DATA_PROTECTION_NOTICE_SMALL_LBL
 import bg.government.virusafe.app.utils.DPN_DESCRIPTION
 import bg.government.virusafe.app.utils.DPN_TITLE
 import bg.government.virusafe.app.utils.I_CONSENT_TO_LBL
+import bg.government.virusafe.app.utils.NO_LABEL
+import bg.government.virusafe.app.utils.OK_LABEL
 import bg.government.virusafe.app.utils.USE_PERSONAL_DATA_TEXT_DISABLED
 import bg.government.virusafe.app.utils.getAgeInputFilter
 import bg.government.virusafe.app.utils.getChronicConditionsInputFilter
 import bg.government.virusafe.app.utils.setClickablePhrase
 import bg.government.virusafe.databinding.FragmentPersonalDataBinding
 import bg.government.virusafe.mvvm.fragment.AbstractFragment
+import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.FALSE_VALUE
 import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.TRUE_VALUE
 import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.USE_PERSONAL_DATA_KEY
 import com.upnetix.applicationservice.registration.model.Gender
@@ -43,39 +49,72 @@ class PersonalDataFragment :
 		getData()
 
 		arguments?.let {
-			if (it.getBoolean(CHECK_BOX_KEY)) setTextNotice() else binding.dataProtectionNoticeTxt.visibility
+			if (it.getBoolean(CHECK_BOX_KEY)) setDataProtectionNoticeTxt() else binding.dataProtectionNoticeTxt.visibility =
+				View.INVISIBLE
 		}
 	}
 
-	private fun setTextNotice() {
-		if (sharedPrefsService.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY) == TRUE_VALUE) {
-			binding.dataProtectionNoticeTxt.setClickablePhrase(
-				fullText = buildString {
-					append(viewModel.localizeString(I_CONSENT_TO_LBL))
-					append(" ")
-					append(viewModel.localizeString(DATA_PROTECTION_NOTICE_SMALL_LBL))
-				},
-				clickablePhrase = viewModel.localizeString(DATA_PROTECTION_NOTICE_SMALL_LBL),
-				shouldBoldPhrase = false,
-				shouldUnderlinePhrase = true
-			) {
+	private fun setDataProtectionNoticeTxt() {
+		if (sharedPrefsService.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY) != TRUE_VALUE) {
+			setEnablePersonalDataUsageTxt()
+		} else {
+			setDisablePersonalDataUsageTxt()
+		}
+	}
 
-				if (!canClick()) {
-					return@setClickablePhrase
-				}
-
-				showAgreementsDialog(
-					viewModel.localizeString(DPN_TITLE),
-					viewModel.localizeString(DPN_DESCRIPTION),
-					Agreement.DataProtectionNotice
-				)
+	private fun setEnablePersonalDataUsageTxt() {
+		binding.dataProtectionNoticeTxt.setClickablePhrase(
+			fullText = buildString {
+				append(viewModel.localizeString(I_CONSENT_TO_LBL))
+				append(" ")
+				append(viewModel.localizeString(DATA_PROTECTION_NOTICE_SMALL_LBL))
+			},
+			clickablePhrase = viewModel.localizeString(DATA_PROTECTION_NOTICE_SMALL_LBL),
+			shouldBoldPhrase = false,
+			shouldUnderlinePhrase = true
+		) {
+			if (!canClick()) {
+				return@setClickablePhrase
 			}
 
+			showAgreementsDialog(
+				viewModel.localizeString(DPN_TITLE),
+				viewModel.localizeString(DPN_DESCRIPTION),
+				Agreement.DataProtectionNotice
+			)
+		}
+	}
+
+	@SuppressLint("ClickableViewAccessibility")
+	private fun setDisablePersonalDataUsageTxt() {
+		with(binding) {
+			dataProtectionNoticeTxt.text = viewModel.localizeString(USE_PERSONAL_DATA_TEXT_DISABLED)
+
+			dataProtectionCheckBox.setOnTouchListener { view, event ->
+				if (event.action == MotionEvent.ACTION_DOWN && !dataProtectionCheckBox.isChecked) {
+					showDisablePersonalDataDialog(view.context)
+					true
+				} else {
+					false
+				}
+			}
+		}
+	}
+
+	private fun showDisablePersonalDataDialog(context: Context) = with(AlertDialog.Builder(context)) {
+		setTitle("Data Alert")
+		setMessage("Data alert msg")
+		setCancelable(false)
+
+		setPositiveButton(viewModel.localizeString(OK_LABEL)) { _, _ ->
 			binding.dataProtectionCheckBox.isChecked = true
-		} else {
-			binding.dataProtectionNoticeTxt.text = viewModel.localizeString(USE_PERSONAL_DATA_TEXT_DISABLED)
+		}
+
+		setNegativeButton(viewModel.localizeString(NO_LABEL)) { _, _ ->
 			binding.dataProtectionCheckBox.isChecked = false
 		}
+
+		show()
 	}
 
 	private fun setInputFilters() {
@@ -135,6 +174,17 @@ class PersonalDataFragment :
 		if (navigatedFromRegistration) {
 			openFragmentFromRegistrationFlow(SelfCheckFragment::class)
 		} else {
+			val canUsePersonalData = sharedPrefsService.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY)
+			// TODO send request to backend about the user data protection state
+			if (binding.dataProtectionCheckBox.isChecked && canUsePersonalData != TRUE_VALUE) {
+				sharedPrefsService.writeStringToSharedPrefs(USE_PERSONAL_DATA_KEY, TRUE_VALUE)
+				navigateToView(SelfCheckFragment::class)
+				return
+			} else if (binding.dataProtectionCheckBox.isChecked && canUsePersonalData == TRUE_VALUE) {
+				// TODO disable GPS and notifications
+				sharedPrefsService.writeStringToSharedPrefs(USE_PERSONAL_DATA_KEY, FALSE_VALUE)
+			}
+
 			navigateToView(HomeFragment::class)
 		}
 	}

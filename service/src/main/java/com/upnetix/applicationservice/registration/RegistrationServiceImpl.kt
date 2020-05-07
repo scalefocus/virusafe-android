@@ -77,5 +77,6 @@ class RegistrationServiceImpl @Inject constructor(
 		const val USE_PERSONAL_DATA_KEY = "use_personal_data_key"
 
 		const val TRUE_VALUE = "true"
+		const val FALSE_VALUE = "false"
 	}
 }

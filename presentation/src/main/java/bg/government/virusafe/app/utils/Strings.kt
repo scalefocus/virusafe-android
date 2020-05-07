@@ -66,7 +66,6 @@ const val CHRONICAL_CONDITIONS_HINT = "Common.chronical_conditions_hint"
 const val INVALID_MIN_AGE_MSG = "Common.invalid_min_age_msg"
 const val FOREIGNER_NUMBER = "Common.identification_number_pin_segment"
 const val PASSPORT_HINT = "Common.passport_hint"
-const val USE_PERSONAL_DATA_TEXT_ENABLED = ""
 const val USE_PERSONAL_DATA_TEXT_DISABLED = "Common.data_protection_deny_usage_label"
 
 //Home
