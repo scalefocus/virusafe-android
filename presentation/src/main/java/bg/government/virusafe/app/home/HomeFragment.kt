@@ -1,5 +1,6 @@
 package bg.government.virusafe.app.home
 
+import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -19,6 +20,8 @@ import bg.government.virusafe.app.selfcheck.SelfCheckFragment
 import bg.government.virusafe.app.splash.SplashActivity.Companion.STATISTICS_URL_KEY
 import bg.government.virusafe.app.utils.DPN_DESCRIPTION
 import bg.government.virusafe.app.utils.DPN_TITLE
+import bg.government.virusafe.app.utils.NO_LABEL
+import bg.government.virusafe.app.utils.OK_LABEL
 import bg.government.virusafe.app.utils.TNC_PART_ONE
 import bg.government.virusafe.app.utils.TNC_PART_TWO
 import bg.government.virusafe.app.utils.TNC_TITLE
@@ -26,6 +29,8 @@ import bg.government.virusafe.app.utils.URL_ABOUT_COVID
 import bg.government.virusafe.app.utils.URL_VIRUSAFE_WHY
 import bg.government.virusafe.databinding.FragmentHomeBinding
 import bg.government.virusafe.mvvm.fragment.AbstractFragment
+import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.TRUE_VALUE
+import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.USE_PERSONAL_DATA_KEY
 
 class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
 
@@ -37,7 +42,11 @@ class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
 		binding.fragmentHomeBtnSelfCheck.setOnClickListener {
 			if (canClick().not()) return@setOnClickListener
 
-			navigateToView(SelfCheckFragment::class)
+			if (sharedPrefsService.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY) == TRUE_VALUE) {
+				navigateToView(SelfCheckFragment::class)
+			} else {
+				showPersonalDataAccessDialog()
+			}
 		}
 
 		binding.fragmentHomeBtnStatistics.setOnClickListener {
@@ -125,5 +134,22 @@ class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 			window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 		window?.statusBarColor = ContextCompat.getColor(activity!!, R.color.color_light_blue)
+	}
+
+	private fun showPersonalDataAccessDialog() = with(AlertDialog.Builder(context)) {
+		setTitle("Data Access")
+		setMessage("Personal data access is needed for this feature.")
+		setCancelable(false)
+
+		setPositiveButton(viewModel.localizeString(OK_LABEL)) { _, _ ->
+			// TODO send request to backend for user data protection state
+			sharedPrefsService.writeStringToSharedPrefs(USE_PERSONAL_DATA_KEY, TRUE_VALUE)
+			navigateToView(SelfCheckFragment::class)
+		}
+
+		setNegativeButton(viewModel.localizeString(NO_LABEL)) { _, _ ->
+		}
+
+		show()
 	}
 }
