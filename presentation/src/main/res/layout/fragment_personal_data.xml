@@ -29,7 +29,7 @@
 				android:textSize="@dimen/text_size_normal"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@+id/data_protection_check_box" />
+				app:layout_constraintTop_toBottomOf="@+id/data_protection_notice_check_box" />
 
 			<RadioGroup
 				android:id="@+id/personal_gender_container"
@@ -219,7 +219,7 @@
 			</com.google.android.material.textfield.TextInputLayout>
 
 			<CheckBox
-				android:id="@+id/data_protection_check_box"
+				android:id="@+id/data_protection_notice_check_box"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="8dp"
@@ -236,8 +236,8 @@
 				android:layout_height="wrap_content"
 				android:textColor="@color/colorPrimary"
 				android:textSize="@dimen/text_size_normal"
-				app:layout_constraintStart_toEndOf="@+id/data_protection_check_box"
-				app:layout_constraintTop_toTopOf="@+id/data_protection_check_box" />
+				app:layout_constraintStart_toEndOf="@+id/data_protection_notice_check_box"
+				app:layout_constraintTop_toTopOf="@+id/data_protection_notice_check_box" />
 
 			<com.google.android.material.textfield.TextInputLayout
 				android:id="@+id/personal_number_layout"

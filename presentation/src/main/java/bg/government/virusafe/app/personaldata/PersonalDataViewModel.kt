@@ -18,7 +18,6 @@ import bg.government.virusafe.app.utils.ID_NUMBER_HINT
 import bg.government.virusafe.app.utils.INVALID_MIN_AGE_MSG
 import bg.government.virusafe.app.utils.PASSPORT_HINT
 import bg.government.virusafe.app.utils.SingleLiveEvent
-import bg.government.virusafe.app.utils.USE_PERSONAL_DATA_TEXT_DISABLED
 import bg.government.virusafe.app.utils.getPersonalIdValidator
 import bg.government.virusafe.app.utils.hasValidForeignerNumberLength
 import bg.government.virusafe.app.utils.hasValidPassportLength
@@ -27,6 +26,7 @@ import bg.government.virusafe.app.utils.validators.LncValidator
 import bg.government.virusafe.app.utils.validators.PersonalIdValidator
 import bg.government.virusafe.mvvm.viewmodel.AbstractViewModel
 import com.upnetix.applicationservice.base.ResponseWrapper
+import com.upnetix.applicationservice.personaldata.IPersonalDataService
 import com.upnetix.applicationservice.registration.IRegistrationService
 import com.upnetix.applicationservice.registration.model.Gender
 import com.upnetix.applicationservice.registration.model.PersonalData
@@ -35,7 +35,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PersonalDataViewModel @Inject constructor(
-	private val registrationService: IRegistrationService
+	private val registrationService: IRegistrationService,
+	private val personalDataService: IPersonalDataService
 ) : AbstractViewModel() {
 
 	val personalNumber: ObservableField<String> = ObservableField()
@@ -93,6 +94,10 @@ class PersonalDataViewModel @Inject constructor(
 	val componentsEditable: LiveData<Boolean> = Transformations.map(_legitimationTypeSelected) {
 		it != LegitimationType.PERSONAL_NUMBER
 	}
+
+	private val _deleteDataResponse = MutableLiveData<ResponseWrapper<Unit>>()
+	val deleteDataResponse: LiveData<ResponseWrapper<Unit>>
+		get() = _deleteDataResponse
 
 	var checkBoxVisibility: Int = View.INVISIBLE
 		private set
@@ -163,6 +168,12 @@ class PersonalDataViewModel @Inject constructor(
 
 	fun setGender(genderStr: String) {
 		gender.value = Gender.fromString(genderStr)
+	}
+
+	fun deletePersonalInformation() {
+		viewModelScope.launch {
+			_deleteDataResponse.postValue(personalDataService.deletePersonalData())
+		}
 	}
 
 	private fun getPersonalData(): PersonalData = PersonalData(

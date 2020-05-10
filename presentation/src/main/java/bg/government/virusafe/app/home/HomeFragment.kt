@@ -136,20 +136,21 @@ class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
 		window?.statusBarColor = ContextCompat.getColor(activity!!, R.color.color_light_blue)
 	}
 
-	private fun showPersonalDataAccessDialog() = with(AlertDialog.Builder(context)) {
-		setTitle("Data Access")
-		setMessage("Personal data access is needed for this feature.")
-		setCancelable(false)
+	private fun showPersonalDataAccessDialog() {
+		AlertDialog.Builder(context)
+			.setTitle("Data Access")
+			.setMessage("Personal data access is needed for this feature.")
+			.setCancelable(false)
 
-		setPositiveButton(viewModel.localizeString(OK_LABEL)) { _, _ ->
-			// TODO send request to backend for user data protection state
-			sharedPrefsService.writeStringToSharedPrefs(USE_PERSONAL_DATA_KEY, TRUE_VALUE)
-			navigateToView(SelfCheckFragment::class)
-		}
+			.setPositiveButton(viewModel.localizeString(OK_LABEL)) { _, _ ->
+				// TODO send request to backend for user data protection state
+				sharedPrefsService.writeStringToSharedPrefs(USE_PERSONAL_DATA_KEY, TRUE_VALUE)
+				navigateToView(SelfCheckFragment::class)
+			}
 
-		setNegativeButton(viewModel.localizeString(REFUSAL_LABEL)) { _, _ ->
-		}
+			.setNegativeButton(viewModel.localizeString(REFUSAL_LABEL)) { _, _ ->
+			}
 
-		show()
+			.show()
 	}
 }
