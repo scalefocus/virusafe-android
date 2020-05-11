@@ -69,6 +69,8 @@ const val INVALID_MIN_AGE_MSG = "Common.invalid_min_age_msg"
 const val FOREIGNER_NUMBER = "Common.identification_number_pin_segment"
 const val PASSPORT_HINT = "Common.passport_hint"
 const val DENY_PERSONAL_DATA_MESSAGE = "Common.popup_deny_personal_data_access_msg"
+const val PERMISSION_CHANGE_TXT = "Common.popup_permission_change_txt"
+const val UPDATE_PERSONAL_INFO_TXT = "Common.popup_update_personal_info_txt"
 
 //Home
 const val MY_CONTRIBUTION_TITLE = "Common.my_contribution_title"

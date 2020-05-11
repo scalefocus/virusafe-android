@@ -9,6 +9,7 @@ import com.upnetix.applicationservice.geolocation.IGeoLocationApi
 import com.upnetix.applicationservice.geolocation.Location
 import com.upnetix.applicationservice.geolocation.LocationEntity
 import com.upnetix.applicationservice.geolocation.LocationRequest
+import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.USE_PERSONAL_DATA_KEY
 import com.upnetix.service.retrofit.RetrofitModule
 import com.upnetix.service.retrofit.SSLData
 import com.upnetix.service.sharedprefs.ISharedPrefsService
@@ -52,6 +53,9 @@ class GeoLocationWorker(
 	}
 
 	override suspend fun doWork(): Result = coroutineScope {
+		// Disable tracking if the user has denied consent
+		if (!sharedPrefs.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY).toBoolean()) return@coroutineScope Result.failure()
+
 		val longitude = inputData.getDouble(LONGITUDE, 0.0)
 		val latitude = inputData.getDouble(LATITUDE, 0.0)
 		val date = inputData.getLong(DATE, 0)

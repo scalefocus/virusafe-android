@@ -21,7 +21,6 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.upnetix.applicationservice.pushtoken.IPushTokenService
 import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.HAS_REGISTRATION_KEY
-import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.TRUE_VALUE
 import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.USE_PERSONAL_DATA_KEY
 import com.upnetix.presentation.BaseApplication
 import com.upnetix.presentation.navigation.ACTIVITY_BUNDLE_EXTRA_KEY
@@ -61,7 +60,9 @@ class FirebaseCloudMessagingService : FirebaseMessagingService() {
 	 * @param remoteMessage Object representing the message received from Firebase Cloud Messaging.
 	 */
 	override fun onMessageReceived(remoteMessage: RemoteMessage) {
-		if (sharedPrefs.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY) != TRUE_VALUE) return
+		// Disable notifications if the user has denied consent
+		if (!sharedPrefs.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY).toBoolean()) return
+
 		showNotification(remoteMessage)
 	}
 

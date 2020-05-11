@@ -139,12 +139,13 @@ class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
 
 	private fun showPersonalDataAccessDialog() {
 		AlertDialog.Builder(context)
-			.setTitle("Data Access")
 			.setMessage(viewModel.localizeString(ACCEPT_PERSONAL_DATA_MESSAGE))
 			.setCancelable(false)
 
 			.setPositiveButton(viewModel.localizeString(PROCEED_BTN_TXT)) { _, _ ->
-				navigateToView(PersonalDataFragment::class)
+				navigateToView(PersonalDataFragment::class, Bundle().apply {
+					putBoolean(CHECK_BOX_KEY, true)
+				})
 			}
 
 			.setNegativeButton(viewModel.localizeString(BACK_BTN_TXT)) { _, _ -> }
