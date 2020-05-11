@@ -18,10 +18,11 @@ import bg.government.virusafe.app.personaldata.PersonalDataFragment
 import bg.government.virusafe.app.personaldata.PersonalDataFragment.Companion.CHECK_BOX_KEY
 import bg.government.virusafe.app.selfcheck.SelfCheckFragment
 import bg.government.virusafe.app.splash.SplashActivity.Companion.STATISTICS_URL_KEY
+import bg.government.virusafe.app.utils.ACCEPT_PERSONAL_DATA_MESSAGE
+import bg.government.virusafe.app.utils.BACK_BTN_TXT
 import bg.government.virusafe.app.utils.DPN_DESCRIPTION
 import bg.government.virusafe.app.utils.DPN_TITLE
-import bg.government.virusafe.app.utils.OK_LABEL
-import bg.government.virusafe.app.utils.REFUSAL_LABEL
+import bg.government.virusafe.app.utils.PROCEED_BTN_TXT
 import bg.government.virusafe.app.utils.TNC_PART_ONE
 import bg.government.virusafe.app.utils.TNC_PART_TWO
 import bg.government.virusafe.app.utils.TNC_TITLE
@@ -139,18 +140,14 @@ class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
 	private fun showPersonalDataAccessDialog() {
 		AlertDialog.Builder(context)
 			.setTitle("Data Access")
-			.setMessage("Personal data access is needed for this feature.")
+			.setMessage(viewModel.localizeString(ACCEPT_PERSONAL_DATA_MESSAGE))
 			.setCancelable(false)
 
-			.setPositiveButton(viewModel.localizeString(OK_LABEL)) { _, _ ->
-				// TODO send request to backend for user data protection state
-				sharedPrefsService.writeStringToSharedPrefs(USE_PERSONAL_DATA_KEY, TRUE_VALUE)
-				navigateToView(SelfCheckFragment::class)
+			.setPositiveButton(viewModel.localizeString(PROCEED_BTN_TXT)) { _, _ ->
+				navigateToView(PersonalDataFragment::class)
 			}
 
-			.setNegativeButton(viewModel.localizeString(REFUSAL_LABEL)) { _, _ ->
-			}
-
+			.setNegativeButton(viewModel.localizeString(BACK_BTN_TXT)) { _, _ -> }
 			.show()
 	}
 }

@@ -42,6 +42,7 @@ const val TNC_PART_TWO = "Common.tnc_part_two"
 const val DPN_TITLE = "Common.dpn_title"
 const val DPN_DESCRIPTION = "Common.dpn_description"
 const val DATA_PROTECTION_NOTICE_LBL = "Common.data_protection_notice_label"
+const val BACK_BTN_TXT = "Common.back_text"
 
 //Registration
 const val REGISTRATION_TITLE = "Common.registration_title"
@@ -67,7 +68,6 @@ const val CHRONICAL_CONDITIONS_HINT = "Common.chronical_conditions_hint"
 const val INVALID_MIN_AGE_MSG = "Common.invalid_min_age_msg"
 const val FOREIGNER_NUMBER = "Common.identification_number_pin_segment"
 const val PASSPORT_HINT = "Common.passport_hint"
-const val USE_PERSONAL_DATA_TEXT_DISABLED = "Common.data_protection_deny_usage_label"
 const val DENY_PERSONAL_DATA_MESSAGE = "Common.popup_deny_personal_data_access_msg"
 
 //Home
@@ -79,6 +79,8 @@ const val STATISTICS = "Common.statistics_label"
 const val MY_PERSONAL_DATA = "Common.my_personal_data"
 const val LEARN_MORE = "Common.learn_more"
 const val LANGUAGE = "Common.language"
+const val ACCEPT_PERSONAL_DATA_MESSAGE = "Common.popup_accept_personal_data_usage"
+const val PROCEED_BTN_TXT = "Common.popup_proceed_btn"
 
 //SelfCheck
 const val SELF_CHECK_TITLE = "Common.self_check_title"

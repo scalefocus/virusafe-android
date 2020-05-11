@@ -67,6 +67,8 @@ class PersonalDataFragment :
 	}
 
 	override fun onAgreeBtnClicked(agreement: Agreement) {
+		setDataProtectionTxtColor(R.color.colorPrimary)
+		binding.dataProtectionNoticeCheckBox.isChecked = true
 	}
 
 	private fun setDataProtectionNotice() {
@@ -103,13 +105,17 @@ class PersonalDataFragment :
 
 	@SuppressLint("ClickableViewAccessibility")
 	private fun noticeTouchListener() {
-		binding.dataProtectionNoticeCheckBox.setOnTouchListener { view, event ->
-			setDataProtectionTxtColor(R.color.colorPrimary)
-			if (event.action == MotionEvent.ACTION_DOWN && binding.dataProtectionNoticeCheckBox.isChecked) {
-				showDeletePersonalDataDialog(view.context)
-				true
-			} else {
-				false
+		with(binding) {
+			dataProtectionNoticeCheckBox.setOnTouchListener { view, event ->
+				setDataProtectionTxtColor(R.color.colorPrimary)
+				if (event.action == MotionEvent.ACTION_DOWN && dataProtectionNoticeCheckBox.isChecked &&
+					!personalAgeEt.text.isNullOrBlank() && !personalNumberEt.text.isNullOrBlank()
+				) {
+					showDeletePersonalDataDialog(view.context)
+					true
+				} else {
+					false
+				}
 			}
 		}
 	}
@@ -121,7 +127,6 @@ class PersonalDataFragment :
 			.setCancelable(false)
 
 			.setPositiveButton(viewModel.localizeString(YES_LABEL)) { _, _ ->
-				binding.dataProtectionNoticeCheckBox.isChecked = false
 				viewModel.deletePersonalInformation()
 			}
 
@@ -191,6 +196,8 @@ class PersonalDataFragment :
 					personalGenderMale.isChecked = false
 					personalGenderFemale.isChecked = false
 					personalHealthStatusEt.text?.clear()
+
+					dataProtectionNoticeCheckBox.isChecked = false
 				}
 
 				// TODO Stop GPS Tracking
