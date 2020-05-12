@@ -3,8 +3,6 @@ package bg.government.virusafe.app.personaldata
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.CycleInterpolator
@@ -34,15 +32,11 @@ import bg.government.virusafe.app.utils.getChronicConditionsInputFilter
 import bg.government.virusafe.app.utils.setClickablePhrase
 import bg.government.virusafe.databinding.FragmentPersonalDataBinding
 import bg.government.virusafe.mvvm.fragment.AbstractFragment
-import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.FALSE_VALUE
-import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.TRUE_VALUE
 import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.USE_PERSONAL_DATA_KEY
 import com.upnetix.applicationservice.registration.model.Gender
 
 class PersonalDataFragment :
 	AbstractFragment<FragmentPersonalDataBinding, PersonalDataViewModel>(), OnDialogButtonListener {
-
-	private var isTextChanged: Boolean = false
 
 	@SuppressLint("ClickableViewAccessibility")
 	override fun onPrepareLayout(layoutView: View) {
@@ -55,24 +49,12 @@ class PersonalDataFragment :
 
 		binding.personalDataBtn.setOnClickListener {
 			if (canClick().not()) return@setOnClickListener
-
-			if (binding.dataProtectionNoticeCheckBox.visibility == View.VISIBLE && !binding.dataProtectionNoticeCheckBox.isChecked) {
-				setDataProtectionTxtColor(R.color.color_red)
-			} else if (binding.dataProtectionNoticeCheckBox.isChecked && isTextChanged && !binding.personalNumberEt.text.isNullOrBlank()) {
-				showWarningDialog(it.context, UPDATE_PERSONAL_INFO_TXT)
-			} else if (binding.dataProtectionNoticeCheckBox.isChecked && !binding.personalNumberEt.text.isNullOrBlank()) {
-				showWarningDialog(it.context, PERMISSION_CHANGE_TXT)
-			} else {
-				sendData()
-			}
+			sendData()
 		}
 
 		getData()
 
-		arguments?.let {
-			if (it.getBoolean(CHECK_BOX_KEY)) setDataProtectionNotice() else binding.dataProtectionNoticeTxt.visibility =
-				View.INVISIBLE
-		}
+		setDataProtectionNotice()
 	}
 
 	override fun onAgreeBtnClicked(agreement: Agreement) {
@@ -81,12 +63,9 @@ class PersonalDataFragment :
 	}
 
 	private fun setDataProtectionNotice() {
+		viewModel.setCheckBoxVisibility(navigatedFromRegistration)
+
 		with(binding) {
-			dataProtectionNoticeCheckBox.isChecked =
-				sharedPrefsService.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY).toBoolean()
-
-			addTextWatcher()
-
 			dataProtectionNoticeTxt.setClickablePhrase(
 				fullText = buildString {
 					append(viewModel.localizeString(I_CONSENT_TO_LBL))
@@ -112,24 +91,6 @@ class PersonalDataFragment :
 
 			noticeTouchListener()
 		}
-	}
-
-	private fun addTextWatcher() {
-		if (!binding.dataProtectionNoticeCheckBox.isChecked) return
-
-		binding.personalAgeEt.addTextChangedListener(object : TextWatcher {
-			override fun afterTextChanged(p0: Editable?) {
-				isTextChanged = true
-			}
-
-			override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-				// do nothing
-			}
-
-			override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-				// do nothing
-			}
-		})
 	}
 
 	@SuppressLint("ClickableViewAccessibility")
@@ -168,7 +129,9 @@ class PersonalDataFragment :
 			.setCancelable(false)
 
 			.setPositiveButton(viewModel.localizeString(YES_LABEL)) { _, _ ->
-				sendData()
+				sharedPrefsService.writeStringToSharedPrefs(USE_PERSONAL_DATA_KEY, true.toString())
+				showProgress()
+				viewModel.sendData()
 			}
 
 			.setNegativeButton(viewModel.localizeString(NO_LABEL)) { _, _ ->
@@ -217,11 +180,7 @@ class PersonalDataFragment :
 		viewModel.saveResponseData.observe(viewLifecycleOwner, Observer { responseWrapper ->
 			hideProgress()
 			processResponse(responseWrapper) {
-				if (binding.dataProtectionNoticeCheckBox.isChecked) {
-					sharedPrefsService.writeStringToSharedPrefs(USE_PERSONAL_DATA_KEY, TRUE_VALUE)
-				} else {
-					openNextScreen()
-				}
+				openNextScreen()
 			}
 		})
 
@@ -235,8 +194,7 @@ class PersonalDataFragment :
 
 		viewModel.deleteDataResponse.observe(viewLifecycleOwner, Observer { responseWrapper ->
 			processResponse(responseWrapper) {
-				sharedPrefsService.writeEncodedStringToSharedPrefs(USE_PERSONAL_DATA_KEY, FALSE_VALUE)
-
+				sharedPrefsService.writeEncodedStringToSharedPrefs(USE_PERSONAL_DATA_KEY, false.toString())
 				with(binding) {
 					personalNumberEt.text?.clear()
 					personalAgeEt.text?.clear()
@@ -245,8 +203,6 @@ class PersonalDataFragment :
 					personalHealthStatusEt.text?.clear()
 					dataProtectionNoticeCheckBox.isChecked = false
 				}
-
-				// TODO Stop GPS Tracking
 			}
 		})
 	}
@@ -261,6 +217,8 @@ class PersonalDataFragment :
 			binding.personalNumberLayout.error != null -> shakeError(binding.personalNumberLayout)
 			binding.personalAgeLayout.error != null -> shakeError(binding.personalAgeLayout)
 			binding.personalNumberEt.text.isNullOrBlank() -> viewModel.validatePersonalNumber()
+			!binding.dataProtectionNoticeCheckBox.isChecked -> setDataProtectionTxtColor(R.color.color_red)
+			!navigatedFromRegistration -> showWarning()
 
 			else -> {
 				showProgress()
@@ -269,18 +227,27 @@ class PersonalDataFragment :
 		}
 	}
 
+	private fun showWarning() {
+		with(binding) {
+			when {
+				dataProtectionNoticeCheckBox.isChecked && !personalAgeEt.text.isNullOrBlank() && !sharedPrefsService.readStringFromSharedPrefs(
+					USE_PERSONAL_DATA_KEY
+				).toBoolean() -> showWarningDialog(
+					root.context,
+					PERMISSION_CHANGE_TXT
+				)
+				dataProtectionNoticeCheckBox.isChecked && !personalAgeEt.text.isNullOrBlank() -> showWarningDialog(
+					root.context,
+					UPDATE_PERSONAL_INFO_TXT
+				)
+			}
+		}
+	}
+
 	private fun openNextScreen() {
 		if (navigatedFromRegistration) {
 			openFragmentFromRegistrationFlow(SelfCheckFragment::class)
 		} else {
-			val isPersonalDataAvailable = sharedPrefsService.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY)
-
-			if (binding.dataProtectionNoticeCheckBox.isChecked && isPersonalDataAvailable != TRUE_VALUE && canClick()) {
-				sharedPrefsService.writeStringToSharedPrefs(USE_PERSONAL_DATA_KEY, TRUE_VALUE)
-				navigateToView(SelfCheckFragment::class)
-			}
-
-			sharedPrefsService.writeStringToSharedPrefs(USE_PERSONAL_DATA_KEY, TRUE_VALUE)
 			navigateToView(HomeFragment::class)
 		}
 	}
@@ -312,8 +279,6 @@ class PersonalDataFragment :
 	override fun getViewModelResId(): Int = BR.personalDataViewModel
 
 	companion object {
-		const val CHECK_BOX_KEY = "checkbox_visibility_key"
-
 		private const val SHAKE_DURATION = 500L
 		private const val SHAKE_CYCLES = 7F
 		private const val SHAKE_FROM_X = 0F

@@ -3,7 +3,6 @@ package bg.government.virusafe.app.registration
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
@@ -13,7 +12,6 @@ import bg.government.virusafe.BR
 import bg.government.virusafe.R
 import bg.government.virusafe.app.fcm.FirebaseCloudMessagingService
 import bg.government.virusafe.app.personaldata.PersonalDataFragment
-import bg.government.virusafe.app.personaldata.PersonalDataFragment.Companion.CHECK_BOX_KEY
 import bg.government.virusafe.app.utils.FIELD_EMPTY_MSG
 import bg.government.virusafe.app.utils.FIELD_INVALID_FORMAT_MSG
 import bg.government.virusafe.app.utils.FIELD_LENGTH_ERROR_MSG
@@ -22,7 +20,6 @@ import bg.government.virusafe.databinding.FragmentCodeVerificationBinding
 import bg.government.virusafe.mvvm.fragment.AbstractFragment
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.upnetix.applicationservice.pushtoken.IPushTokenService
-import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.TRUE_VALUE
 import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.USE_PERSONAL_DATA_KEY
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -91,11 +88,9 @@ class CodeVerificationFragment :
 			processResponse(responseWrapper) {
 				trySendingFirebaseToken()
 
-				openFragmentFromRegistrationFlow(PersonalDataFragment::class, Bundle().apply {
-					putBoolean(CHECK_BOX_KEY, false)
-				})
+				openFragmentFromRegistrationFlow(PersonalDataFragment::class)
 
-				sharedPrefsService.writeStringToSharedPrefs(USE_PERSONAL_DATA_KEY, TRUE_VALUE)
+				sharedPrefsService.writeStringToSharedPrefs(USE_PERSONAL_DATA_KEY, true.toString())
 			}
 		})
 

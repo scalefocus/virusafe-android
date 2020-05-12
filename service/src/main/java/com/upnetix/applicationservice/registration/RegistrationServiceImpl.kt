@@ -34,6 +34,7 @@ class RegistrationServiceImpl @Inject constructor(
 		if (responseWrapper is ResponseWrapper.Success) {
 			val response = responseWrapper.response
 			sharedPrefs.writeStringToSharedPrefs(HAS_REGISTRATION_KEY, TRUE_VALUE)
+			sharedPrefs.writeStringToSharedPrefs(USE_PERSONAL_DATA_KEY, TRUE_VALUE)
 			saveTokens(response)
 		}
 		return responseWrapper
@@ -76,7 +77,6 @@ class RegistrationServiceImpl @Inject constructor(
 
 		const val USE_PERSONAL_DATA_KEY = "use_personal_data_key"
 
-		const val TRUE_VALUE = "true"
-		const val FALSE_VALUE = "false"
+		private const val TRUE_VALUE = "true"
 	}
 }

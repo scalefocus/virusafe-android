@@ -225,6 +225,7 @@
 				android:layout_marginTop="8dp"
 				android:layout_marginEnd="@dimen/registration_term_and_conditions_padding"
 				android:buttonTint="@color/colorPrimary"
+				android:checked="@{personalDataViewModel.isCheckboxClicked}"
 				android:visibility="@{personalDataViewModel.checkBoxVisibility}"
 				app:constraintSet="@dimen/text_btn_padding"
 				app:layout_constraintStart_toStartOf="parent"
@@ -236,6 +237,7 @@
 				android:layout_height="wrap_content"
 				android:textColor="@color/colorPrimary"
 				android:textSize="@dimen/text_size_normal"
+				android:visibility="@{personalDataViewModel.checkBoxVisibility}"
 				app:layout_constraintStart_toEndOf="@+id/data_protection_notice_check_box"
 				app:layout_constraintTop_toTopOf="@+id/data_protection_notice_check_box" />
 

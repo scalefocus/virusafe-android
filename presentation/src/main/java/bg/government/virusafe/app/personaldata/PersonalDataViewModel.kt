@@ -1,6 +1,5 @@
 package bg.government.virusafe.app.personaldata
 
-import android.os.Bundle
 import android.view.View
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
@@ -8,7 +7,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
-import bg.government.virusafe.app.personaldata.PersonalDataFragment.Companion.CHECK_BOX_KEY
 import bg.government.virusafe.app.utils.ComparableLiveData
 import bg.government.virusafe.app.utils.FIELD_EMPTY_MSG
 import bg.government.virusafe.app.utils.FIELD_INVALID_FORMAT_MSG
@@ -28,15 +26,18 @@ import bg.government.virusafe.mvvm.viewmodel.AbstractViewModel
 import com.upnetix.applicationservice.base.ResponseWrapper
 import com.upnetix.applicationservice.personaldata.IPersonalDataService
 import com.upnetix.applicationservice.registration.IRegistrationService
+import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.USE_PERSONAL_DATA_KEY
 import com.upnetix.applicationservice.registration.model.Gender
 import com.upnetix.applicationservice.registration.model.PersonalData
+import com.upnetix.service.sharedprefs.ISharedPrefsService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PersonalDataViewModel @Inject constructor(
 	private val registrationService: IRegistrationService,
-	private val personalDataService: IPersonalDataService
+	private val personalDataService: IPersonalDataService,
+	sharedPrefs: ISharedPrefsService
 ) : AbstractViewModel() {
 
 	val personalNumber: ObservableField<String> = ObservableField()
@@ -99,16 +100,14 @@ class PersonalDataViewModel @Inject constructor(
 	val deleteDataResponse: LiveData<ResponseWrapper<Unit>>
 		get() = _deleteDataResponse
 
+	private val _isCheckboxClicked = MutableLiveData<Boolean>().apply {
+		value = sharedPrefs.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY).toBoolean()
+	}
+	val isCheckboxClicked: LiveData<Boolean>
+		get() = _isCheckboxClicked
+
 	var checkBoxVisibility: Int = View.INVISIBLE
 		private set
-
-	override fun receiveNavigationArgs(args: Bundle?) {
-		super.receiveNavigationArgs(args)
-
-		args ?: return
-
-		checkBoxVisibility = if (args.getBoolean(CHECK_BOX_KEY)) View.VISIBLE else View.INVISIBLE
-	}
 
 	fun onLegitimationChange(legitimationType: LegitimationType) {
 		if (this._legitimationTypeSelected.value == legitimationType) {
@@ -173,6 +172,14 @@ class PersonalDataViewModel @Inject constructor(
 	fun deletePersonalInformation() {
 		viewModelScope.launch {
 			_deleteDataResponse.postValue(personalDataService.deletePersonalData())
+		}
+	}
+
+	fun setCheckBoxVisibility(state: Boolean) {
+		checkBoxVisibility = if (state) {
+			View.INVISIBLE
+		} else {
+			View.VISIBLE
 		}
 	}
 

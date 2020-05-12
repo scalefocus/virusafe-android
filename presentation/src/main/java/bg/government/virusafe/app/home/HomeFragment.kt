@@ -15,7 +15,6 @@ import bg.government.virusafe.app.appinfo.AppInfoFragment
 import bg.government.virusafe.app.fcm.FirebaseCloudMessagingService.Companion.URL
 import bg.government.virusafe.app.localization.LocalizationFragment
 import bg.government.virusafe.app.personaldata.PersonalDataFragment
-import bg.government.virusafe.app.personaldata.PersonalDataFragment.Companion.CHECK_BOX_KEY
 import bg.government.virusafe.app.selfcheck.SelfCheckFragment
 import bg.government.virusafe.app.splash.SplashActivity.Companion.STATISTICS_URL_KEY
 import bg.government.virusafe.app.utils.ACCEPT_PERSONAL_DATA_MESSAGE
@@ -30,7 +29,6 @@ import bg.government.virusafe.app.utils.URL_ABOUT_COVID
 import bg.government.virusafe.app.utils.URL_VIRUSAFE_WHY
 import bg.government.virusafe.databinding.FragmentHomeBinding
 import bg.government.virusafe.mvvm.fragment.AbstractFragment
-import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.TRUE_VALUE
 import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.USE_PERSONAL_DATA_KEY
 
 class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
@@ -43,7 +41,7 @@ class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
 		binding.fragmentHomeBtnSelfCheck.setOnClickListener {
 			if (canClick().not()) return@setOnClickListener
 
-			if (sharedPrefsService.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY) == TRUE_VALUE) {
+			if (sharedPrefsService.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY).toBoolean()) {
 				navigateToView(SelfCheckFragment::class)
 			} else {
 				showPersonalDataAccessDialog()
@@ -61,9 +59,7 @@ class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
 		binding.fragmentHomePersonalInfo.setOnClickListener {
 			if (canClick().not()) return@setOnClickListener
 
-			navigateToView(PersonalDataFragment::class, Bundle().apply {
-				putBoolean(CHECK_BOX_KEY, true)
-			})
+			navigateToView(PersonalDataFragment::class)
 		}
 
 		binding.fragmentHomeBtnAppInfo.setOnClickListener {
@@ -143,9 +139,7 @@ class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
 			.setCancelable(false)
 
 			.setPositiveButton(viewModel.localizeString(PROCEED_BTN_TXT)) { _, _ ->
-				navigateToView(PersonalDataFragment::class, Bundle().apply {
-					putBoolean(CHECK_BOX_KEY, true)
-				})
+				navigateToView(PersonalDataFragment::class)
 			}
 
 			.setNegativeButton(viewModel.localizeString(BACK_BTN_TXT)) { _, _ -> }

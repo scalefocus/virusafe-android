@@ -10,10 +10,7 @@ class PersonalDataServiceImpl @Inject constructor(
 	context: Context
 ) : BaseService(context), IPersonalDataService {
 
-	override suspend fun deletePersonalData(): ResponseWrapper<Unit> {
-
-		return executeRetrofitCall {
-			api.deletePersonalData()
-		}
+	override suspend fun deletePersonalData(): ResponseWrapper<Unit> = executeRetrofitCall {
+		api.deletePersonalData()
 	}
 }
