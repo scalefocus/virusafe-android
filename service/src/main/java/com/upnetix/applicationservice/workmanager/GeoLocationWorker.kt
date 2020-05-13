@@ -54,7 +54,7 @@ class GeoLocationWorker(
 
 	override suspend fun doWork(): Result = coroutineScope {
 		// Disable tracking if the user has denied consent
-		if (!sharedPrefs.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY).toBoolean()) return@coroutineScope Result.failure()
+		if (!sharedPrefs.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY).toBoolean()) return@coroutineScope Result.retry()
 
 		val longitude = inputData.getDouble(LONGITUDE, 0.0)
 		val latitude = inputData.getDouble(LATITUDE, 0.0)
@@ -90,7 +90,7 @@ class GeoLocationWorker(
 		val savedValue = sharedPrefs.readStringFromSharedPrefs(VALUE_KEY)
 		var coordinatesMatch = false
 		if (savedValue.isNotBlank()) {
-			savedValue.split(DELIMITER)?.let {
+			savedValue.split(DELIMITER).let {
 				if (it.size != 2) return@let
 				coordinatesMatch = it[0].toDouble() == latitude && it[1].toDouble() == longitude
 			}
