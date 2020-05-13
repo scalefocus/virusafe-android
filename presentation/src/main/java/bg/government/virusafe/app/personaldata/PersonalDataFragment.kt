@@ -17,6 +17,7 @@ import bg.government.virusafe.R
 import bg.government.virusafe.app.home.Agreement
 import bg.government.virusafe.app.home.HomeFragment
 import bg.government.virusafe.app.home.OnDialogButtonListener
+import bg.government.virusafe.app.location.LocationUpdateManager
 import bg.government.virusafe.app.selfcheck.SelfCheckFragment
 import bg.government.virusafe.app.utils.DATA_PROTECTION_NOTICE_SMALL_LBL
 import bg.government.virusafe.app.utils.DENY_PERSONAL_DATA_MESSAGE
@@ -195,6 +196,8 @@ class PersonalDataFragment :
 		viewModel.deleteDataResponse.observe(viewLifecycleOwner, Observer { responseWrapper ->
 			processResponse(responseWrapper) {
 				sharedPrefsService.writeEncodedStringToSharedPrefs(USE_PERSONAL_DATA_KEY, false.toString())
+				context?.let { ctx -> LocationUpdateManager.getInstance(ctx).stopLocationUpdates() }
+
 				with(binding) {
 					personalNumberEt.text?.clear()
 					personalAgeEt.text?.clear()
