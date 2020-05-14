@@ -64,7 +64,7 @@ class PersonalDataFragment :
 	}
 
 	private fun setDataProtectionNotice() {
-		viewModel.setCheckBoxVisibility(navigatedFromRegistration)
+		viewModel.isCheckBoxVisible = navigatedFromRegistration
 
 		with(binding) {
 			dataProtectionNoticeTxt.setClickablePhrase(
@@ -130,7 +130,6 @@ class PersonalDataFragment :
 			.setCancelable(false)
 
 			.setPositiveButton(viewModel.localizeString(YES_LABEL)) { _, _ ->
-				sharedPrefsService.writeStringToSharedPrefs(USE_PERSONAL_DATA_KEY, true.toString())
 				showProgress()
 				viewModel.sendData()
 			}
@@ -195,7 +194,6 @@ class PersonalDataFragment :
 
 		viewModel.deleteDataResponse.observe(viewLifecycleOwner, Observer { responseWrapper ->
 			processResponse(responseWrapper) {
-				sharedPrefsService.writeEncodedStringToSharedPrefs(USE_PERSONAL_DATA_KEY, false.toString())
 				context?.let { ctx -> LocationUpdateManager.getInstance(ctx).stopLocationUpdates() }
 
 				with(binding) {
@@ -216,33 +214,23 @@ class PersonalDataFragment :
 	}
 
 	private fun sendData() {
-		when {
-			binding.personalNumberLayout.error != null -> shakeError(binding.personalNumberLayout)
-			binding.personalAgeLayout.error != null -> shakeError(binding.personalAgeLayout)
-			binding.personalNumberEt.text.isNullOrBlank() -> viewModel.validatePersonalNumber()
-			!binding.dataProtectionNoticeCheckBox.isChecked -> setDataProtectionTxtColor(R.color.color_red)
-			!navigatedFromRegistration -> showWarning()
-
-			else -> {
-				showProgress()
-				viewModel.sendData()
-			}
-		}
-	}
-
-	private fun showWarning() {
 		with(binding) {
 			when {
-				dataProtectionNoticeCheckBox.isChecked && !personalAgeEt.text.isNullOrBlank() && !sharedPrefsService.readStringFromSharedPrefs(
+				binding.personalNumberLayout.error != null -> shakeError(binding.personalNumberLayout)
+				binding.personalAgeLayout.error != null -> shakeError(binding.personalAgeLayout)
+				binding.personalNumberEt.text.isNullOrBlank() -> viewModel.validatePersonalNumber()
+				!binding.dataProtectionNoticeCheckBox.isChecked -> setDataProtectionTxtColor(R.color.color_red)
+				!sharedPrefsService.readStringFromSharedPrefs(
 					USE_PERSONAL_DATA_KEY
-				).toBoolean() -> showWarningDialog(
-					root.context,
-					PERMISSION_CHANGE_TXT
-				)
-				dataProtectionNoticeCheckBox.isChecked && !personalAgeEt.text.isNullOrBlank() -> showWarningDialog(
-					root.context,
-					UPDATE_PERSONAL_INFO_TXT
-				)
+				).toBoolean() -> showWarningDialog(root.context, PERMISSION_CHANGE_TXT)
+				sharedPrefsService.readStringFromSharedPrefs(
+					USE_PERSONAL_DATA_KEY
+				).toBoolean() -> showWarningDialog(root.context, UPDATE_PERSONAL_INFO_TXT)
+
+				else -> {
+					showProgress()
+					this@PersonalDataFragment.viewModel.sendData()
+				}
 			}
 		}
 	}

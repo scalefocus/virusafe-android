@@ -1,6 +1,5 @@
 package bg.government.virusafe.app.personaldata
 
-import android.view.View
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
@@ -106,8 +105,7 @@ class PersonalDataViewModel @Inject constructor(
 	val isCheckboxClicked: LiveData<Boolean>
 		get() = _isCheckboxClicked
 
-	var checkBoxVisibility: Int = View.INVISIBLE
-		private set
+	var isCheckBoxVisible = false
 
 	fun onLegitimationChange(legitimationType: LegitimationType) {
 		if (this._legitimationTypeSelected.value == legitimationType) {
@@ -172,14 +170,6 @@ class PersonalDataViewModel @Inject constructor(
 	fun deletePersonalInformation() {
 		viewModelScope.launch {
 			_deleteDataResponse.postValue(personalDataService.deletePersonalData())
-		}
-	}
-
-	fun setCheckBoxVisibility(state: Boolean) {
-		checkBoxVisibility = if (state) {
-			View.INVISIBLE
-		} else {
-			View.VISIBLE
 		}
 	}
 

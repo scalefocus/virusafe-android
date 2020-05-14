@@ -60,8 +60,15 @@ class RegistrationServiceImpl @Inject constructor(
 	override suspend fun getPersonalData(): ResponseWrapper<PersonalData> =
 		executeRetrofitCall { api.getPersonalData() }
 
-	override suspend fun sendPersonalData(personalData: PersonalData): ResponseWrapper<Unit> =
-		executeRetrofitCall { api.postPersonalData(personalData) }
+	override suspend fun sendPersonalData(personalData: PersonalData): ResponseWrapper<Unit> {
+		val responseWrapper = executeRetrofitCall { api.postPersonalData(personalData) }
+
+		if (responseWrapper is ResponseWrapper.Success) {
+			sharedPrefs.writeStringToSharedPrefs(USE_PERSONAL_DATA_KEY, true.toString())
+		}
+
+		return responseWrapper
+	}
 
 	private fun saveTokens(response: TokenResponse) = with(sharedPrefs) {
 		writeStringToSharedPrefs(NEW_ACCESS_TOKEN_KEY, response.accessToken)

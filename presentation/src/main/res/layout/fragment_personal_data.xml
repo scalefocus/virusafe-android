@@ -226,7 +226,7 @@
 				android:layout_marginEnd="@dimen/registration_term_and_conditions_padding"
 				android:buttonTint="@color/colorPrimary"
 				android:checked="@{personalDataViewModel.isCheckboxClicked}"
-				android:visibility="@{personalDataViewModel.checkBoxVisibility}"
+				android:visibility="@{personalDataViewModel.isCheckBoxVisible ? View.INVISIBLE : View.VISIBLE}"
 				app:constraintSet="@dimen/text_btn_padding"
 				app:layout_constraintStart_toStartOf="parent"
 				app:layout_constraintTop_toBottomOf="@id/personal_health_status_layout" />
@@ -237,7 +237,7 @@
 				android:layout_height="wrap_content"
 				android:textColor="@color/colorPrimary"
 				android:textSize="@dimen/text_size_normal"
-				android:visibility="@{personalDataViewModel.checkBoxVisibility}"
+				android:visibility="@{personalDataViewModel.isCheckBoxVisible ? View.INVISIBLE : View.VISIBLE}"
 				app:layout_constraintStart_toEndOf="@+id/data_protection_notice_check_box"
 				app:layout_constraintTop_toTopOf="@+id/data_protection_notice_check_box" />
 
@@ -269,6 +269,7 @@
 	</ScrollView>
 
 	<data>
+		<import type="android.view.View"/>
 
 		<import type="com.upnetix.applicationservice.registration.model.Gender" />
 

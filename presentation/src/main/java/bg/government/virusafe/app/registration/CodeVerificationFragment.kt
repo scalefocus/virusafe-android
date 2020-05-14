@@ -89,8 +89,6 @@ class CodeVerificationFragment :
 				trySendingFirebaseToken()
 
 				openFragmentFromRegistrationFlow(PersonalDataFragment::class)
-
-				sharedPrefsService.writeStringToSharedPrefs(USE_PERSONAL_DATA_KEY, true.toString())
 			}
 		})
 
