@@ -20,7 +20,6 @@ import bg.government.virusafe.databinding.FragmentCodeVerificationBinding
 import bg.government.virusafe.mvvm.fragment.AbstractFragment
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.upnetix.applicationservice.pushtoken.IPushTokenService
-import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.USE_PERSONAL_DATA_KEY
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject

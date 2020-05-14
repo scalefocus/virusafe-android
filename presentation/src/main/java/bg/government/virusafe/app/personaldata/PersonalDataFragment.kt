@@ -220,16 +220,13 @@ class PersonalDataFragment :
 				personalAgeLayout.error != null -> shakeError(personalAgeLayout)
 				personalNumberEt.text.isNullOrBlank() -> this@PersonalDataFragment.viewModel.validatePersonalNumber()
 				!dataProtectionNoticeCheckBox.isChecked -> setDataProtectionTxtColor(R.color.color_red)
-				!sharedPrefsService.readStringFromSharedPrefs(
-					USE_PERSONAL_DATA_KEY
-				).toBoolean() -> showWarningDialog(root.context, PERMISSION_CHANGE_TXT)
-				sharedPrefsService.readStringFromSharedPrefs(
-					USE_PERSONAL_DATA_KEY
-				).toBoolean() -> showWarningDialog(root.context, UPDATE_PERSONAL_INFO_TXT)
 
 				else -> {
-					showProgress()
-					this@PersonalDataFragment.viewModel.sendData()
+					if (!sharedPrefsService.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY).toBoolean()) {
+						showWarningDialog(root.context, PERMISSION_CHANGE_TXT)
+					} else {
+						showWarningDialog(root.context, UPDATE_PERSONAL_INFO_TXT)
+					}
 				}
 			}
 		}
