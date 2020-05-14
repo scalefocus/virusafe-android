@@ -34,6 +34,7 @@ class RegistrationServiceImpl @Inject constructor(
 		if (responseWrapper is ResponseWrapper.Success) {
 			val response = responseWrapper.response
 			sharedPrefs.writeStringToSharedPrefs(HAS_REGISTRATION_KEY, TRUE_VALUE)
+			sharedPrefs.writeStringToSharedPrefs(USE_PERSONAL_DATA_KEY, TRUE_VALUE)
 			saveTokens(response)
 		}
 		return responseWrapper
@@ -59,8 +60,15 @@ class RegistrationServiceImpl @Inject constructor(
 	override suspend fun getPersonalData(): ResponseWrapper<PersonalData> =
 		executeRetrofitCall { api.getPersonalData() }
 
-	override suspend fun sendPersonalData(personalData: PersonalData): ResponseWrapper<Unit> =
-		executeRetrofitCall { api.postPersonalData(personalData) }
+	override suspend fun sendPersonalData(personalData: PersonalData): ResponseWrapper<Unit> {
+		val responseWrapper = executeRetrofitCall { api.postPersonalData(personalData) }
+
+		if (responseWrapper is ResponseWrapper.Success) {
+			sharedPrefs.writeStringToSharedPrefs(USE_PERSONAL_DATA_KEY, true.toString())
+		}
+
+		return responseWrapper
+	}
 
 	private fun saveTokens(response: TokenResponse) = with(sharedPrefs) {
 		writeStringToSharedPrefs(NEW_ACCESS_TOKEN_KEY, response.accessToken)
@@ -73,6 +81,8 @@ class RegistrationServiceImpl @Inject constructor(
 		const val NEW_ACCESS_TOKEN_KEY = "com.upnetix.applicationservice.key2.1"
 		const val REFRESH_TOKEN_KEY = "com.upnetix.applicationservice.key2.2"
 		const val FINISHED_REGISTRATION_KEY = "com.upnetix.applicationservice.key3"
+
+		const val USE_PERSONAL_DATA_KEY = "use_personal_data_key"
 
 		private const val TRUE_VALUE = "true"
 	}

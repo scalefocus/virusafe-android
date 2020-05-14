@@ -1,5 +1,6 @@
 package com.upnetix.applicationservice
 
+import com.upnetix.applicationservice.personaldata.IPersonalDataApi
 import com.upnetix.applicationservice.pushtoken.IPushTokenApi
 import com.upnetix.applicationservice.registration.IRegistrationApi
 import com.upnetix.applicationservice.selfcheck.ISelfCheckApi
@@ -27,4 +28,9 @@ object RetrofitApiModule {
 	@JvmStatic
 	fun providePushTokenApi(retrofit: Retrofit): IPushTokenApi =
 		retrofit.create(IPushTokenApi::class.java)
+
+	@Provides
+	@JvmStatic
+	fun providePersonalDataApi(retrofit: Retrofit): IPersonalDataApi =
+		retrofit.create(IPersonalDataApi::class.java)
 }
