@@ -216,10 +216,10 @@ class PersonalDataFragment :
 	private fun sendData() {
 		with(binding) {
 			when {
-				binding.personalNumberLayout.error != null -> shakeError(binding.personalNumberLayout)
-				binding.personalAgeLayout.error != null -> shakeError(binding.personalAgeLayout)
-				binding.personalNumberEt.text.isNullOrBlank() -> viewModel.validatePersonalNumber()
-				!binding.dataProtectionNoticeCheckBox.isChecked -> setDataProtectionTxtColor(R.color.color_red)
+				personalNumberLayout.error != null -> shakeError(personalNumberLayout)
+				personalAgeLayout.error != null -> shakeError(personalAgeLayout)
+				personalNumberEt.text.isNullOrBlank() -> this@PersonalDataFragment.viewModel.validatePersonalNumber()
+				!dataProtectionNoticeCheckBox.isChecked -> setDataProtectionTxtColor(R.color.color_red)
 				!sharedPrefsService.readStringFromSharedPrefs(
 					USE_PERSONAL_DATA_KEY
 				).toBoolean() -> showWarningDialog(root.context, PERMISSION_CHANGE_TXT)
