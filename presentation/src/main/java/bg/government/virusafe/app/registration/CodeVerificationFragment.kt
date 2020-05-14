@@ -86,13 +86,14 @@ class CodeVerificationFragment :
 			hideProgress()
 			processResponse(responseWrapper) {
 				trySendingFirebaseToken()
+
 				openFragmentFromRegistrationFlow(PersonalDataFragment::class)
 			}
 		})
 
-		viewModel.resendCodeData.observe(viewLifecycleOwner, Observer { resposeWrapper ->
+		viewModel.resendCodeData.observe(viewLifecycleOwner, Observer { responseWrapper ->
 			hideProgress()
-			processResponse(resposeWrapper) {
+			processResponse(responseWrapper) {
 				Toast.makeText(
 					activity,
 					viewModel.localizeString(VERIFICATION_CODE_SEND_AGAIN),

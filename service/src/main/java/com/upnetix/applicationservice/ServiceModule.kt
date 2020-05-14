@@ -11,6 +11,8 @@ import com.upnetix.applicationservice.encryption.IEncryptionService
 import com.upnetix.applicationservice.geolocation.WorkManagerInitializer
 import com.upnetix.applicationservice.localization.ILocalizationService
 import com.upnetix.applicationservice.localization.LocalizationServiceImpl
+import com.upnetix.applicationservice.personaldata.IPersonalDataService
+import com.upnetix.applicationservice.personaldata.PersonalDataServiceImpl
 import com.upnetix.applicationservice.pushtoken.IPushTokenService
 import com.upnetix.applicationservice.pushtoken.PushTokenServiceImpl
 import com.upnetix.applicationservice.registration.IRegistrationService
@@ -137,6 +139,11 @@ class ServiceModule(application: Application) : BaseServiceModule(application) {
 		@Singleton
 		@JvmStatic
 		fun provideSelfCheckService(service: SelfCheckServiceImpl): ISelfCheckService = service
+
+		@Provides
+		@Singleton
+		@JvmStatic
+		fun providePersonalDataService(service: PersonalDataServiceImpl): IPersonalDataService = service
 
 		@Provides
 		@JvmStatic

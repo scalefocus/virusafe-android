@@ -1,23 +1,43 @@
 package bg.government.virusafe.app.personaldata
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.res.ColorStateList
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.CycleInterpolator
 import android.view.animation.TranslateAnimation
+import androidx.annotation.ColorRes
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import bg.government.virusafe.BR
 import bg.government.virusafe.R
+import bg.government.virusafe.app.home.Agreement
 import bg.government.virusafe.app.home.HomeFragment
+import bg.government.virusafe.app.home.OnDialogButtonListener
+import bg.government.virusafe.app.location.LocationUpdateManager
 import bg.government.virusafe.app.selfcheck.SelfCheckFragment
+import bg.government.virusafe.app.utils.DATA_PROTECTION_NOTICE_SMALL_LBL
+import bg.government.virusafe.app.utils.DENY_PERSONAL_DATA_MESSAGE
+import bg.government.virusafe.app.utils.DPN_DESCRIPTION
+import bg.government.virusafe.app.utils.DPN_TITLE
+import bg.government.virusafe.app.utils.I_CONSENT_TO_LBL
+import bg.government.virusafe.app.utils.NO_LABEL
+import bg.government.virusafe.app.utils.PERMISSION_CHANGE_TXT
+import bg.government.virusafe.app.utils.UPDATE_PERSONAL_INFO_TXT
+import bg.government.virusafe.app.utils.YES_LABEL
 import bg.government.virusafe.app.utils.getAgeInputFilter
 import bg.government.virusafe.app.utils.getChronicConditionsInputFilter
+import bg.government.virusafe.app.utils.setClickablePhrase
 import bg.government.virusafe.databinding.FragmentPersonalDataBinding
 import bg.government.virusafe.mvvm.fragment.AbstractFragment
+import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.USE_PERSONAL_DATA_KEY
 import com.upnetix.applicationservice.registration.model.Gender
 
 class PersonalDataFragment :
-	AbstractFragment<FragmentPersonalDataBinding, PersonalDataViewModel>() {
+	AbstractFragment<FragmentPersonalDataBinding, PersonalDataViewModel>(), OnDialogButtonListener {
 
 	@SuppressLint("ClickableViewAccessibility")
 	override fun onPrepareLayout(layoutView: View) {
@@ -27,11 +47,115 @@ class PersonalDataFragment :
 		binding.personalDataContainer.setOnClickListener {
 			hideKeyboard()
 		}
+
 		binding.personalDataBtn.setOnClickListener {
 			if (canClick().not()) return@setOnClickListener
 			sendData()
 		}
+
 		getData()
+
+		setDataProtectionNotice()
+	}
+
+	override fun onAgreeBtnClicked(agreement: Agreement) {
+		setDataProtectionTxtColor(R.color.colorPrimary)
+		binding.dataProtectionNoticeCheckBox.isChecked = true
+	}
+
+	private fun setDataProtectionNotice() {
+		viewModel.isCheckBoxVisible = navigatedFromRegistration
+
+		with(binding) {
+			dataProtectionNoticeTxt.setClickablePhrase(
+				fullText = buildString {
+					append(viewModel.localizeString(I_CONSENT_TO_LBL))
+					append(" ")
+					append(viewModel.localizeString(DATA_PROTECTION_NOTICE_SMALL_LBL))
+				},
+				clickablePhrase = viewModel.localizeString(DATA_PROTECTION_NOTICE_SMALL_LBL),
+				shouldBoldPhrase = false,
+				shouldUnderlinePhrase = true
+			) {
+				if (!canClick()) {
+					return@setClickablePhrase
+				}
+
+				showAgreementsDialog(
+					viewModel.localizeString(DPN_TITLE),
+					viewModel.localizeString(DPN_DESCRIPTION),
+					Agreement.DataProtectionNotice,
+					!binding.dataProtectionNoticeCheckBox.isChecked,
+					this@PersonalDataFragment
+				)
+			}
+
+			noticeTouchListener()
+		}
+	}
+
+	@SuppressLint("ClickableViewAccessibility")
+	private fun noticeTouchListener() {
+		with(binding) {
+			dataProtectionNoticeCheckBox.setOnTouchListener { view, event ->
+				setDataProtectionTxtColor(R.color.colorPrimary)
+				if (event.action == MotionEvent.ACTION_DOWN && dataProtectionNoticeCheckBox.isChecked &&
+					!personalAgeEt.text.isNullOrBlank() && !personalNumberEt.text.isNullOrBlank()
+				) {
+					showDeletePersonalDataDialog(view.context)
+					true
+				} else {
+					false
+				}
+			}
+		}
+	}
+
+	private fun showDeletePersonalDataDialog(context: Context) {
+		AlertDialog.Builder(context)
+			.setMessage(viewModel.localizeString(DENY_PERSONAL_DATA_MESSAGE))
+			.setCancelable(false)
+
+			.setPositiveButton(viewModel.localizeString(YES_LABEL)) { _, _ ->
+				viewModel.deletePersonalInformation()
+			}
+
+			.setNegativeButton(viewModel.localizeString(NO_LABEL)) { _, _ -> }
+			.show()
+	}
+
+	private fun showWarningDialog(context: Context, message: String) {
+		AlertDialog.Builder(context)
+			.setMessage(message)
+			.setCancelable(false)
+
+			.setPositiveButton(viewModel.localizeString(YES_LABEL)) { _, _ ->
+				showProgress()
+				viewModel.sendData()
+			}
+
+			.setNegativeButton(viewModel.localizeString(NO_LABEL)) { _, _ ->
+				binding.dataProtectionNoticeCheckBox.isChecked = false
+			}
+			.show()
+	}
+
+	private fun setDataProtectionTxtColor(@ColorRes color: Int) {
+		binding.dataProtectionNoticeCheckBox.buttonTintList = ColorStateList.valueOf(
+			ContextCompat.getColor(
+				activity ?: return, color
+			)
+		)
+		binding.dataProtectionNoticeTxt.setTextColor(
+			ContextCompat.getColor(
+				activity ?: return, color
+			)
+		)
+		binding.dataProtectionNoticeTxt.setLinkTextColor(
+			ContextCompat.getColor(
+				activity ?: return, color
+			)
+		)
 	}
 
 	private fun setInputFilters() {
@@ -67,6 +191,21 @@ class PersonalDataFragment :
 		viewModel.errorAgeData.observe(viewLifecycleOwner, Observer { errorMsg ->
 			binding.personalAgeLayout.error = errorMsg
 		})
+
+		viewModel.deleteDataResponse.observe(viewLifecycleOwner, Observer { responseWrapper ->
+			processResponse(responseWrapper) {
+				context?.let { ctx -> LocationUpdateManager.getInstance(ctx).stopLocationUpdates() }
+
+				with(binding) {
+					personalNumberEt.text?.clear()
+					personalAgeEt.text?.clear()
+					personalGenderMale.isChecked = false
+					personalGenderFemale.isChecked = false
+					personalHealthStatusEt.text?.clear()
+					dataProtectionNoticeCheckBox.isChecked = false
+				}
+			}
+		})
 	}
 
 	private fun getData() {
@@ -75,14 +214,20 @@ class PersonalDataFragment :
 	}
 
 	private fun sendData() {
-		when {
-			binding.personalNumberLayout.error != null -> shakeError(binding.personalNumberLayout)
-			binding.personalAgeLayout.error != null -> shakeError(binding.personalAgeLayout)
-			binding.personalNumberEt.text.isNullOrBlank() -> viewModel.validatePersonalNumber()
+		with(binding) {
+			when {
+				personalNumberLayout.error != null -> shakeError(personalNumberLayout)
+				personalAgeLayout.error != null -> shakeError(personalAgeLayout)
+				personalNumberEt.text.isNullOrBlank() -> this@PersonalDataFragment.viewModel.validatePersonalNumber()
+				!dataProtectionNoticeCheckBox.isChecked -> setDataProtectionTxtColor(R.color.color_red)
 
-			else -> {
-				showProgress()
-				viewModel.sendData()
+				else -> {
+					if (!sharedPrefsService.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY).toBoolean()) {
+						showWarningDialog(root.context, PERMISSION_CHANGE_TXT)
+					} else {
+						showWarningDialog(root.context, UPDATE_PERSONAL_INFO_TXT)
+					}
+				}
 			}
 		}
 	}

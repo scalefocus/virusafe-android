@@ -1,5 +1,6 @@
 package bg.government.virusafe.app.home
 
+import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -16,8 +17,11 @@ import bg.government.virusafe.app.localization.LocalizationFragment
 import bg.government.virusafe.app.personaldata.PersonalDataFragment
 import bg.government.virusafe.app.selfcheck.SelfCheckFragment
 import bg.government.virusafe.app.splash.SplashActivity.Companion.STATISTICS_URL_KEY
+import bg.government.virusafe.app.utils.ACCEPT_PERSONAL_DATA_MESSAGE
+import bg.government.virusafe.app.utils.BACK_BTN_TXT
 import bg.government.virusafe.app.utils.DPN_DESCRIPTION
 import bg.government.virusafe.app.utils.DPN_TITLE
+import bg.government.virusafe.app.utils.PROCEED_BTN_TXT
 import bg.government.virusafe.app.utils.TNC_PART_ONE
 import bg.government.virusafe.app.utils.TNC_PART_TWO
 import bg.government.virusafe.app.utils.TNC_TITLE
@@ -25,6 +29,7 @@ import bg.government.virusafe.app.utils.URL_ABOUT_COVID
 import bg.government.virusafe.app.utils.URL_VIRUSAFE_WHY
 import bg.government.virusafe.databinding.FragmentHomeBinding
 import bg.government.virusafe.mvvm.fragment.AbstractFragment
+import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.USE_PERSONAL_DATA_KEY
 
 class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
 
@@ -36,7 +41,11 @@ class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
 		binding.fragmentHomeBtnSelfCheck.setOnClickListener {
 			if (canClick().not()) return@setOnClickListener
 
-			navigateToView(SelfCheckFragment::class)
+			if (sharedPrefsService.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY).toBoolean()) {
+				navigateToView(SelfCheckFragment::class)
+			} else {
+				showPersonalDataAccessDialog()
+			}
 		}
 
 		binding.fragmentHomeBtnStatistics.setOnClickListener {
@@ -122,5 +131,18 @@ class HomeFragment : AbstractFragment<FragmentHomeBinding, HomeViewModel>() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 			window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 		window?.statusBarColor = ContextCompat.getColor(activity!!, R.color.color_light_blue)
+	}
+
+	private fun showPersonalDataAccessDialog() {
+		AlertDialog.Builder(context)
+			.setMessage(viewModel.localizeString(ACCEPT_PERSONAL_DATA_MESSAGE))
+			.setCancelable(false)
+
+			.setPositiveButton(viewModel.localizeString(PROCEED_BTN_TXT)) { _, _ ->
+				navigateToView(PersonalDataFragment::class)
+			}
+
+			.setNegativeButton(viewModel.localizeString(BACK_BTN_TXT)) { _, _ -> }
+			.show()
 	}
 }
