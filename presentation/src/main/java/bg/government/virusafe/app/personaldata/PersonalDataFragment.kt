@@ -124,14 +124,13 @@ class PersonalDataFragment :
 			.show()
 	}
 
-	private fun showWarningDialog(context: Context, message: String) {
+	private fun showWarningDialog(context: Context, flexKey: String) {
 		AlertDialog.Builder(context)
-			.setMessage(message)
+			.setMessage(viewModel.localizeString(flexKey))
 			.setCancelable(false)
 
 			.setPositiveButton(viewModel.localizeString(YES_LABEL)) { _, _ ->
-				showProgress()
-				viewModel.sendData()
+				sendUserData()
 			}
 
 			.setNegativeButton(viewModel.localizeString(NO_LABEL)) { _, _ ->
@@ -220,6 +219,7 @@ class PersonalDataFragment :
 				personalAgeLayout.error != null -> shakeError(personalAgeLayout)
 				personalNumberEt.text.isNullOrBlank() -> this@PersonalDataFragment.viewModel.validatePersonalNumber()
 				!dataProtectionNoticeCheckBox.isChecked -> setDataProtectionTxtColor(R.color.color_red)
+				navigatedFromRegistration -> sendUserData()
 
 				else -> {
 					if (!sharedPrefsService.readStringFromSharedPrefs(USE_PERSONAL_DATA_KEY).toBoolean()) {
@@ -230,6 +230,11 @@ class PersonalDataFragment :
 				}
 			}
 		}
+	}
+
+	private fun sendUserData() {
+		hideProgress()
+		viewModel.sendData()
 	}
 
 	private fun openNextScreen() {
