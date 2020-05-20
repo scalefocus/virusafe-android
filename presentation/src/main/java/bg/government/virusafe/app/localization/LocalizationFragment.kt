@@ -13,8 +13,7 @@ import bg.government.virusafe.app.utils.URL_VIRUSAFE_WHY
 import bg.government.virusafe.databinding.FragmentLocalizationBinding
 import bg.government.virusafe.mvvm.fragment.AbstractFragment
 
-class LocalizationFragment :
-	AbstractFragment<FragmentLocalizationBinding, LocalizationViewModel>(), LocaleClickListener {
+class LocalizationFragment : AbstractFragment<FragmentLocalizationBinding, LocalizationViewModel>(), LocaleClickListener {
 
 	private val adapter: LocalizationAdapter = LocalizationAdapter()
 
