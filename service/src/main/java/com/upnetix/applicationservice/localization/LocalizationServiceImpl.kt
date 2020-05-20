@@ -24,7 +24,7 @@ internal class LocalizationServiceImpl(
 	companion object {
 
 		private val TAG = LocalizationServiceImpl::class.java.simpleName
-		private const val LANGUAGE_KEY = "last_selected_language"
+		const val LANGUAGE_KEY = "last_selected_language"
 	}
 
 	private val availableLanguagesList: MutableList<AvailableLanguage> = mutableListOf()
