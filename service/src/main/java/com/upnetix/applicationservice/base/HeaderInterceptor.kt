@@ -5,6 +5,7 @@ import com.imperiamobile.localizationmodule.LocaleHelper
 import com.upnetix.applicationservice.BuildConfig
 import com.upnetix.applicationservice.R
 import com.upnetix.applicationservice.encryption.IEncryptionService
+import com.upnetix.applicationservice.localization.LocalizationServiceImpl.Companion.LANGUAGE_KEY
 import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.NEW_ACCESS_TOKEN_KEY
 import com.upnetix.applicationservice.registration.RegistrationServiceImpl.Companion.OLD_TOKEN_KEY
 import com.upnetix.service.sharedprefs.ISharedPrefsService
@@ -31,7 +32,7 @@ class HeaderInterceptor @Inject constructor(
 		}
 		val locale = LocaleHelper.convertToJavaLocale(languageValue)
 		locale?.let {
-			requestBuilder.addHeader(LANGUAGE_KEY, it.language)
+			requestBuilder.addHeader(LANGUAGE_HEADER_KEY, it.language)
 		}
 
 		var token: String? = sharedPrefs.readStringFromSharedPrefs(NEW_ACCESS_TOKEN_KEY)
@@ -64,7 +65,7 @@ class HeaderInterceptor @Inject constructor(
 
 	companion object {
 		private const val CLIENT_ID_KEY = "clientId"
-		private const val LANGUAGE_KEY = "language"
+		private const val LANGUAGE_HEADER_KEY = "language"
 		private const val USER_AGENT_KEY = "User-Agent"
 		private const val USER_AGENT_SYSTEM_PROPERTY = "http.agent"
 
