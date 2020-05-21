@@ -1,0 +1,35 @@
+name: Upload apk to the App Center
+
+on:
+  push:
+    branches: [ test-ci ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Prepare Project
+      run: |
+        echo '${{ secrets.GOOGLE_SERVICES_JSON_DEBUG }}' > presentation/src/debug/google-services.json
+        echo '${{ secrets.GOOGLE_SERVICES_JSON_MK }}' > presentation/src/mk/google-services.json
+        mkdir -p presentation/src/release
+        echo '${{ secrets.GOOGLE_SERVICES_JSON_RELEASE }}' > presentation/src/release/google-services.json
+        echo '${{ secrets.GRADLE_PROPERTIES }}' > gradle.properties
+        echo '${{ secrets.TRANSLATIONS_GRADLE }}' > service/translations.gradle
+    - name: Static code analysis
+      run: |
+        ./gradlew checkstyle
+        ./gradlew detekt
+    - name: Build
+      run: ./gradlew assembleDebug
+
+    - name: upload artefact to App Center
+      run: ./gradlew appCenterAssembleAndUploadDebug
+      env:
+        APPCENTER_API_TOKEN: ${{ secrets.APPCENTER_API_TOKEN }}
+        APPCENTER_OWNER_NAME: ${{ secrets.APPCENTER_OWNER_NAME }}
+        APPCENTER_DISTRIBUTION_GROUPS: ${{ secrets.APPCENTER_DISTRIBUTION_GROUPS }}
+        APP_NAME_DEV: ${{ secrets.APP_NAME_DEV }}
