@@ -129,7 +129,7 @@ apply plugin: 'io.gitlab.arturbosch.detekt'
 
 detekt {
     input = files("$projectDir")
-    config = files("$projectDir/detekt-ruleset.yml")
+    config = files("$projectDir/android-detekt-ruleset.yml")
 }
 
 tasks.withType(io.gitlab.arturbosch.detekt.Detekt) {
@@ -150,7 +150,7 @@ checkstyle() {
 }
 
 task checkstyle(type: Checkstyle) {
-    configFile file("$projectDir/checkstyle-android.xml")
+    configFile file("$projectDir/android-checkstyle.xml")
     include '**/*.java'
     exclude '**/gen/**'
     exclude '**/external/**'
