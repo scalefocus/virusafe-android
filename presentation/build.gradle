@@ -127,7 +127,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:20.1.6'
 
     //DateTime
-    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.3'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'
 
     //Service module
     implementation project(path: ':service')
