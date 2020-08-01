@@ -20,7 +20,7 @@ buildscript {
 
                 dagger2Version     : '2.16',
 
-                coroutines         : '1.3.2',
+                coroutines         : '1.3.8',
 
                 junitVersion       : '4.12',
                 testRunnerVersion  : '1.1.0-alpha4',
