@@ -65,7 +65,7 @@ buildscript {
         classpath 'de.undercouch:gradle-download-task:4.0.4'
 
         //jfrog plugin
-        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.11.0'
+        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.20.0'
 
         //google services
         classpath 'com.google.gms:google-services:4.3.3'
